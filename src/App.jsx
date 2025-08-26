@@ -54,7 +54,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 relative overflow-hidden">
       {/* Ambient Background Effects */}
       <div
         className="fixed inset-0 pointer-events-none opacity-30"

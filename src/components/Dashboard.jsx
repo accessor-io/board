@@ -65,45 +65,45 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
       {/* Executive Summary Bar */}
-      <div className="glass border-b border-gray-700">
+      <div className="glass border-b border-gray-200">
         <div className="px-4 py-3">
           <div className="grid grid-cols-4 gap-3">
-            <div className="border-r border-gray-700 pr-4">
-              <div className="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-1">
+            <div className="border-r border-gray-200 pr-4">
+              <div className="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-1">
                 TOTAL AUM
               </div>
-              <div className="text-xl font-light text-white">$926.8M</div>
-              <div className="text-sm text-green-400">+2.5% MTD</div>
+              <div className="text-xl font-light text-gray-900">$926.8M</div>
+              <div className="text-sm text-green-600">+2.5% MTD</div>
             </div>
-            <div className="border-r border-gray-700 pr-4">
-              <div className="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-1">
+            <div className="border-r border-gray-200 pr-4">
+              <div className="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-1">
                 LIQUID ASSETS
               </div>
-              <div className="text-xl font-light text-white">$840.2M</div>
-              <div className="text-sm text-green-400">+1.8% MTD</div>
+              <div className="text-xl font-light text-gray-900">$840.2M</div>
+              <div className="text-sm text-green-600">+1.8% MTD</div>
             </div>
-            <div className="border-r border-gray-700 pr-4">
-              <div className="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-1">
+            <div className="border-r border-gray-200 pr-4">
+              <div className="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-1">
                 MONTHLY OUTFLOW
               </div>
-              <div className="text-xl font-light text-white">$642K</div>
-              <div className="text-sm text-gray-400">+12.3% vs Prior</div>
+              <div className="text-xl font-light text-gray-900">$642K</div>
+              <div className="text-sm text-gray-500">+12.3% vs Prior</div>
             </div>
             <div>
-              <div className="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-1">
+              <div className="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-1">
                 CUSTODY ACCOUNTS
               </div>
-              <div className="text-xl font-light text-white">12</div>
-              <div className="text-sm text-gray-400">No Change</div>
+              <div className="text-xl font-light text-gray-900">12</div>
+              <div className="text-sm text-gray-500">No Change</div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Navigation */}
-      <div className="bg-white border-b border-slate-100">
+      <div className="glass border-b border-gray-200">
         <div className="px-4">
           <nav className="flex space-x-8">
             {tabs.map((tab) => (
@@ -112,8 +112,8 @@ const Dashboard = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`py-4 border-b-2 font-medium text-sm transition-colors ${
                   activeTab === tab.id
-                    ? 'border-slate-900 text-slate-900'
-                    : 'border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300'
+                    ? 'border-blue-600 text-blue-700'
+                    : 'border-transparent text-gray-600 hover:text-blue-700 hover:border-blue-300'
                 }`}
               >
                 {tab.name}
