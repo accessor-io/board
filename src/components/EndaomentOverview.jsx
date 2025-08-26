@@ -51,52 +51,52 @@ const EndaomentOverview = () => {
       </div>
 
       {/* ENDAOment Details */}
-      <div className="glass rounded-lg border border-gray-700 p-6">
-        <h3 className="text-lg font-semibold text-white mb-4">ENDAOment Fund Details</h3>
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <h3 className="text-xl font-semibold text-gray-900 tracking-tight mb-4">ENDAOment Fund Details</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Fund ID</label>
-            <p className="text-sm font-mono bg-gray-800 p-2 rounded text-white">{endaoment.fundId}</p>
+            <label className="block text-sm font-medium text-gray-700 mb-2 uppercase tracking-wide">Fund ID</label>
+            <p className="text-sm font-mono bg-gray-50 p-2 rounded text-gray-900">{endaoment.fundId}</p>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Safe Wallet Address</label>
-            <p className="text-sm font-mono bg-gray-800 p-2 rounded text-white">{endaoment.walletAddress}</p>
+            <label className="block text-sm font-medium text-gray-700 mb-2 uppercase tracking-wide">Safe Wallet Address</label>
+            <p className="text-sm font-mono bg-gray-50 p-2 rounded text-gray-900">{endaoment.walletAddress}</p>
           </div>
         </div>
       </div>
 
       {/* Recipients Table */}
-      <div className="glass rounded-lg border border-gray-700 overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-700">
-          <h3 className="text-lg font-semibold text-white">ENDAOment Recipients</h3>
-          <p className="text-sm text-gray-400 mt-1">Organizations and projects that received funding</p>
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div className="px-6 py-4 border-b border-gray-200">
+          <h3 className="text-xl font-semibold text-gray-900 tracking-tight">ENDAOment Recipients</h3>
+          <p className="text-sm text-gray-600 mt-1 leading-relaxed">Organizations and projects that received funding</p>
         </div>
         
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-700">
-            <thead className="bg-gray-800">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wide">
                   Recipient
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wide">
                   Amount (ETH)
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wide">
                   USD Value
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wide">
                   Purpose
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wide">
                   Transaction
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-gray-900 divide-y divide-gray-700">
+            <tbody className="bg-white divide-y divide-gray-200">
               {endaoment.recipients.map((recipient, index) => (
-                <tr key={index} className="hover:bg-gray-800">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white font-mono">
+                <tr key={index} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 font-mono">
                     {formatAddress(recipient.walletAddress)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-mono">
@@ -105,10 +105,10 @@ const EndaomentOverview = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
                     {formatCurrency(recipient.amount.usd)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 max-w-xs truncate">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 max-w-xs truncate">
                     {recipient.purpose}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 font-mono hover:text-blue-800">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 font-mono hover:text-blue-700">
                     <a href={`https://etherscan.io/tx/${recipient.txHash}`} target="_blank" rel="noopener noreferrer">
                       {formatAddress(recipient.txHash)}
                     </a>
@@ -121,8 +121,8 @@ const EndaomentOverview = () => {
         
         <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
           <div className="flex justify-between text-sm">
-            <span className="text-gray-500">Total Recipients: {endaoment.recipients.length}</span>
-            <span className="text-gray-500">
+            <span className="text-gray-600 font-medium">Total Recipients: {endaoment.recipients.length}</span>
+            <span className="text-gray-600 font-medium">
               Total Disbursed: {formatCurrency(
                 endaoment.recipients.reduce((total, recipient) => total + recipient.amount.usd, 0)
               )}

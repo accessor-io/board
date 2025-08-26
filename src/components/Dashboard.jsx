@@ -10,8 +10,7 @@ import ContractsTable from './ContractsTable';
 import AddressConnectionDiagram from './AddressConnectionDiagram';
 import { walletDirectory } from '../data/walletDirectory';
 import ExpendituresTable from './ExpendituresTable';
-import EndaomentOverview from './EndaomentOverview';
-import EndaomentData from './EndaomentData';
+
 import KarpatkeyReports from './KarpatkeyReports';
 
 import MilestoneTracker from './MilestoneTracker';
@@ -65,58 +64,63 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-blue-50">
       {/* Executive Summary Bar */}
-      <div className="glass border-b border-gray-700">
-        <div className="px-4 py-3">
-          <div className="grid grid-cols-4 gap-3">
-            <div className="border-r border-gray-700 pr-4">
-              <div className="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-1">
+      <div className="bg-white/80 backdrop-blur-xl border-b border-blue-200/50">
+        <div className="px-6 py-4">
+          <div className="grid grid-cols-4 gap-4">
+            <div className="border-r border-blue-200 pr-6">
+              <div className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">
                 TOTAL AUM
               </div>
-              <div className="text-xl font-light text-white">$926.8M</div>
-              <div className="text-sm text-green-400">+2.5% MTD</div>
+              <div className="text-2xl font-light text-gray-900">$926.8M</div>
+              <div className="text-sm text-emerald-600 font-medium">+2.5% MTD</div>
             </div>
-            <div className="border-r border-gray-700 pr-4">
-              <div className="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-1">
+            <div className="border-r border-blue-200 pr-6">
+              <div className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">
                 LIQUID ASSETS
               </div>
-              <div className="text-xl font-light text-white">$840.2M</div>
-              <div className="text-sm text-green-400">+1.8% MTD</div>
+              <div className="text-2xl font-light text-gray-900">$840.2M</div>
+              <div className="text-sm text-emerald-600 font-medium">+1.8% MTD</div>
             </div>
-            <div className="border-r border-gray-700 pr-4">
-              <div className="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-1">
+            <div className="border-r border-blue-200 pr-6">
+              <div className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">
                 MONTHLY OUTFLOW
               </div>
-              <div className="text-xl font-light text-white">$642K</div>
-              <div className="text-sm text-gray-400">+12.3% vs Prior</div>
+              <div className="text-2xl font-light text-gray-900">$642K</div>
+              <div className="text-sm text-gray-600 font-medium">+12.3% vs Prior</div>
             </div>
             <div>
-              <div className="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-1">
+              <div className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">
                 CUSTODY ACCOUNTS
               </div>
-              <div className="text-xl font-light text-white">12</div>
-              <div className="text-sm text-gray-400">No Change</div>
+              <div className="text-2xl font-light text-gray-900">12</div>
+              <div className="text-sm text-gray-600 font-medium">No Change</div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Navigation */}
-      <div className="bg-white border-b border-slate-100">
-        <div className="px-4">
-          <nav className="flex space-x-8">
+      <div className="bg-white/90 backdrop-blur-sm border-b border-blue-200/50">
+        <div className="px-6">
+          <nav className="flex space-x-12">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`py-4 border-b-2 font-medium text-sm transition-colors ${
+                className={`py-6 border-b-2 font-semibold text-base transition-all duration-200 ${
                   activeTab === tab.id
-                    ? 'border-slate-900 text-slate-900'
-                    : 'border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300'
+                    ? 'border-blue-600 text-blue-700'
+                    : 'border-transparent text-gray-600 hover:text-blue-800 hover:border-blue-500 hover:bg-blue-100/50'
                 }`}
               >
-                {tab.name}
+                <div className="text-center">
+                  <div className="text-lg font-semibold">{tab.name}</div>
+                  {tab.description && (
+                    <div className="text-xs text-gray-500 mt-1 font-normal">{tab.description}</div>
+                  )}
+                </div>
               </button>
             ))}
           </nav>
@@ -378,30 +382,12 @@ const OverviewContent = ({ expandedSections, toggleSection }) => {
       <CollapsibleSection
         id="strategic-partnerships"
         title="Strategic Partnerships & Initiatives"
-        subtitle="Endaoment, Karpatkey reports, and ecosystem partnerships"
+        subtitle="Karpatkey reports and ecosystem partnerships"
         isExpanded={expandedSections['strategic-partnerships']}
         onToggle={toggleSection}
       >
         <div className="space-y-0">
-          <CollapsibleSection
-            id="endaoment-partnership"
-            title="Endaoment Foundation Partnership"
-            subtitle="Charitable giving and social impact initiatives"
-            isExpanded={expandedSections['endaoment-partnership']}
-            onToggle={toggleSection}
-          >
-            <EndaomentOverview />
-          </CollapsibleSection>
 
-          <CollapsibleSection
-            id="endaoment-data"
-            title="Endaoment Fund Data"
-            subtitle="Live data from Karpatkey reports API"
-            isExpanded={expandedSections['endaoment-data']}
-            onToggle={toggleSection}
-          >
-            <EndaomentData />
-          </CollapsibleSection>
 
           <CollapsibleSection
             id="karpatkey-reports"

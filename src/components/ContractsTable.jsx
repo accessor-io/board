@@ -28,12 +28,12 @@ const ContractsTable = () => {
 
   const getTypeIcon = (type) => {
     const icons = {
-      'token': '🪙',
-      'token-lock': '🔒',
-      'governance': '🏛️',
-      'controller': '⚙️',
-      'karpatkey-managed': '🏦',
-      'other': '📋'
+      'token': '',
+      'token-lock': '',
+      'governance': '',
+      'controller': '',
+      'karpatkey-managed': '',
+      'other': ''
     };
     return icons[type] || icons['other'];
   };
@@ -41,27 +41,27 @@ const ContractsTable = () => {
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
       <div className="px-6 py-4 border-b border-gray-200">
-        <h3 className="text-lg font-semibold text-gray-900">Smart Contracts</h3>
-        <p className="text-sm text-gray-500 mt-1">ENS DAO associated smart contracts and their details</p>
+        <h3 className="text-xl font-semibold text-gray-900 tracking-tight">Smart Contracts</h3>
+        <p className="text-sm text-gray-600 mt-1 leading-relaxed">ENS DAO associated smart contracts and their details</p>
       </div>
       
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wide">
                 Contract
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wide">
                 Address / ENS Name
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wide">
                 Type
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wide">
                 Deployed
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wide">
                 Actions
               </th>
             </tr>

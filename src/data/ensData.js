@@ -10,55 +10,7 @@ export const ensFinancialData = {
     netBalance: 840000000,
     currency: "USD"
   },
-  endaoment: {
-    fundId: "ENS-Endaoment-2023",
-    walletAddress: "0x4F2083f5fBede34C2714aFfb3105539775f7FE64",
-    totalContributions: 52000000,
-    disbursedAmount: 10000000,
-    availableBalance: 42000000,
-    recipients: [
-      {
-        walletAddress: "0x1234567890abcdef1234567890abcdef12345678",
-        amount: {
-          eth: 1000,
-          usd: 3400000,
-          ens: 0
-        },
-        purpose: "Grant for ENS development",
-        txHash: "0x12345678abcdef1234567890abcdef1234567890abcdef1234567890abcdef12"
-      },
-      {
-        walletAddress: "0xabcdef1234567890abcdef1234567890abcdef12",
-        amount: {
-          eth: 2000,
-          usd: 6600000,
-          ens: 0
-        },
-        purpose: "Infrastructure development",
-        txHash: "0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890"
-      },
-      {
-        walletAddress: "0x9876543210fedcba9876543210fedcba98765432",
-        amount: {
-          eth: 500,
-          usd: 1700000,
-          ens: 0
-        },
-        purpose: "Security audit funding",
-        txHash: "0x9876543210fedcba9876543210fedcba9876543210fedcba9876543210fedcba98"
-      },
-      {
-        walletAddress: "0xfedcba9876543210fedcba9876543210fedcba98",
-        amount: {
-          eth: 800,
-          usd: 2720000,
-          ens: 0
-        },
-        purpose: "Community grants program",
-        txHash: "0xfedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210fe"
-      }
-    ]
-  },
+
   wallets: [
     {
       address: "0xFe89cc7aBB2C4183683ab71625C4fCB7B02D44b7",
@@ -71,17 +23,7 @@ export const ensFinancialData = {
       },
       manager: "ens-dao"
     },
-    {
-      address: "0x4F2083f5fBede34C2714aFfb3105539775f7FE64",
-      ensName: null,
-      type: "endaoment",
-      balance: {
-        eth: 16000,
-        usd: 52000000,
-        ens: 0
-      },
-      manager: "karpatkey"
-    },
+
     {
       address: "0x1234567890abcdef1234567890abcdef12345678",
       ensName: "controller.ens.eth",
@@ -128,19 +70,7 @@ export const ensFinancialData = {
     }
   ],
   transactions: [
-    {
-      txHash: "0x1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b",
-      fromAddress: "0xFe89cc7aBB2C4183683ab71625C4fCB7B02D44b7",
-      toAddress: "0x4F2083f5fBede34C2714aFfb3105539775f7FE64",
-      amount: {
-        eth: 16000,
-        usd: 52000000,
-        ens: 0
-      },
-      timestamp: "2023-03-07T00:00:00Z",
-      category: "endaoment-disbursement",
-      description: "Transfer of 16,000 ETH to ENDAOment Safe wallet (EP3.4)"
-    },
+
     {
       txHash: "0x2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c",
       fromAddress: "0xFe89cc7aBB2C4183683ab71625C4fCB7B02D44b7",
@@ -154,32 +84,8 @@ export const ensFinancialData = {
       category: "eth-to-usdc-swap",
       description: "Swap 10,000 ETH to USDC for operational expenses"
     },
-    {
-      txHash: "0x3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d",
-      fromAddress: "0x4F2083f5fBede34C2714aFfb3105539775f7FE64",
-      toAddress: "0x1234567890abcdef1234567890abcdef12345678",
-      amount: {
-        eth: 1000,
-        usd: 3400000,
-        ens: 0
-      },
-      timestamp: "2023-04-15T10:30:00Z",
-      category: "expenditure",
-      description: "Grant disbursement for ENS development project"
-    },
-    {
-      txHash: "0x4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e",
-      fromAddress: "0x4F2083f5fBede34C2714aFfb3105539775f7FE64",
-      toAddress: "0xabcdef1234567890abcdef1234567890abcdef12",
-      amount: {
-        eth: 2000,
-        usd: 6600000,
-        ens: 0
-      },
-      timestamp: "2023-05-20T14:45:00Z",
-      category: "expenditure",
-      description: "Infrastructure development funding"
-    },
+
+
     {
       txHash: "0x5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f",
       fromAddress: "0xFe89cc7aBB2C4183683ab71625C4fCB7B02D44b7",
@@ -291,45 +197,9 @@ export const ensFinancialData = {
       description: "Swap 10,000 ETH to USDC for operational expenses",
       date: "2022-11-01T00:00:00Z"
     },
-    {
-      expenditureId: "EP3.4",
-      category: "endaoment",
-      amount: {
-        eth: 16000,
-        usd: 52000000,
-        ens: 0
-      },
-      recipient: "0x4F2083f5fBede34C2714aFfb3105539775f7FE64",
-      txHash: "0x1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b",
-      description: "Transfer to ENDAOment Safe wallet",
-      date: "2023-03-07T00:00:00Z"
-    },
-    {
-      expenditureId: "EP4.1",
-      category: "grants",
-      amount: {
-        eth: 1000,
-        usd: 3400000,
-        ens: 0
-      },
-      recipient: "0x1234567890abcdef1234567890abcdef12345678",
-      txHash: "0x3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d",
-      description: "Grant for ENS development project",
-      date: "2023-04-15T10:30:00Z"
-    },
-    {
-      expenditureId: "EP4.2",
-      category: "development",
-      amount: {
-        eth: 2000,
-        usd: 6600000,
-        ens: 0
-      },
-      recipient: "0xabcdef1234567890abcdef1234567890abcdef12",
-      txHash: "0x4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e",
-      description: "Infrastructure development funding",
-      date: "2023-05-20T14:45:00Z"
-    },
+
+
+
     {
       expenditureId: "EP4.3",
       category: "operational",

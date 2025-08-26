@@ -71,14 +71,14 @@ const AnalyticsOverview = () => {
                 <span className="text-blue-400 text-lg">💰</span>
               </div>
             </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-300">Total Assets</p>
-              <p className="text-2xl font-bold text-white">{formatCurrency(totalAssets)}</p>
+                          <div className="ml-4">
+                <p className="text-sm font-medium text-gray-700 uppercase tracking-wide">Total Assets</p>
+                <p className="text-2xl font-bold text-gray-900">{formatCurrency(totalAssets)}</p>
+              </div>
             </div>
-          </div>
-          <div className="mt-4">
-            <span className="text-green-400 text-sm font-medium">+2.5% from last month</span>
-          </div>
+            <div className="mt-4">
+              <span className="text-green-600 text-sm font-medium">+2.5% from last month</span>
+            </div>
         </div>
 
         <div className="glass p-6 rounded-lg border border-gray-700">
@@ -88,14 +88,14 @@ const AnalyticsOverview = () => {
                 <span className="text-green-400 text-lg">📈</span>
               </div>
             </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-300">Net Balance</p>
-              <p className="text-2xl font-bold text-white">{formatCurrency(netBalance)}</p>
+                          <div className="ml-4">
+                <p className="text-sm font-medium text-gray-700 uppercase tracking-wide">Net Balance</p>
+                <p className="text-2xl font-bold text-gray-900">{formatCurrency(netBalance)}</p>
+              </div>
             </div>
-          </div>
-          <div className="mt-4">
-            <span className="text-green-400 text-sm font-medium">+1.8% from last month</span>
-          </div>
+            <div className="mt-4">
+              <span className="text-green-600 text-sm font-medium">+1.8% from last month</span>
+            </div>
         </div>
 
         <div className="glass p-6 rounded-lg border border-gray-700">
@@ -105,14 +105,14 @@ const AnalyticsOverview = () => {
                 <span className="text-purple-400 text-lg">🏦</span>
               </div>
             </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-300">Karpatkey ROI</p>
-              <p className="text-2xl font-bold text-white">{formatPercentage(karpatkeyROI)}</p>
+                          <div className="ml-4">
+                <p className="text-sm font-medium text-gray-700 uppercase tracking-wide">Karpatkey ROI</p>
+                <p className="text-2xl font-bold text-gray-900">{formatPercentage(karpatkeyROI)}</p>
+              </div>
             </div>
-          </div>
-          <div className="mt-4">
-            <span className="text-green-400 text-sm font-medium">+0.5% from last month</span>
-          </div>
+            <div className="mt-4">
+              <span className="text-green-600 text-sm font-medium">+0.5% from last month</span>
+            </div>
         </div>
 
         <div className="glass p-6 rounded-lg border border-gray-700">
@@ -122,14 +122,14 @@ const AnalyticsOverview = () => {
                 <span className="text-yellow-400 text-lg">📊</span>
               </div>
             </div>
-            <div className="ml-4">
-              <p className="text-sm font-medium text-gray-300">Avg Monthly Spend</p>
-              <p className="text-2xl font-bold text-white">{formatCurrency(avgMonthlyExpenditure)}</p>
+                          <div className="ml-4">
+                <p className="text-sm font-medium text-gray-700 uppercase tracking-wide">Avg Monthly Spend</p>
+                <p className="text-2xl font-bold text-gray-900">{formatCurrency(avgMonthlyExpenditure)}</p>
+              </div>
             </div>
-          </div>
-          <div className="mt-4">
-            <span className="text-red-400 text-sm font-medium">-5.2% from last month</span>
-          </div>
+            <div className="mt-4">
+              <span className="text-red-600 text-sm font-medium">-5.2% from last month</span>
+            </div>
         </div>
       </div>
 
@@ -169,42 +169,42 @@ const AnalyticsOverview = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Treasury Health Score */}
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Treasury Health Score</h3>
+          <h3 className="text-xl font-semibold text-gray-900 tracking-tight mb-4">Treasury Health Score</h3>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-gray-700">Liquidity</span>
+              <span className="text-sm font-semibold text-gray-900">Liquidity</span>
               <div className="flex items-center">
                 <div className="w-32 bg-gray-200 rounded-full h-2 mr-2">
                   <div className="bg-green-500 h-2 rounded-full" style={{ width: '85%' }}></div>
                 </div>
-                <span className="text-sm font-medium text-gray-900">85%</span>
+                <span className="text-sm font-semibold text-gray-900">85%</span>
               </div>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-gray-700">Diversification</span>
+              <span className="text-sm font-semibold text-gray-900">Diversification</span>
               <div className="flex items-center">
                 <div className="w-32 bg-gray-200 rounded-full h-2 mr-2">
                   <div className="bg-blue-500 h-2 rounded-full" style={{ width: '72%' }}></div>
                 </div>
-                <span className="text-sm font-medium text-gray-900">72%</span>
+                <span className="text-sm font-semibold text-gray-900">72%</span>
               </div>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-gray-700">Yield Generation</span>
+              <span className="text-sm font-semibold text-gray-900">Yield Generation</span>
               <div className="flex items-center">
                 <div className="w-32 bg-gray-200 rounded-full h-2 mr-2">
                   <div className="bg-purple-500 h-2 rounded-full" style={{ width: '68%' }}></div>
                 </div>
-                <span className="text-sm font-medium text-gray-900">68%</span>
+                <span className="text-sm font-semibold text-gray-900">68%</span>
               </div>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-gray-700">Risk Management</span>
+              <span className="text-sm font-semibold text-gray-900">Risk Management</span>
               <div className="flex items-center">
                 <div className="w-32 bg-gray-200 rounded-full h-2 mr-2">
                   <div className="bg-green-500 h-2 rounded-full" style={{ width: '90%' }}></div>
                 </div>
-                <span className="text-sm font-medium text-gray-900">90%</span>
+                <span className="text-sm font-semibold text-gray-900">90%</span>
               </div>
             </div>
           </div>
@@ -212,35 +212,35 @@ const AnalyticsOverview = () => {
 
         {/* Performance Insights */}
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Performance Insights</h3>
+          <h3 className="text-xl font-semibold text-gray-900 tracking-tight mb-4">Performance Insights</h3>
           <div className="space-y-4">
             <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
               <div>
-                <p className="text-sm font-medium text-green-800">Strong Liquidity Position</p>
-                <p className="text-xs text-green-600">85% of assets are liquid</p>
+                <p className="text-sm font-semibold text-gray-900">Strong Liquidity Position</p>
+                <p className="text-xs text-gray-700">85% of assets are liquid</p>
               </div>
-              <span className="text-green-600">✓</span>
+              <span className="text-green-700 font-bold">✓</span>
             </div>
             <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
               <div>
-                <p className="text-sm font-medium text-blue-800">Diversified Portfolio</p>
-                <p className="text-xs text-blue-600">Multiple asset classes</p>
+                <p className="text-sm font-semibold text-gray-900">Diversified Portfolio</p>
+                <p className="text-xs text-gray-700">Multiple asset classes</p>
               </div>
-              <span className="text-blue-600">✓</span>
+              <span className="text-blue-700 font-bold">✓</span>
             </div>
             <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
               <div>
-                <p className="text-sm font-medium text-yellow-800">Moderate Yield</p>
-                <p className="text-xs text-yellow-600">5.83% ROI on managed assets</p>
+                <p className="text-sm font-semibold text-gray-900">Moderate Yield</p>
+                <p className="text-xs text-gray-700">5.83% ROI on managed assets</p>
               </div>
-              <span className="text-yellow-600">⚠</span>
+              <span className="text-yellow-700 font-bold">⚠</span>
             </div>
             <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
               <div>
-                <p className="text-sm font-medium text-red-800">High Expenditure Rate</p>
-                <p className="text-xs text-red-600">9.3% of total assets spent</p>
+                <p className="text-sm font-semibold text-gray-900">High Expenditure Rate</p>
+                <p className="text-xs text-gray-700">9.3% of total assets spent</p>
               </div>
-              <span className="text-red-600">!</span>
+              <span className="text-red-700 font-bold">!</span>
             </div>
           </div>
         </div>
@@ -248,29 +248,29 @@ const AnalyticsOverview = () => {
 
       {/* Recommendations */}
       <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Strategic Recommendations</h3>
+        <h3 className="text-xl font-semibold text-gray-900 tracking-tight mb-4">Strategic Recommendations</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="p-4 border border-blue-200 rounded-lg bg-blue-50">
-            <h4 className="font-medium text-blue-900 mb-2">Increase Yield Generation</h4>
-            <p className="text-sm text-blue-700">
+            <h4 className="font-semibold text-gray-900 mb-2">Increase Yield Generation</h4>
+            <p className="text-sm text-gray-700 leading-relaxed">
               Consider allocating more assets to yield-generating strategies through Karpatkey Finance.
             </p>
           </div>
           <div className="p-4 border border-green-200 rounded-lg bg-green-50">
-            <h4 className="font-medium text-green-900 mb-2">Maintain Liquidity</h4>
-            <p className="text-sm text-green-700">
+            <h4 className="font-semibold text-gray-900 mb-2">Maintain Liquidity</h4>
+            <p className="text-sm text-gray-700 leading-relaxed">
               Current liquidity position is strong. Continue monitoring to ensure operational needs are met.
             </p>
           </div>
           <div className="p-4 border border-purple-200 rounded-lg bg-purple-50">
-            <h4 className="font-medium text-purple-900 mb-2">Diversify Further</h4>
-            <p className="text-sm text-purple-700">
+            <h4 className="font-semibold text-gray-900 mb-2">Diversify Further</h4>
+            <p className="text-sm text-gray-700 leading-relaxed">
               Consider adding more stablecoins and other low-volatility assets to reduce portfolio risk.
             </p>
           </div>
           <div className="p-4 border border-yellow-200 rounded-lg bg-yellow-50">
-            <h4 className="font-medium text-yellow-900 mb-2">Monitor Expenditures</h4>
-            <p className="text-sm text-yellow-700">
+            <h4 className="font-semibold text-gray-900 mb-2">Monitor Expenditures</h4>
+            <p className="text-sm text-gray-700 leading-relaxed">
               Review expenditure patterns to ensure sustainable spending levels relative to asset base.
             </p>
           </div>

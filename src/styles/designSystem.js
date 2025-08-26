@@ -124,19 +124,52 @@ export const borderRadius = {
   full: '9999px',
 };
 
+// Standardized Typography Classes
+export const typographyClasses = {
+  // Headings
+  h1: 'text-3xl font-bold text-black tracking-tight',
+  h2: 'text-2xl font-semibold text-black tracking-tight',
+  h3: 'text-xl font-semibold text-black tracking-tight',
+  h4: 'text-lg font-semibold text-black tracking-tight',
+  h5: 'text-base font-semibold text-black tracking-tight',
+  h6: 'text-sm font-semibold text-black tracking-tight',
+  
+  // Body text
+  body: 'text-base text-black leading-relaxed',
+  bodySmall: 'text-sm text-black leading-relaxed',
+  bodyLarge: 'text-lg text-black leading-relaxed',
+  
+  // Labels and captions
+  label: 'text-sm font-medium text-black uppercase tracking-wide',
+  caption: 'text-xs text-black uppercase tracking-wide',
+  
+  // Monospace
+  mono: 'font-mono text-sm text-black',
+  monoSmall: 'font-mono text-xs text-black',
+  
+  // Links
+  link: 'text-blue-600 hover:text-blue-700 font-medium',
+  
+  // Status text
+  success: 'text-green-600 font-medium',
+  warning: 'text-yellow-600 font-medium',
+  error: 'text-red-600 font-medium',
+  info: 'text-blue-600 font-medium',
+};
+
 // Standardized component classes
 export const componentClasses = {
   // Card components
   card: {
-    base: 'glass p-6 rounded border border-gray-700',
+    base: 'bg-white rounded-lg shadow-sm border border-gray-200 p-6',
     header: 'mb-4',
-    title: 'text-2xl font-bold text-white',
-    subtitle: 'text-gray-300 text-sm',
+    title: 'text-2xl font-semibold text-black tracking-tight',
+    subtitle: 'text-sm text-black mt-1',
   },
   
   // Stats cards
   statsCard: {
-    base: 'glass p-4 rounded text-white',
+    base: 'glass p-4 rounded text-black',
     title: 'text-lg font-semibold mb-1',
     value: 'text-3xl font-bold',
     subtitle: 'text-sm',
@@ -144,12 +177,12 @@ export const componentClasses = {
   
   // Tables
   table: {
-    container: 'glass rounded border border-gray-700 overflow-hidden',
-    header: 'bg-gray-800 border-b border-gray-700',
-    headerCell: 'px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase',
-    body: 'bg-gray-900 divide-y divide-gray-700',
-    row: 'hover:bg-gray-800 transition-colors',
-    cell: 'px-6 py-4 whitespace-nowrap',
+    container: 'bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden',
+    header: 'bg-gray-50 border-b border-gray-200',
+    headerCell: 'px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wide',
+    body: 'bg-white divide-y divide-gray-200',
+    row: 'hover:bg-gray-50 transition-colors',
+    cell: 'px-6 py-4 whitespace-nowrap text-sm text-black',
   },
   
   // Buttons
@@ -195,6 +228,165 @@ export const componentClasses = {
     grid: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4',
     flex: 'flex items-center justify-between',
   },
+
+  // Service Provider specific components
+  serviceProvider: {
+    // Container
+    container: 'space-y-0',
+    
+    // Collapsible sections
+    collapsibleSection: 'border-b border-gray-700',
+    collapsibleButton: 'w-full px-4 py-3 text-left hover:bg-gray-800 transition-colors',
+    collapsibleHeader: 'flex items-center justify-between',
+    collapsibleTitle: 'text-sm font-semibold text-black uppercase tracking-wide',
+    collapsibleSubtitle: 'text-sm text-black',
+    collapsibleIcon: 'text-black text-lg',
+    collapsibleContent: 'px-4 pb-4',
+    
+    // Metrics grid
+    metricsGrid: 'grid grid-cols-4 gap-3 py-3 border-b border-gray-200',
+    metricItem: 'text-center',
+    metricLabel: 'text-sm font-semibold text-black uppercase tracking-wider',
+    metricValue: 'text-xl font-light text-black',
+    metricSubtext: 'text-xs text-black',
+    
+    // Info grids
+    infoGrid: 'grid grid-cols-2 gap-4',
+    infoItem: '',
+    infoLabel: 'text-black text-sm',
+    infoValue: 'font-medium text-black',
+    infoValueContainer: 'flex items-center space-x-2',
+    infoDot: 'inline-block w-3 h-3 rounded-full',
+    
+    // Description
+    description: '',
+    descriptionLabel: 'text-black text-sm',
+    descriptionText: 'text-black mt-1',
+    
+    // Forum activity
+    forumGrid: 'grid grid-cols-3 gap-4',
+    forumItem: '',
+    forumLabel: 'text-black text-sm',
+    forumValue: 'font-medium text-black',
+    
+    // Links
+    link: 'text-blue-600 hover:text-blue-800 text-sm font-medium',
+    
+    // Q2 Updates
+    q2Update: 'border-t border-gray-100 pt-3',
+    q2UpdateContainer: 'bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4',
+    q2UpdateHeader: 'flex items-center justify-between mb-3',
+    q2UpdateTitle: 'text-sm font-semibold text-black',
+    q2UpdateDate: 'text-xs text-blue-600',
+    q2UpdateSection: 'mb-4',
+    q2UpdateSectionTitle: 'text-xs font-semibold text-black uppercase tracking-wider mb-2',
+    q2UpdateList: 'space-y-1',
+    q2UpdateListItem: 'text-xs text-black',
+    
+    // Financial status
+    financialStatus: 'mb-4 p-3 bg-green-50 border border-green-200 rounded',
+    financialStatusTitle: 'text-xs font-semibold text-black uppercase tracking-wider mb-2',
+    financialStatusGrid: 'space-y-1 text-xs',
+    financialStatusItem: '',
+    financialStatusLabel: 'text-green-700',
+    financialStatusValue: 'font-medium',
+    
+    // SPP2 Results
+    spp2Results: 'mb-4 p-3 bg-blue-50 border border-blue-200 rounded',
+    spp2ResultsTitle: 'text-xs font-semibold text-black uppercase tracking-wider mb-2',
+    spp2ResultsGrid: 'space-y-1 text-xs',
+    spp2ResultsItem: '',
+    spp2ResultsLabel: 'text-blue-700',
+    spp2ResultsValue: 'font-medium',
+    
+    // Quarterly metrics
+    quarterlyMetrics: 'mb-4',
+    quarterlyMetricsTitle: 'text-xs font-semibold text-black uppercase tracking-wider mb-2',
+    quarterlyMetricsGrid: 'grid grid-cols-2 gap-3',
+    quarterlyMetricsItem: 'text-center',
+    quarterlyMetricsValue: 'text-lg font-bold text-blue-600',
+    quarterlyMetricsLabel: 'text-xs text-blue-700',
+    
+    // Monthly breakdown
+    monthlyBreakdown: 'mb-4',
+    monthlyBreakdownTitle: 'text-xs font-semibold text-black uppercase tracking-wider mb-2',
+    monthlyBreakdownList: 'space-y-2',
+    monthlyBreakdownItem: 'bg-white border border-blue-200 rounded p-2',
+    monthlyBreakdownHeader: 'flex justify-between items-center mb-1',
+    monthlyBreakdownMonth: 'text-xs font-medium text-black',
+    monthlyBreakdownUptime: 'text-xs text-blue-600',
+    monthlyBreakdownGrid: 'grid grid-cols-3 gap-2 text-xs',
+    monthlyBreakdownGridItem: '',
+    monthlyBreakdownGridLabel: 'text-blue-700',
+    monthlyBreakdownGridValue: 'font-medium',
+    
+    // EIK Features
+    eikFeatures: 'mb-4',
+    eikFeaturesTitle: 'text-xs font-semibold text-black uppercase tracking-wider mb-2',
+    eikFeaturesList: 'space-y-1',
+    eikFeaturesItem: 'text-xs text-black',
+    
+    // EFP Integrations
+    efpIntegrations: 'mb-4 p-3 bg-purple-50 border border-purple-200 rounded',
+    efpIntegrationsTitle: 'text-xs font-semibold text-black uppercase tracking-wider mb-2',
+    efpIntegrationsGrid: 'space-y-1 text-xs',
+    efpIntegrationsItem: '',
+    efpIntegrationsLabel: 'text-purple-700',
+    efpIntegrationsValue: 'font-medium',
+    
+    // KPIs
+    kpis: 'mb-4 p-3 bg-emerald-50 border border-emerald-200 rounded',
+    kpisTitle: 'text-xs font-semibold text-black uppercase tracking-wider mb-2',
+    kpisGrid: 'space-y-1 text-xs',
+    kpisItem: '',
+    kpisLabel: 'text-emerald-700',
+    kpisValue: 'font-medium',
+    kpisDetails: 'mt-2 space-y-1',
+    
+    // Filters and sorting
+    filtersContainer: 'flex justify-between items-center py-3 border-b border-gray-200',
+    filtersLeft: 'flex space-x-2',
+    filtersRight: 'flex items-center space-x-2',
+    filterSelect: 'text-sm border border-gray-300 rounded px-2 py-1',
+    filterLabel: 'text-sm text-black',
+    
+    // Category statistics
+    categoryStats: 'grid grid-cols-2 gap-6',
+    categoryStatsSection: '',
+    categoryStatsTitle: 'text-sm font-semibold text-black mb-3',
+    categoryStatsList: 'space-y-3',
+    categoryStatsItem: 'flex items-center justify-between p-3 border border-gray-200 rounded-lg',
+    categoryStatsLeft: 'flex items-center space-x-3',
+    categoryStatsRight: 'text-right',
+    categoryStatsName: 'font-medium text-black',
+    categoryStatsCount: 'text-sm text-black',
+    categoryStatsFunding: 'font-semibold text-black',
+    
+    // Program statistics
+    programStats: 'space-y-3',
+    programStatsGrid: 'grid grid-cols-2 gap-4',
+    programStatsItem: 'text-center p-3 border border-gray-200 rounded-lg',
+    programStatsValue: 'text-2xl font-light text-black',
+    programStatsLabel: 'text-sm text-black',
+    
+    // Sources
+    sourcesList: 'space-y-3',
+    sourcesItem: 'border border-gray-200 rounded-lg p-3',
+    sourcesTitle: 'text-sm font-medium text-black mb-1',
+    sourcesLink: 'text-blue-600 hover:text-blue-800 text-sm',
+    
+    // Program updates
+    updatesList: 'space-y-0',
+    updateItem: '',
+    updateContent: 'space-y-3',
+    updateGrid: 'grid grid-cols-2 gap-4',
+    updateItem: '',
+    updateLabel: 'text-black text-sm',
+    updateValue: 'font-medium text-black',
+    updateDescription: '',
+    updateDescriptionLabel: 'text-black text-sm',
+    updateDescriptionText: 'text-black mt-1',
+  },
 };
 
 // Standardized spacing utilities
@@ -210,18 +402,18 @@ export const spacingClasses = {
 // Standardized color utilities
 export const colorClasses = {
   text: {
-    primary: 'text-white',
-    secondary: 'text-gray-300',
-    muted: 'text-gray-400',
-    success: 'text-green-400',
-    warning: 'text-yellow-400',
-    error: 'text-red-400',
-    info: 'text-blue-400',
+    primary: 'text-black',
+    secondary: 'text-black',
+    muted: 'text-black',
+    success: 'text-green-600',
+    warning: 'text-yellow-600',
+    error: 'text-red-600',
+    info: 'text-blue-600',
   },
   
   background: {
-    primary: 'bg-gray-800',
-    secondary: 'bg-gray-900',
+    primary: 'bg-white',
+    secondary: 'bg-gray-50',
     glass: 'glass',
     success: 'bg-green-600',
     warning: 'bg-yellow-600',
@@ -230,8 +422,8 @@ export const colorClasses = {
   },
   
   border: {
-    primary: 'border-gray-700',
-    secondary: 'border-gray-600',
+    primary: 'border-gray-200',
+    secondary: 'border-gray-300',
     success: 'border-green-600',
     warning: 'border-yellow-600',
     error: 'border-red-600',

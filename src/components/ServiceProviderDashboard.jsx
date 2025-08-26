@@ -5,6 +5,7 @@ import {
   getStatusColor, 
   formatDate 
 } from '../data/serviceProviderData';
+import { componentClasses } from '../styles/designSystem';
 
 const ServiceProviderDashboard = ({ expandedSections, toggleSection }) => {
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -30,25 +31,26 @@ const ServiceProviderDashboard = ({ expandedSections, toggleSection }) => {
   });
 
   const CollapsibleSection = ({ id, title, subtitle, children, isExpanded, onToggle }) => {
+    const styles = componentClasses.serviceProvider;
     return (
-      <div className="border-b border-slate-200">
+      <div className={styles.collapsibleSection}>
         <button
           onClick={() => onToggle(id)}
-          className="w-full px-4 py-3 text-left hover:bg-slate-25 transition-colors"
+          className={styles.collapsibleButton}
         >
-          <div className="flex items-center justify-between">
+          <div className={styles.collapsibleHeader}>
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wide">{title}</h3>
-              {subtitle && <span className="text-sm text-slate-500">{subtitle}</span>}
+              <h3 className={styles.collapsibleTitle}>{title}</h3>
+              {subtitle && <span className={styles.collapsibleSubtitle}>{subtitle}</span>}
             </div>
-            <div className="text-slate-400 text-lg">
+            <div className={styles.collapsibleIcon}>
               {isExpanded ? '−' : '+'}
             </div>
           </div>
         </button>
         
         {isExpanded && (
-          <div className="px-4 pb-4">
+          <div className={styles.collapsibleContent}>
             {children}
           </div>
         )}
@@ -57,7 +59,7 @@ const ServiceProviderDashboard = ({ expandedSections, toggleSection }) => {
   };
 
   return (
-    <div className="space-y-0">
+    <div className={componentClasses.serviceProvider.container}>
       {/* SPP2 Season Overview */}
       <CollapsibleSection
         id="spp2-overview"
@@ -68,52 +70,52 @@ const ServiceProviderDashboard = ({ expandedSections, toggleSection }) => {
       >
         <div className="space-y-4">
           {/* SPP2 Key Metrics */}
-          <div className="grid grid-cols-4 gap-3 py-3 border-b border-slate-200">
-            <div className="text-center">
-              <div className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Annual Budget</div>
-              <div className="text-xl font-light text-slate-900">{serviceProviderData.spp2Details.annualBudget}</div>
-              <div className="text-xs text-emerald-600">+25% from SPP1</div>
+          <div className={componentClasses.serviceProvider.metricsGrid}>
+            <div className={componentClasses.serviceProvider.metricItem}>
+              <div className={componentClasses.serviceProvider.metricLabel}>Annual Budget</div>
+              <div className={componentClasses.serviceProvider.metricValue}>{serviceProviderData.spp2Details.annualBudget}</div>
+              <div className={componentClasses.serviceProvider.metricSubtext}>+25% from SPP1</div>
             </div>
-            <div className="text-center">
-              <div className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Active Providers</div>
-              <div className="text-xl font-light text-slate-900">{serviceProviderData.spp2Details.totalProviders}</div>
-              <div className="text-xs text-slate-600">6 continuing, 2 new</div>
+            <div className={componentClasses.serviceProvider.metricItem}>
+              <div className={componentClasses.serviceProvider.metricLabel}>Active Providers</div>
+              <div className={componentClasses.serviceProvider.metricValue}>{serviceProviderData.spp2Details.totalProviders}</div>
+              <div className={componentClasses.serviceProvider.metricSubtext}>6 continuing, 2 new</div>
             </div>
-            <div className="text-center">
-              <div className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Monthly Funding</div>
-              <div className="text-xl font-light text-slate-900">{serviceProviderData.spp2Details.monthlyFunding}</div>
-              <div className="text-xs text-slate-600">Automated streams</div>
+            <div className={componentClasses.serviceProvider.metricItem}>
+              <div className={componentClasses.serviceProvider.metricLabel}>Monthly Funding</div>
+              <div className={componentClasses.serviceProvider.metricValue}>{serviceProviderData.spp2Details.monthlyFunding}</div>
+              <div className={componentClasses.serviceProvider.metricSubtext}>Automated streams</div>
             </div>
-            <div className="text-center">
-              <div className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Implementation</div>
-              <div className="text-xl font-light text-slate-900">{serviceProviderData.spp2Details.executableProposal}</div>
-              <div className="text-xs text-slate-600">Executed June 2025</div>
+            <div className={componentClasses.serviceProvider.metricItem}>
+              <div className={componentClasses.serviceProvider.metricLabel}>Implementation</div>
+              <div className={componentClasses.serviceProvider.metricValue}>{serviceProviderData.spp2Details.executableProposal}</div>
+              <div className={componentClasses.serviceProvider.metricSubtext}>Executed June 2025</div>
             </div>
           </div>
 
           {/* SPP2 Description and Features */}
           <div className="grid grid-cols-2 gap-6">
             <div>
-              <h4 className="text-sm font-semibold text-slate-900 mb-2">Program Evolution</h4>
-              <p className="text-slate-600 text-sm leading-relaxed mb-3">
+              <h4 className="text-sm font-semibold text-black mb-2">Program Evolution</h4>
+              <p className="text-black text-sm leading-relaxed mb-3">
                 {serviceProviderData.spp2Details.description}
               </p>
               <div className="space-y-2">
                 {serviceProviderData.spp2Details.keyFeatures.map((feature, index) => (
                   <div key={index} className="flex items-start space-x-2">
                     <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <span className="text-sm text-slate-600">{feature}</span>
+                    <span className="text-sm text-black">{feature}</span>
                   </div>
                 ))}
               </div>
             </div>
             <div>
-              <h4 className="text-sm font-semibold text-slate-900 mb-2">Governance & Implementation</h4>
+              <h4 className="text-sm font-semibold text-black mb-2">Governance & Implementation</h4>
               <div className="space-y-3">
                 {serviceProviderData.spp2Details.governanceLinks.map((link, index) => (
-                  <div key={index} className="border border-slate-200 rounded-lg p-3">
-                    <h5 className="text-sm font-medium text-slate-900 mb-1">{link.title}</h5>
-                    <p className="text-xs text-slate-600 mb-2">{link.description}</p>
+                  <div key={index} className="border border-gray-200 rounded-lg p-3">
+                    <h5 className="text-sm font-medium text-black mb-1">{link.title}</h5>
+                    <p className="text-xs text-black mb-2">{link.description}</p>
                     <a
                       href={link.url}
                       target="_blank"
@@ -140,12 +142,12 @@ const ServiceProviderDashboard = ({ expandedSections, toggleSection }) => {
       >
         <div className="space-y-0">
           {/* Filters and Sorting */}
-          <div className="flex justify-between items-center py-3 border-b border-slate-200">
-            <div className="flex space-x-2">
+          <div className={componentClasses.serviceProvider.filtersContainer}>
+            <div className={componentClasses.serviceProvider.filtersLeft}>
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="text-sm border border-slate-300 rounded px-2 py-1"
+                className={componentClasses.serviceProvider.filterSelect}
               >
                 <option value="all">All Categories</option>
                 {Object.keys(serviceProviderData.categories).map(category => (
@@ -153,12 +155,12 @@ const ServiceProviderDashboard = ({ expandedSections, toggleSection }) => {
                 ))}
               </select>
             </div>
-            <div className="flex items-center space-x-2">
-              <span className="text-sm text-slate-500">Sort by:</span>
+            <div className={componentClasses.serviceProvider.filtersRight}>
+              <span className={componentClasses.serviceProvider.filterLabel}>Sort by:</span>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="text-sm border border-slate-300 rounded px-2 py-1"
+                className={componentClasses.serviceProvider.filterSelect}
               >
                 <option value="name">Name</option>
                 <option value="funding">Funding</option>
@@ -180,50 +182,50 @@ const ServiceProviderDashboard = ({ expandedSections, toggleSection }) => {
             >
               <div className="space-y-4">
                 {/* Basic Info */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <span className="text-slate-500 text-sm">Category:</span>
-                    <div className="flex items-center space-x-2">
-                      <span className={`inline-block w-3 h-3 rounded-full ${getCategoryColor(provider.category)}`}></span>
-                      <span className="font-medium text-slate-900">{provider.category}</span>
+                <div className={componentClasses.serviceProvider.infoGrid}>
+                  <div className={componentClasses.serviceProvider.infoItem}>
+                    <span className={componentClasses.serviceProvider.infoLabel}>Category:</span>
+                    <div className={componentClasses.serviceProvider.infoValueContainer}>
+                      <span className={`${componentClasses.serviceProvider.infoDot} ${getCategoryColor(provider.category)}`}></span>
+                      <span className={componentClasses.serviceProvider.infoValue}>{provider.category}</span>
                     </div>
                   </div>
-                  <div>
-                    <span className="text-slate-500 text-sm">Status:</span>
-                    <div className="flex items-center space-x-2">
-                      <span className={`inline-block w-3 h-3 rounded-full ${getStatusColor(provider.status)}`}></span>
-                      <span className="font-medium text-slate-900">{provider.status}</span>
+                  <div className={componentClasses.serviceProvider.infoItem}>
+                    <span className={componentClasses.serviceProvider.infoLabel}>Status:</span>
+                    <div className={componentClasses.serviceProvider.infoValueContainer}>
+                      <span className={`${componentClasses.serviceProvider.infoDot} ${getStatusColor(provider.status)}`}></span>
+                      <span className={componentClasses.serviceProvider.infoValue}>{provider.status}</span>
                     </div>
                   </div>
-                  <div>
-                    <span className="text-slate-500 text-sm">Funding:</span>
-                    <div className="font-medium text-slate-900">{provider.funding}</div>
+                  <div className={componentClasses.serviceProvider.infoItem}>
+                    <span className={componentClasses.serviceProvider.infoLabel}>Funding:</span>
+                    <div className={componentClasses.serviceProvider.infoValue}>{provider.funding}</div>
                   </div>
-                  <div>
-                    <span className="text-slate-500 text-sm">Application Date:</span>
-                    <div className="font-medium text-slate-900">{formatDate(provider.applicationDate)}</div>
+                  <div className={componentClasses.serviceProvider.infoItem}>
+                    <span className={componentClasses.serviceProvider.infoLabel}>Application Date:</span>
+                    <div className={componentClasses.serviceProvider.infoValue}>{formatDate(provider.applicationDate)}</div>
                   </div>
                 </div>
 
                 {/* Description */}
-                <div>
-                  <span className="text-slate-500 text-sm">Description:</span>
-                  <p className="text-slate-900 mt-1">{provider.description}</p>
+                <div className={componentClasses.serviceProvider.description}>
+                  <span className={componentClasses.serviceProvider.descriptionLabel}>Description:</span>
+                  <p className={componentClasses.serviceProvider.descriptionText}>{provider.description}</p>
                 </div>
 
                 {/* Forum Activity */}
-                <div className="grid grid-cols-3 gap-4">
-                  <div>
-                    <span className="text-slate-500 text-sm">Contributors:</span>
-                    <div className="font-medium text-slate-900">{provider.contributors.join(', ')}</div>
+                <div className={componentClasses.serviceProvider.forumGrid}>
+                  <div className={componentClasses.serviceProvider.forumItem}>
+                    <span className={componentClasses.serviceProvider.forumLabel}>Contributors:</span>
+                    <div className={componentClasses.serviceProvider.forumValue}>{provider.contributors.join(', ')}</div>
                   </div>
-                  <div>
-                    <span className="text-slate-500 text-sm">Replies:</span>
-                    <div className="font-medium text-slate-900">{provider.replies}</div>
+                  <div className={componentClasses.serviceProvider.forumItem}>
+                    <span className={componentClasses.serviceProvider.forumLabel}>Replies:</span>
+                    <div className={componentClasses.serviceProvider.forumValue}>{provider.replies}</div>
                   </div>
-                  <div>
-                    <span className="text-slate-500 text-sm">Views:</span>
-                    <div className="font-medium text-slate-900">{provider.views}</div>
+                  <div className={componentClasses.serviceProvider.forumItem}>
+                    <span className={componentClasses.serviceProvider.forumLabel}>Views:</span>
+                    <div className={componentClasses.serviceProvider.forumValue}>{provider.views}</div>
                   </div>
                 </div>
 
@@ -233,7 +235,7 @@ const ServiceProviderDashboard = ({ expandedSections, toggleSection }) => {
                     href={provider.forumThread}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                    className={componentClasses.serviceProvider.link}
                   >
                     View Forum Discussion →
                   </a>
@@ -241,64 +243,82 @@ const ServiceProviderDashboard = ({ expandedSections, toggleSection }) => {
 
                 {/* Q2 Update Display */}
                 {provider.q2Update && (
-                  <div className="border-t border-slate-100 pt-3">
-                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <h5 className="text-sm font-semibold text-blue-900">Q2 2025 Update</h5>
-                        <span className="text-xs text-blue-600">{formatDate(provider.q2Update.date)}</span>
+                  <div className={componentClasses.serviceProvider.q2Update}>
+                    <div className={componentClasses.serviceProvider.q2UpdateContainer}>
+                      <div className={componentClasses.serviceProvider.q2UpdateHeader}>
+                        <h5 className={componentClasses.serviceProvider.q2UpdateTitle}>Q2 2025 Update</h5>
+                        <span className={componentClasses.serviceProvider.q2UpdateDate}>{formatDate(provider.q2Update.date)}</span>
                       </div>
                       
                       {/* Achievements */}
-                      <div className="mb-4">
-                        <h6 className="text-xs font-semibold text-blue-900 uppercase tracking-wider mb-2">Recent Achievements</h6>
-                        <ul className="space-y-1">
+                      <div className={componentClasses.serviceProvider.q2UpdateSection}>
+                        <h6 className={componentClasses.serviceProvider.q2UpdateSectionTitle}>Recent Achievements</h6>
+                        <ul className={componentClasses.serviceProvider.q2UpdateList}>
                           {provider.q2Update.achievements && provider.q2Update.achievements.map ? 
                             provider.q2Update.achievements.map((achievement, index) => (
-                              <li key={index} className="text-xs text-blue-800">• {achievement}</li>
+                              <li key={index} className={componentClasses.serviceProvider.q2UpdateListItem}>• {achievement}</li>
                             )) : 
-                            <li className="text-xs text-blue-800">• Update available</li>
+                            <li className={componentClasses.serviceProvider.q2UpdateListItem}>• Update available</li>
                           }
                         </ul>
                       </div>
 
                       {/* Financial Status */}
                       {provider.q2Update.financialStatus && (
-                        <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded">
-                          <h6 className="text-xs font-semibold text-green-900 uppercase tracking-wider mb-2">Financial Status</h6>
-                          <div className="space-y-1 text-xs">
-                            <div><span className="text-green-700">Income:</span> <span className="font-medium">{provider.q2Update.financialStatus.income}</span></div>
-                            <div><span className="text-green-700">Expenses:</span> <span className="font-medium">{provider.q2Update.financialStatus.expenses}</span></div>
-                            <div><span className="text-green-700">Budget:</span> <span className="font-medium">{provider.q2Update.financialStatus.budget}</span></div>
+                        <div className={componentClasses.serviceProvider.financialStatus}>
+                          <h6 className={componentClasses.serviceProvider.financialStatusTitle}>Financial Status</h6>
+                          <div className={componentClasses.serviceProvider.financialStatusGrid}>
+                            <div className={componentClasses.serviceProvider.financialStatusItem}>
+                              <span className={componentClasses.serviceProvider.financialStatusLabel}>Income:</span> 
+                              <span className={componentClasses.serviceProvider.financialStatusValue}>{provider.q2Update.financialStatus.income}</span>
+                            </div>
+                            <div className={componentClasses.serviceProvider.financialStatusItem}>
+                              <span className={componentClasses.serviceProvider.financialStatusLabel}>Expenses:</span> 
+                              <span className={componentClasses.serviceProvider.financialStatusValue}>{provider.q2Update.financialStatus.expenses}</span>
+                            </div>
+                            <div className={componentClasses.serviceProvider.financialStatusItem}>
+                              <span className={componentClasses.serviceProvider.financialStatusLabel}>Budget:</span> 
+                              <span className={componentClasses.serviceProvider.financialStatusValue}>{provider.q2Update.financialStatus.budget}</span>
+                            </div>
                           </div>
                         </div>
                       )}
 
                       {/* SPP2 Results */}
                       {provider.q2Update.spp2Results && (
-                        <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded">
-                          <h6 className="text-xs font-semibold text-blue-900 uppercase tracking-wider mb-2">SPP2 Results</h6>
-                          <div className="space-y-1 text-xs">
-                            <div><span className="text-blue-700">Ranking:</span> <span className="font-medium">{provider.q2Update.spp2Results.ranking}</span></div>
-                            <div><span className="text-blue-700">Funding:</span> <span className="font-medium">{provider.q2Update.spp2Results.funding}</span></div>
-                            <div><span className="text-blue-700">Status:</span> <span className="font-medium text-green-600">{provider.q2Update.spp2Results.status}</span></div>
+                        <div className={componentClasses.serviceProvider.spp2Results}>
+                          <h6 className={componentClasses.serviceProvider.spp2ResultsTitle}>SPP2 Results</h6>
+                          <div className={componentClasses.serviceProvider.spp2ResultsGrid}>
+                            <div className={componentClasses.serviceProvider.spp2ResultsItem}>
+                              <span className={componentClasses.serviceProvider.spp2ResultsLabel}>Ranking:</span> 
+                              <span className={componentClasses.serviceProvider.spp2ResultsValue}>{provider.q2Update.spp2Results.ranking}</span>
+                            </div>
+                            <div className={componentClasses.serviceProvider.spp2ResultsItem}>
+                              <span className={componentClasses.serviceProvider.spp2ResultsLabel}>Funding:</span> 
+                              <span className={componentClasses.serviceProvider.spp2ResultsValue}>{provider.q2Update.spp2Results.funding}</span>
+                            </div>
+                            <div className={componentClasses.serviceProvider.spp2ResultsItem}>
+                              <span className={componentClasses.serviceProvider.spp2ResultsLabel}>Status:</span> 
+                              <span className={`${componentClasses.serviceProvider.spp2ResultsValue} text-green-600`}>{provider.q2Update.spp2Results.status}</span>
+                            </div>
                           </div>
                         </div>
                       )}
 
                       {/* Quarterly Metrics */}
                       {provider.q2Update.quarterlyMetrics && (
-                        <div className="mb-4">
-                          <h6 className="text-xs font-semibold text-blue-900 uppercase tracking-wider mb-2">Q2 Traffic Metrics</h6>
-                          <div className="grid grid-cols-2 gap-3">
-                            <div className="text-center">
-                              <div className="text-lg font-bold text-blue-600">
+                        <div className={componentClasses.serviceProvider.quarterlyMetrics}>
+                          <h6 className={componentClasses.serviceProvider.quarterlyMetricsTitle}>Q2 Traffic Metrics</h6>
+                          <div className={componentClasses.serviceProvider.quarterlyMetricsGrid}>
+                            <div className={componentClasses.serviceProvider.quarterlyMetricsItem}>
+                              <div className={componentClasses.serviceProvider.quarterlyMetricsValue}>
                                 {provider.q2Update.quarterlyMetrics.totalQ2Traffic.toLocaleString()}
                               </div>
-                              <div className="text-xs text-blue-700">Total Q2 Requests</div>
+                              <div className={componentClasses.serviceProvider.quarterlyMetricsLabel}>Total Q2 Requests</div>
                             </div>
-                            <div className="text-center">
-                              <div className="text-lg font-bold text-green-600">99.999%</div>
-                              <div className="text-xs text-green-700">Average Uptime</div>
+                            <div className={componentClasses.serviceProvider.quarterlyMetricsItem}>
+                              <div className={componentClasses.serviceProvider.quarterlyMetricsValue}>99.999%</div>
+                              <div className={componentClasses.serviceProvider.quarterlyMetricsLabel}>Average Uptime</div>
                             </div>
                           </div>
                         </div>
@@ -306,27 +326,27 @@ const ServiceProviderDashboard = ({ expandedSections, toggleSection }) => {
 
                       {/* Monthly Breakdown */}
                       {provider.q2Update.quarterlyMetrics && (
-                        <div className="mb-4">
-                          <h6 className="text-xs font-semibold text-blue-900 uppercase tracking-wider mb-2">Monthly Breakdown</h6>
-                          <div className="space-y-2">
+                        <div className={componentClasses.serviceProvider.monthlyBreakdown}>
+                          <h6 className={componentClasses.serviceProvider.monthlyBreakdownTitle}>Monthly Breakdown</h6>
+                          <div className={componentClasses.serviceProvider.monthlyBreakdownList}>
                             {provider.q2Update.quarterlyMetrics.monthlyBreakdown.map((month, index) => (
-                              <div key={index} className="bg-white border border-blue-200 rounded p-2">
-                                <div className="flex justify-between items-center mb-1">
-                                  <span className="text-xs font-medium text-blue-900">{month.month}</span>
-                                  <span className="text-xs text-blue-600">{month.uptime}</span>
+                              <div key={index} className={componentClasses.serviceProvider.monthlyBreakdownItem}>
+                                <div className={componentClasses.serviceProvider.monthlyBreakdownHeader}>
+                                  <span className={componentClasses.serviceProvider.monthlyBreakdownMonth}>{month.month}</span>
+                                  <span className={componentClasses.serviceProvider.monthlyBreakdownUptime}>{month.uptime}</span>
                                 </div>
-                                <div className="grid grid-cols-3 gap-2 text-xs">
-                                  <div>
-                                    <span className="text-blue-700">Total:</span>
-                                    <div className="font-medium">{month.total.toLocaleString()}</div>
+                                <div className={componentClasses.serviceProvider.monthlyBreakdownGrid}>
+                                  <div className={componentClasses.serviceProvider.monthlyBreakdownGridItem}>
+                                    <span className={componentClasses.serviceProvider.monthlyBreakdownGridLabel}>Total:</span>
+                                    <div className={componentClasses.serviceProvider.monthlyBreakdownGridValue}>{month.total.toLocaleString()}</div>
                                   </div>
-                                  <div>
-                                    <span className="text-blue-700">eth.limo:</span>
-                                    <div className="font-medium">{month.ethLimo.toLocaleString()}</div>
+                                  <div className={componentClasses.serviceProvider.monthlyBreakdownGridItem}>
+                                    <span className={componentClasses.serviceProvider.monthlyBreakdownGridLabel}>eth.limo:</span>
+                                    <div className={componentClasses.serviceProvider.monthlyBreakdownGridValue}>{month.ethLimo.toLocaleString()}</div>
                                   </div>
-                                  <div>
-                                    <span className="text-blue-700">eth.link:</span>
-                                    <div className="font-medium">{month.ethLink.toLocaleString()}</div>
+                                  <div className={componentClasses.serviceProvider.monthlyBreakdownGridItem}>
+                                    <span className={componentClasses.serviceProvider.monthlyBreakdownGridLabel}>eth.link:</span>
+                                    <div className={componentClasses.serviceProvider.monthlyBreakdownGridValue}>{month.ethLink.toLocaleString()}</div>
                                   </div>
                                 </div>
                               </div>
@@ -337,11 +357,11 @@ const ServiceProviderDashboard = ({ expandedSections, toggleSection }) => {
 
                       {/* EIK Features */}
                       {provider.q2Update.achievements?.eik && (
-                        <div className="mb-4">
-                          <h6 className="text-xs font-semibold text-blue-900 uppercase tracking-wider mb-2">{provider.q2Update.achievements.eik.title}</h6>
-                          <ul className="space-y-1">
+                        <div className={componentClasses.serviceProvider.eikFeatures}>
+                          <h6 className={componentClasses.serviceProvider.eikFeaturesTitle}>{provider.q2Update.achievements.eik.title}</h6>
+                          <ul className={componentClasses.serviceProvider.eikFeaturesList}>
                             {provider.q2Update.achievements.eik.features.map((feature, index) => (
-                              <li key={index} className="text-xs text-blue-800">• {feature}</li>
+                              <li key={index} className={componentClasses.serviceProvider.eikFeaturesItem}>• {feature}</li>
                             ))}
                           </ul>
                         </div>
@@ -349,28 +369,52 @@ const ServiceProviderDashboard = ({ expandedSections, toggleSection }) => {
 
                       {/* EFP Integrations */}
                       {provider.q2Update.achievements?.efp?.integrations && (
-                        <div className="mb-4 p-3 bg-purple-50 border border-purple-200 rounded">
-                          <h6 className="text-xs font-semibold text-purple-900 uppercase tracking-wider mb-2">EFP Integrations</h6>
-                          <div className="space-y-1 text-xs">
-                            <div><span className="text-purple-700">New:</span> <span className="font-medium">{provider.q2Update.achievements.efp.integrations.new}</span></div>
-                            <div><span className="text-purple-700">Total:</span> <span className="font-medium">{provider.q2Update.achievements.efp.integrations.total}</span></div>
-                            <div><span className="text-purple-700">Examples:</span> <span className="font-medium">{provider.q2Update.achievements.efp.integrations.examples.join(', ')}</span></div>
+                        <div className={componentClasses.serviceProvider.efpIntegrations}>
+                          <h6 className={componentClasses.serviceProvider.efpIntegrationsTitle}>EFP Integrations</h6>
+                          <div className={componentClasses.serviceProvider.efpIntegrationsGrid}>
+                            <div className={componentClasses.serviceProvider.efpIntegrationsItem}>
+                              <span className={componentClasses.serviceProvider.efpIntegrationsLabel}>New:</span> 
+                              <span className={componentClasses.serviceProvider.efpIntegrationsValue}>{provider.q2Update.achievements.efp.integrations.new}</span>
+                            </div>
+                            <div className={componentClasses.serviceProvider.efpIntegrationsItem}>
+                              <span className={componentClasses.serviceProvider.efpIntegrationsLabel}>Total:</span> 
+                              <span className={componentClasses.serviceProvider.efpIntegrationsValue}>{provider.q2Update.achievements.efp.integrations.total}</span>
+                            </div>
+                            <div className={componentClasses.serviceProvider.efpIntegrationsItem}>
+                              <span className={componentClasses.serviceProvider.efpIntegrationsLabel}>Examples:</span> 
+                              <span className={componentClasses.serviceProvider.efpIntegrationsValue}>{provider.q2Update.achievements.efp.integrations.examples.join(', ')}</span>
+                            </div>
                           </div>
                         </div>
                       )}
 
                       {/* KPIs */}
                       {provider.q2Update.kpis && (
-                        <div className="mb-4 p-3 bg-emerald-50 border border-emerald-200 rounded">
-                          <h6 className="text-xs font-semibold text-emerald-900 uppercase tracking-wider mb-2">KPI Achievement</h6>
-                          <div className="space-y-1 text-xs">
-                            <div><span className="text-emerald-700">Target:</span> <span className="font-medium">{provider.q2Update.kpis.target}</span></div>
-                            <div><span className="text-emerald-700">Status:</span> <span className="font-medium text-green-600">{provider.q2Update.kpis.status}</span></div>
+                        <div className={componentClasses.serviceProvider.kpis}>
+                          <h6 className={componentClasses.serviceProvider.kpisTitle}>KPI Achievement</h6>
+                          <div className={componentClasses.serviceProvider.kpisGrid}>
+                            <div className={componentClasses.serviceProvider.kpisItem}>
+                              <span className={componentClasses.serviceProvider.kpisLabel}>Target:</span> 
+                              <span className={componentClasses.serviceProvider.kpisValue}>{provider.q2Update.kpis.target}</span>
+                            </div>
+                            <div className={componentClasses.serviceProvider.kpisItem}>
+                              <span className={componentClasses.serviceProvider.kpisLabel}>Status:</span> 
+                              <span className={`${componentClasses.serviceProvider.kpisValue} text-green-600`}>{provider.q2Update.kpis.status}</span>
+                            </div>
                             {provider.q2Update.kpis.details && (
-                              <div className="mt-2 space-y-1">
-                                <div><span className="text-emerald-700">EFP Integrations:</span> <span className="font-medium">{provider.q2Update.kpis.details.efpIntegrations}</span></div>
-                                <div><span className="text-emerald-700">EIK Features:</span> <span className="font-medium">{provider.q2Update.kpis.details.eikFeatures}</span></div>
-                                <div><span className="text-emerald-700">EFP Features:</span> <span className="font-medium">{provider.q2Update.kpis.details.efpFeatures}</span></div>
+                              <div className={componentClasses.serviceProvider.kpisDetails}>
+                                <div className={componentClasses.serviceProvider.kpisItem}>
+                                  <span className={componentClasses.serviceProvider.kpisLabel}>EFP Integrations:</span> 
+                                  <span className={componentClasses.serviceProvider.kpisValue}>{provider.q2Update.kpis.details.efpIntegrations}</span>
+                                </div>
+                                <div className={componentClasses.serviceProvider.kpisItem}>
+                                  <span className={componentClasses.serviceProvider.kpisLabel}>EIK Features:</span> 
+                                  <span className={componentClasses.serviceProvider.kpisValue}>{provider.q2Update.kpis.details.eikFeatures}</span>
+                                </div>
+                                <div className={componentClasses.serviceProvider.kpisItem}>
+                                  <span className={componentClasses.serviceProvider.kpisLabel}>EFP Features:</span> 
+                                  <span className={componentClasses.serviceProvider.kpisValue}>{provider.q2Update.kpis.details.efpFeatures}</span>
+                                </div>
                               </div>
                             )}
                           </div>
@@ -383,7 +427,7 @@ const ServiceProviderDashboard = ({ expandedSections, toggleSection }) => {
                           href={provider.q2Update.forumThread}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                          className={componentClasses.serviceProvider.link}
                         >
                           View Q2 2025 Update →
                         </a>
@@ -405,7 +449,7 @@ const ServiceProviderDashboard = ({ expandedSections, toggleSection }) => {
         isExpanded={expandedSections['program-updates']}
         onToggle={toggleSection}
       >
-        <div className="space-y-0">
+        <div className={componentClasses.serviceProvider.updatesList}>
           {serviceProviderData.programUpdates.map((update) => (
             <CollapsibleSection
               key={update.id}
@@ -415,27 +459,27 @@ const ServiceProviderDashboard = ({ expandedSections, toggleSection }) => {
               isExpanded={expandedSections[`update-${update.id}`]}
               onToggle={toggleSection}
             >
-              <div className="space-y-3">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <span className="text-slate-500 text-sm">Contributors:</span>
-                    <div className="font-medium text-slate-900">{update.contributors.join(', ')}</div>
+              <div className={componentClasses.serviceProvider.updateContent}>
+                <div className={componentClasses.serviceProvider.updateGrid}>
+                  <div className={componentClasses.serviceProvider.updateItem}>
+                    <span className={componentClasses.serviceProvider.updateLabel}>Contributors:</span>
+                    <div className={componentClasses.serviceProvider.updateValue}>{update.contributors.join(', ')}</div>
                   </div>
-                  <div>
-                    <span className="text-slate-500 text-sm">Category:</span>
-                    <div className="font-medium text-slate-900">{update.category}</div>
+                  <div className={componentClasses.serviceProvider.updateItem}>
+                    <span className={componentClasses.serviceProvider.updateLabel}>Category:</span>
+                    <div className={componentClasses.serviceProvider.updateValue}>{update.category}</div>
                   </div>
                 </div>
-                <div>
-                  <span className="text-slate-500 text-sm">Description:</span>
-                  <p className="text-slate-900 mt-1">{update.description}</p>
+                <div className={componentClasses.serviceProvider.updateDescription}>
+                  <span className={componentClasses.serviceProvider.updateDescriptionLabel}>Description:</span>
+                  <p className={componentClasses.serviceProvider.updateDescriptionText}>{update.description}</p>
                 </div>
                 <div>
                   <a
                     href={update.forumThread}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                    className={componentClasses.serviceProvider.link}
                   >
                     View Forum Discussion →
                   </a>
@@ -454,45 +498,45 @@ const ServiceProviderDashboard = ({ expandedSections, toggleSection }) => {
         isExpanded={expandedSections['category-stats']}
         onToggle={toggleSection}
       >
-        <div className="grid grid-cols-2 gap-6">
-          <div>
-            <h4 className="text-sm font-semibold text-slate-900 mb-3">Funding by Category</h4>
-            <div className="space-y-3">
+        <div className={componentClasses.serviceProvider.categoryStats}>
+          <div className={componentClasses.serviceProvider.categoryStatsSection}>
+            <h4 className={componentClasses.serviceProvider.categoryStatsTitle}>Funding by Category</h4>
+            <div className={componentClasses.serviceProvider.categoryStatsList}>
               {Object.entries(serviceProviderData.categories).map(([category, stats]) => (
-                <div key={category} className="flex items-center justify-between p-3 border border-slate-200 rounded-lg">
-                  <div className="flex items-center space-x-3">
+                <div key={category} className={componentClasses.serviceProvider.categoryStatsItem}>
+                  <div className={componentClasses.serviceProvider.categoryStatsLeft}>
                     <span className={`w-3 h-3 rounded-full ${getCategoryColor(category)}`}></span>
                     <div>
-                      <div className="font-medium text-slate-900">{category}</div>
-                      <div className="text-sm text-slate-500">{stats.count} providers</div>
+                      <div className={componentClasses.serviceProvider.categoryStatsName}>{category}</div>
+                      <div className={componentClasses.serviceProvider.categoryStatsCount}>{stats.count} providers</div>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="font-semibold text-slate-900">{stats.totalFunding}</div>
+                  <div className={componentClasses.serviceProvider.categoryStatsRight}>
+                    <div className={componentClasses.serviceProvider.categoryStatsFunding}>{stats.totalFunding}</div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-          <div>
-            <h4 className="text-sm font-semibold text-slate-900 mb-3">Program Statistics</h4>
-            <div className="space-y-3">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="text-center p-3 border border-slate-200 rounded-lg">
-                  <div className="text-2xl font-light text-slate-900">{serviceProviderData.statistics.totalProviders}</div>
-                  <div className="text-sm text-slate-500">Total Providers</div>
+          <div className={componentClasses.serviceProvider.categoryStatsSection}>
+            <h4 className={componentClasses.serviceProvider.categoryStatsTitle}>Program Statistics</h4>
+            <div className={componentClasses.serviceProvider.programStats}>
+              <div className={componentClasses.serviceProvider.programStatsGrid}>
+                <div className={componentClasses.serviceProvider.programStatsItem}>
+                  <div className={componentClasses.serviceProvider.programStatsValue}>{serviceProviderData.statistics.totalProviders}</div>
+                  <div className={componentClasses.serviceProvider.programStatsLabel}>Total Providers</div>
                 </div>
-                <div className="text-center p-3 border border-slate-200 rounded-lg">
-                  <div className="text-2xl font-light text-slate-900">{serviceProviderData.statistics.totalFunding}</div>
-                  <div className="text-sm text-slate-500">Total Funding</div>
+                <div className={componentClasses.serviceProvider.programStatsItem}>
+                  <div className={componentClasses.serviceProvider.programStatsValue}>{serviceProviderData.statistics.totalFunding}</div>
+                  <div className={componentClasses.serviceProvider.programStatsLabel}>Total Funding</div>
                 </div>
-                <div className="text-center p-3 border border-slate-200 rounded-lg">
-                  <div className="text-2xl font-light text-slate-900">{serviceProviderData.statistics.totalViews}</div>
-                  <div className="text-sm text-slate-500">Forum Views</div>
+                <div className={componentClasses.serviceProvider.programStatsItem}>
+                  <div className={componentClasses.serviceProvider.programStatsValue}>{serviceProviderData.statistics.totalViews}</div>
+                  <div className={componentClasses.serviceProvider.programStatsLabel}>Forum Views</div>
                 </div>
-                <div className="text-center p-3 border border-slate-200 rounded-lg">
-                  <div className="text-2xl font-light text-slate-900">{serviceProviderData.statistics.totalReplies}</div>
-                  <div className="text-sm text-slate-500">Total Replies</div>
+                <div className={componentClasses.serviceProvider.programStatsItem}>
+                  <div className={componentClasses.serviceProvider.programStatsValue}>{serviceProviderData.statistics.totalReplies}</div>
+                  <div className={componentClasses.serviceProvider.programStatsLabel}>Total Replies</div>
                 </div>
               </div>
             </div>
@@ -508,15 +552,15 @@ const ServiceProviderDashboard = ({ expandedSections, toggleSection }) => {
         isExpanded={expandedSections['sources']}
         onToggle={toggleSection}
       >
-        <div className="space-y-3">
+        <div className={componentClasses.serviceProvider.sourcesList}>
           {serviceProviderData.sources.map((source, index) => (
-            <div key={index} className="border border-slate-200 rounded-lg p-3">
-              <h4 className="text-sm font-medium text-slate-900 mb-1">{source.title}</h4>
+            <div key={index} className={componentClasses.serviceProvider.sourcesItem}>
+              <h4 className={componentClasses.serviceProvider.sourcesTitle}>{source.title}</h4>
               <a
                 href={source.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 hover:text-blue-800 text-sm"
+                className={componentClasses.serviceProvider.sourcesLink}
               >
                 View Source →
               </a>

@@ -19,15 +19,15 @@ const WalletsTable = () => {
 
   const getTypeColor = (type) => {
     const colors = {
-      'dao-treasury': 'bg-blue-100 text-blue-800 border border-blue-200',
-      'endaoment': 'bg-green-100 text-green-800 border border-green-200',
-      'controller': 'bg-purple-100 text-purple-800 border border-purple-200',
-      'karpatkey-managed': 'bg-orange-100 text-orange-800 border border-orange-200',
-      'working-group': 'bg-indigo-100 text-indigo-800 border border-indigo-200',
-      'contract': 'bg-gray-100 text-gray-800 border border-gray-200',
-      'governance': 'bg-red-100 text-red-800 border border-red-200',
-      'service-provider': 'bg-yellow-100 text-yellow-800 border border-yellow-200',
-      'other': 'bg-slate-100 text-slate-800 border border-slate-200'
+      'dao-treasury': 'bg-blue-900 text-blue-300 border border-blue-700',
+      'endaoment': 'bg-green-900 text-green-300 border border-green-700',
+      'controller': 'bg-purple-900 text-purple-300 border border-purple-700',
+      'karpatkey-managed': 'bg-orange-900 text-orange-300 border border-orange-700',
+      'working-group': 'bg-indigo-900 text-indigo-300 border border-indigo-700',
+      'contract': 'bg-gray-800 text-gray-300 border border-gray-600',
+      'governance': 'bg-red-900 text-red-300 border border-red-700',
+      'service-provider': 'bg-yellow-900 text-yellow-300 border border-yellow-700',
+      'other': 'bg-gray-800 text-gray-300 border border-gray-600'
     };
     return colors[type] || colors['other'];
   };

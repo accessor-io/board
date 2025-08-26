@@ -25,16 +25,16 @@ const StandardTable = ({
   };
 
   return (
-    <div className={`${componentClasses.table.container} ${className}`} {...props}>
+    <div className={`bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden ${className}`} {...props}>
       <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead className={componentClasses.table.header}>
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
             <tr>
               {headers.map((header, index) => (
                 <th 
                   key={index}
-                  className={`${componentClasses.table.headerCell} ${
-                    sortable ? 'cursor-pointer hover:text-gray-200' : ''
+                  className={`px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wide ${
+                    sortable ? 'cursor-pointer hover:text-gray-900' : ''
                   }`}
                   onClick={() => handleSort(header.key)}
                 >
@@ -46,17 +46,17 @@ const StandardTable = ({
               ))}
             </tr>
           </thead>
-          <tbody className={componentClasses.table.body}>
+          <tbody className="bg-white divide-y divide-gray-200">
             {data.map((row, rowIndex) => (
               <tr 
                 key={rowIndex} 
-                className={`${componentClasses.table.row} ${
+                className={`hover:bg-gray-50 ${
                   onRowClick ? 'cursor-pointer' : ''
                 }`}
                 onClick={() => onRowClick && onRowClick(row)}
               >
                 {headers.map((header, cellIndex) => (
-                  <td key={cellIndex} className={componentClasses.table.cell}>
+                  <td key={cellIndex} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {header.render ? header.render(row[header.key], row) : row[header.key]}
                   </td>
                 ))}

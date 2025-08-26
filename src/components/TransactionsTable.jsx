@@ -27,12 +27,12 @@ const TransactionsTable = () => {
 
   const getCategoryColor = (category) => {
     const colors = {
-      'expenditure': 'marble-red text-red-300 border border-red-700',
-      'revenue': 'marble-green text-green-300 border border-green-700',
-      'transfer': 'marble-blue text-blue-300 border border-blue-700',
-      'endaoment-disbursement': 'marble-purple text-purple-300 border border-purple-700',
-      'eth-to-usdc-swap': 'marble-yellow text-yellow-300 border border-yellow-700',
-      'other': 'bg-gray-800 text-gray-300 border border-gray-700'
+      'expenditure': 'bg-red-100 text-red-800 border border-red-200',
+      'revenue': 'bg-green-100 text-green-800 border border-green-200',
+      'transfer': 'bg-blue-100 text-blue-800 border border-blue-200',
+      'endaoment-disbursement': 'bg-purple-100 text-purple-800 border border-purple-200',
+      'eth-to-usdc-swap': 'bg-yellow-100 text-yellow-800 border border-yellow-200',
+      'other': 'bg-gray-100 text-gray-800 border border-gray-200'
     };
     return colors[category] || colors['other'];
   };
@@ -61,22 +61,22 @@ const TransactionsTable = () => {
   }, [txs, filter, walletFilter]);
 
   return (
-    <div className="glass border border-gray-700 overflow-hidden">
-      <div className="px-8 py-6 border-b border-gray-700 bg-gray-800">
+    <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+      <div className="px-8 py-6 border-b border-gray-200 bg-gray-50">
         <div className="flex justify-between items-center">
           <div>
-            <h3 className="text-base font-medium text-white uppercase tracking-wide">Transaction History</h3>
-            <p className="text-sm text-gray-300 mt-2">Recent on-chain transfers across ENS DAO wallets</p>
+            <h3 className="text-base font-medium text-gray-900 uppercase tracking-wide">Transaction History</h3>
+            <p className="text-sm text-gray-600 mt-2">Recent on-chain transfers across ENS DAO wallets</p>
           </div>
           <div className="flex items-end gap-4">
-            <label htmlFor="category-filter" className="block text-xs font-medium text-gray-300 mb-2 uppercase tracking-wide">
+            <label htmlFor="category-filter" className="block text-xs font-medium text-gray-700 mb-2 uppercase tracking-wide">
               Filter by Category
             </label>
             <select
               id="category-filter"
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
-              className="border border-gray-600 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-800 text-white"
+              className="border border-gray-300 rounded-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900"
             >
                {categories.map((category) => (
                 <option key={category} value={category}>
@@ -112,41 +112,41 @@ const TransactionsTable = () => {
       </div>
       
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-700">
-          <thead className="bg-gray-800 sticky top-[56px] z-10">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50 sticky top-[56px] z-10">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                 Transaction
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                 From → To
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                 Amount
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                 Wallet
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                 Category
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                 Date
               </th>
             </tr>
           </thead>
-          <tbody className="bg-gray-900 divide-y divide-gray-700">
+          <tbody className="bg-white divide-y divide-gray-200">
             {filteredTransactions.map((transaction, index) => (
-              <tr key={index} className={index % 2 === 0 ? 'bg-gray-900 hover:bg-gray-800' : 'bg-gray-950 hover:bg-gray-800'}>
+              <tr key={index} className={index % 2 === 0 ? 'bg-white hover:bg-gray-50' : 'bg-gray-50 hover:bg-gray-100'}>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div>
-                    <div className="text-sm font-medium text-white font-mono">
+                    <div className="text-sm font-medium text-gray-900 font-mono">
                       {formatAddress(transaction.hash)}
                     </div>
-                    <div className="text-xs text-gray-400">{transaction.asset}</div>
+                    <div className="text-xs text-gray-500">{transaction.asset}</div>
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-white">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   <div className="flex items-center space-x-2">
                     <span className="font-mono">{formatAddress(transaction.from)}</span>
                     <span>→</span>
@@ -154,12 +154,12 @@ const TransactionsTable = () => {
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-semibold text-white">
+                  <div className="text-sm font-semibold text-gray-900">
                     {transaction.value ? `${transaction.value.toFixed(6)} ${transaction.asset}` : '-'}
                   </div>
-                  <div className="text-xs text-gray-400 capitalize">{transaction.direction}</div>
+                  <div className="text-xs text-gray-500 capitalize">{transaction.direction}</div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-white">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {transaction.address ? formatAddress(transaction.address) : '—'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
@@ -167,7 +167,7 @@ const TransactionsTable = () => {
                     {transaction.category}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-white">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {transaction.timestamp ? formatDate(transaction.timestamp) : '—'}
                 </td>
               </tr>
@@ -176,12 +176,12 @@ const TransactionsTable = () => {
         </table>
       </div>
       
-      <div className="px-6 py-4 bg-gray-800 border-t border-gray-700">
+      <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
         <div className="flex justify-between text-sm">
-          <span className="text-gray-400">
+          <span className="text-gray-600">
             Showing {filteredTransactions.length} of {txs.length} transfers
           </span>
-          <span className="text-gray-400">Updated live</span>
+          <span className="text-gray-600">Updated live</span>
         </div>
       </div>
     </div>
