@@ -33,8 +33,8 @@ const StandardTable = ({
               {headers.map((header, index) => (
                 <th 
                   key={index}
-                  className={`px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wide ${
-                    sortable ? 'cursor-pointer hover:text-gray-900' : ''
+                  className={`px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wide ${
+                    sortable ? 'cursor-pointer hover:text-black' : ''
                   }`}
                   onClick={() => handleSort(header.key)}
                 >
@@ -56,7 +56,7 @@ const StandardTable = ({
                 onClick={() => onRowClick && onRowClick(row)}
               >
                 {headers.map((header, cellIndex) => (
-                  <td key={cellIndex} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td key={cellIndex} className="px-6 py-4 whitespace-nowrap text-sm text-black">
                     {header.render ? header.render(row[header.key], row) : row[header.key]}
                   </td>
                 ))}

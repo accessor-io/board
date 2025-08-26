@@ -41,27 +41,27 @@ const ContractsTable = () => {
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
       <div className="px-6 py-4 border-b border-gray-200">
-        <h3 className="text-xl font-semibold text-gray-900 tracking-tight">Smart Contracts</h3>
-        <p className="text-sm text-gray-600 mt-1 leading-relaxed">ENS DAO associated smart contracts and their details</p>
+        <h3 className="text-xl font-semibold text-black tracking-tight">Smart Contracts</h3>
+        <p className="text-sm text-black mt-1 leading-relaxed">ENS DAO associated smart contracts and their details</p>
       </div>
       
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wide">
+              <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wide">
                 Contract
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wide">
+              <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wide">
                 Address / ENS Name
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wide">
+              <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wide">
                 Type
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wide">
+              <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wide">
                 Deployed
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wide">
+              <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wide">
                 Actions
               </th>
             </tr>
@@ -73,7 +73,7 @@ const ContractsTable = () => {
                   <div className="flex items-center">
                     <span className="text-xl mr-3">{getTypeIcon(contract.type)}</span>
                     <div>
-                      <div className="text-sm font-medium text-gray-900">{contract.name}</div>
+                      <div className="text-sm font-medium text-black">{contract.name}</div>
                       {contract.ensName && (
                         <div className="text-sm text-blue-600">{contract.ensName}</div>
                       )}
@@ -81,10 +81,10 @@ const ContractsTable = () => {
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-mono text-gray-900">
+                  <div className="text-sm font-mono text-black">
                     {formatAddress(contract.address)}
                   </div>
-                  <div className="text-xs text-gray-500 font-mono">
+                  <div className="text-xs text-black font-mono">
                     {contract.address}
                   </div>
                 </td>
@@ -93,7 +93,7 @@ const ContractsTable = () => {
                     {contract.type.replace('-', ' ')}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
                   {formatDate(contract.deployedTimestamp)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -114,13 +114,13 @@ const ContractsTable = () => {
       
       <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
         <div className="flex justify-between text-sm">
-          <span className="text-gray-500">Total Contracts: {ensFinancialData.contracts.length}</span>
+          <span className="text-black">Total Contracts: {ensFinancialData.contracts.length}</span>
           <div className="flex space-x-4">
             {Object.entries(ensFinancialData.contracts.reduce((acc, contract) => {
               acc[contract.type] = (acc[contract.type] || 0) + 1;
               return acc;
             }, {})).map(([type, count]) => (
-              <span key={type} className="text-gray-500">
+              <span key={type} className="text-black">
                 {type}: {count}
               </span>
             ))}
