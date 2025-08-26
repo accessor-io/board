@@ -124,6 +124,137 @@ export const borderRadius = {
   full: '9999px',
 };
 
+// Animation and Transition Classes
+export const animations = {
+  // Transition durations
+  duration: {
+    fast: '150ms',
+    normal: '300ms',
+    slow: '500ms',
+    slower: '700ms',
+  },
+  
+  // Transition timing functions
+  easing: {
+    linear: 'linear',
+    ease: 'ease',
+    easeIn: 'ease-in',
+    easeOut: 'ease-out',
+    easeInOut: 'ease-in-out',
+    cubicBezier: 'cubic-bezier(0.4, 0, 0.2, 1)',
+    bounce: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+  },
+  
+  // Standard transition classes
+  transitions: {
+    // Basic transitions
+    all: 'transition-all duration-300 ease-in-out',
+    colors: 'transition-colors duration-200 ease-in-out',
+    opacity: 'transition-opacity duration-200 ease-in-out',
+    transform: 'transition-transform duration-300 ease-in-out',
+    shadow: 'transition-shadow duration-200 ease-in-out',
+    border: 'transition-border duration-200 ease-in-out',
+    
+    // Smooth transitions
+    smooth: 'transition-all duration-300 cubic-bezier(0.4, 0, 0.2, 1)',
+    smoothFast: 'transition-all duration-150 cubic-bezier(0.4, 0, 0.2, 1)',
+    smoothSlow: 'transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1)',
+    
+    // Hover effects
+    hover: 'transition-all duration-200 ease-in-out hover:scale-105',
+    hoverLift: 'transition-all duration-200 ease-in-out hover:-translate-y-1 hover:shadow-lg',
+    hoverGlow: 'transition-all duration-200 ease-in-out hover:shadow-lg hover:shadow-blue-500/25',
+    
+    // Interactive elements
+    button: 'transition-all duration-200 ease-in-out active:scale-95',
+    card: 'transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1',
+    link: 'transition-colors duration-200 ease-in-out hover:text-blue-600',
+    
+    // Collapsible animations
+    collapsible: 'transition-all duration-300 ease-in-out',
+    expand: 'transition-all duration-300 ease-in-out transform origin-top',
+    fade: 'transition-opacity duration-200 ease-in-out',
+    
+    // Loading states
+    loading: 'transition-opacity duration-300 ease-in-out',
+    pulse: 'animate-pulse',
+    spin: 'animate-spin',
+    
+    // Entrance animations
+    slideIn: 'transition-all duration-500 ease-out transform translate-y-4 opacity-0',
+    slideInUp: 'transition-all duration-500 ease-out transform translate-y-8 opacity-0',
+    slideInDown: 'transition-all duration-500 ease-out transform -translate-y-8 opacity-0',
+    slideInLeft: 'transition-all duration-500 ease-out transform translate-x-8 opacity-0',
+    slideInRight: 'transition-all duration-500 ease-out transform -translate-x-8 opacity-0',
+    
+    // Scale animations
+    scaleIn: 'transition-all duration-300 ease-out transform scale-95 opacity-0',
+    scaleOut: 'transition-all duration-300 ease-in transform scale-105 opacity-0',
+    
+    // Fade animations
+    fadeIn: 'transition-opacity duration-300 ease-out opacity-0',
+    fadeOut: 'transition-opacity duration-300 ease-in opacity-100',
+  },
+  
+  // Animation states
+  states: {
+    // Hover states
+    hover: {
+      scale: 'hover:scale-105',
+      lift: 'hover:-translate-y-1',
+      glow: 'hover:shadow-lg hover:shadow-blue-500/25',
+      brightness: 'hover:brightness-110',
+      contrast: 'hover:contrast-125',
+    },
+    
+    // Focus states
+    focus: {
+      ring: 'focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+      outline: 'focus:outline-none focus:ring-2 focus:ring-blue-500',
+      border: 'focus:border-blue-500',
+    },
+    
+    // Active states
+    active: {
+      scale: 'active:scale-95',
+      brightness: 'active:brightness-90',
+    },
+    
+    // Disabled states
+    disabled: {
+      opacity: 'disabled:opacity-50',
+      cursor: 'disabled:cursor-not-allowed',
+    },
+  },
+  
+  // Keyframe animations
+  keyframes: {
+    // Fade in from top
+    fadeInDown: '@keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }',
+    
+    // Fade in from bottom
+    fadeInUp: '@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }',
+    
+    // Fade in from left
+    fadeInLeft: '@keyframes fadeInLeft { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }',
+    
+    // Fade in from right
+    fadeInRight: '@keyframes fadeInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }',
+    
+    // Scale in
+    scaleIn: '@keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }',
+    
+    // Bounce in
+    bounceIn: '@keyframes bounceIn { 0% { opacity: 0; transform: scale(0.3); } 50% { opacity: 1; transform: scale(1.05); } 70% { transform: scale(0.9); } 100% { opacity: 1; transform: scale(1); } }',
+    
+    // Slide in from top
+    slideInDown: '@keyframes slideInDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }',
+    
+    // Slide in from bottom
+    slideInUp: '@keyframes slideInUp { from { transform: translateY(100%); } to { transform: translateY(0); } }',
+  },
+};
+
 // Standardized Typography Classes
 export const typographyClasses = {
   // Headings
@@ -161,7 +292,7 @@ export const typographyClasses = {
 export const componentClasses = {
   // Card components
   card: {
-    base: 'bg-white rounded-lg shadow-sm border border-gray-200 p-6',
+    base: 'bg-white rounded-lg shadow-sm border border-gray-200 p-6 transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1',
     header: 'mb-4',
     title: 'text-2xl font-semibold text-black tracking-tight',
     subtitle: 'text-sm text-black mt-1',
@@ -169,7 +300,7 @@ export const componentClasses = {
   
   // Stats cards
   statsCard: {
-    base: 'glass p-4 rounded text-black',
+    base: 'glass p-4 rounded text-black transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1',
     title: 'text-lg font-semibold mb-1',
     value: 'text-3xl font-bold',
     subtitle: 'text-sm',
@@ -181,15 +312,15 @@ export const componentClasses = {
     header: 'bg-gray-50 border-b border-gray-200',
     headerCell: 'px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wide',
     body: 'bg-white divide-y divide-gray-200',
-    row: 'hover:bg-gray-50 transition-colors',
+    row: 'hover:bg-gray-50 transition-colors duration-200 ease-in-out',
     cell: 'px-6 py-4 whitespace-nowrap text-sm text-black',
   },
   
   // Buttons
   button: {
-    base: 'px-4 py-2 rounded font-medium transition-colors',
+    base: 'px-4 py-2 rounded font-medium transition-all duration-200 ease-in-out active:scale-95',
     primary: 'bg-blue-600 text-white hover:bg-blue-700',
-    secondary: 'bg-gray-600 text-white hover:bg-gray-700',
+    secondary: 'bg-gray-600 text-white',
     success: 'bg-green-600 text-white hover:bg-green-700',
     warning: 'bg-yellow-600 text-white hover:bg-yellow-700',
     error: 'bg-red-600 text-white hover:bg-red-700',
@@ -197,7 +328,7 @@ export const componentClasses = {
   
   // Badges
   badge: {
-    base: 'inline-flex px-2 py-1 text-xs font-semibold rounded text-white',
+    base: 'inline-flex px-2 py-1 text-xs font-semibold rounded text-white transition-all duration-200 ease-in-out',
     primary: 'bg-blue-600',
     success: 'bg-green-600',
     warning: 'bg-yellow-600',
@@ -209,15 +340,15 @@ export const componentClasses = {
   nav: {
     container: 'border-b border-gray-700',
     tabs: '-mb-px flex space-x-4',
-    tab: 'py-2 px-1 border-b-2 font-medium text-sm',
+    tab: 'py-2 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ease-in-out',
     active: 'border-blue-500 text-blue-400',
     inactive: 'border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-600',
   },
   
   // Forms
   form: {
-    input: 'bg-gray-700 border border-gray-600 text-white rounded px-3 py-2',
-    select: 'bg-gray-700 border border-gray-600 text-white rounded px-3 py-1',
+    input: 'bg-gray-700 border border-gray-600 text-white rounded px-3 py-2 transition-all duration-200 ease-in-out focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
+    select: 'bg-gray-700 border border-gray-600 text-white rounded px-3 py-1 transition-all duration-200 ease-in-out focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
     label: 'block text-sm font-medium text-gray-300 mb-1',
   },
   
@@ -236,16 +367,16 @@ export const componentClasses = {
     
     // Collapsible sections
     collapsibleSection: 'border-b border-gray-700',
-    collapsibleButton: 'w-full px-4 py-3 text-left hover:bg-gray-800 transition-colors',
+    collapsibleButton: 'w-full px-4 py-3 text-left transition-all duration-200 ease-in-out',
     collapsibleHeader: 'flex items-center justify-between',
     collapsibleTitle: 'text-sm font-semibold text-black uppercase tracking-wide',
     collapsibleSubtitle: 'text-sm text-black',
-    collapsibleIcon: 'text-black text-lg',
-    collapsibleContent: 'px-4 pb-4',
+    collapsibleIcon: 'text-black text-lg transition-transform duration-200 ease-in-out',
+    collapsibleContent: 'px-4 pb-4 transition-all duration-300 ease-in-out transform origin-top',
     
     // Metrics grid
     metricsGrid: 'grid grid-cols-4 gap-3 py-3 border-b border-gray-200',
-    metricItem: 'text-center',
+    metricItem: 'text-center transition-all duration-200 ease-in-out hover:scale-105',
     metricLabel: 'text-sm font-semibold text-black uppercase tracking-wider',
     metricValue: 'text-xl font-light text-black',
     metricSubtext: 'text-xs text-black',

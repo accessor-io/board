@@ -22,7 +22,7 @@ const Sidebar = () => {
                   className={`flex items-center px-4 py-3 text-sm rounded-md ${
                     activeItem === item.id
                       ? 'bg-blue-600 text-white'
-                      : 'text-gray-300 hover:bg-gray-700'
+                      : 'text-gray-300'
                   }`}
                   onClick={() => setActiveItem(item.id)}
                 >
