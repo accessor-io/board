@@ -64,71 +64,71 @@ const AnalyticsOverview = () => {
     <div className="space-y-6">
       {/* Key Performance Indicators */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div className="glass p-6 rounded-lg border border-gray-700">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                <span className="text-blue-600 text-lg">💰</span>
+              <div className="w-8 h-8 bg-blue-900 rounded-lg flex items-center justify-center">
+                <span className="text-blue-400 text-lg">💰</span>
               </div>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Total Assets</p>
-              <p className="text-2xl font-bold text-gray-900">{formatCurrency(totalAssets)}</p>
+              <p className="text-sm font-medium text-gray-300">Total Assets</p>
+              <p className="text-2xl font-bold text-white">{formatCurrency(totalAssets)}</p>
             </div>
           </div>
           <div className="mt-4">
-            <span className="text-green-600 text-sm font-medium">+2.5% from last month</span>
+            <span className="text-green-400 text-sm font-medium">+2.5% from last month</span>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div className="glass p-6 rounded-lg border border-gray-700">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                <span className="text-green-600 text-lg">📈</span>
+              <div className="w-8 h-8 bg-green-900 rounded-lg flex items-center justify-center">
+                <span className="text-green-400 text-lg">📈</span>
               </div>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Net Balance</p>
-              <p className="text-2xl font-bold text-gray-900">{formatCurrency(netBalance)}</p>
+              <p className="text-sm font-medium text-gray-300">Net Balance</p>
+              <p className="text-2xl font-bold text-white">{formatCurrency(netBalance)}</p>
             </div>
           </div>
           <div className="mt-4">
-            <span className="text-green-600 text-sm font-medium">+1.8% from last month</span>
+            <span className="text-green-400 text-sm font-medium">+1.8% from last month</span>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div className="glass p-6 rounded-lg border border-gray-700">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                <span className="text-purple-600 text-lg">🏦</span>
+              <div className="w-8 h-8 bg-purple-900 rounded-lg flex items-center justify-center">
+                <span className="text-purple-400 text-lg">🏦</span>
               </div>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Karpatkey ROI</p>
-              <p className="text-2xl font-bold text-gray-900">{formatPercentage(karpatkeyROI)}</p>
+              <p className="text-sm font-medium text-gray-300">Karpatkey ROI</p>
+              <p className="text-2xl font-bold text-white">{formatPercentage(karpatkeyROI)}</p>
             </div>
           </div>
           <div className="mt-4">
-            <span className="text-green-600 text-sm font-medium">+0.5% from last month</span>
+            <span className="text-green-400 text-sm font-medium">+0.5% from last month</span>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div className="glass p-6 rounded-lg border border-gray-700">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <div className="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
-                <span className="text-yellow-600 text-lg">📊</span>
+              <div className="w-8 h-8 bg-yellow-900 rounded-lg flex items-center justify-center">
+                <span className="text-yellow-400 text-lg">📊</span>
               </div>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Avg Monthly Spend</p>
-              <p className="text-2xl font-bold text-gray-900">{formatCurrency(avgMonthlyExpenditure)}</p>
+              <p className="text-sm font-medium text-gray-300">Avg Monthly Spend</p>
+              <p className="text-2xl font-bold text-white">{formatCurrency(avgMonthlyExpenditure)}</p>
             </div>
           </div>
           <div className="mt-4">
-            <span className="text-red-600 text-sm font-medium">-5.2% from last month</span>
+            <span className="text-red-400 text-sm font-medium">-5.2% from last month</span>
           </div>
         </div>
       </div>
@@ -136,13 +136,13 @@ const AnalyticsOverview = () => {
       {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Expenditure Trends */}
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div className="glass p-6 rounded-lg border border-gray-700">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Expenditure Trends</h3>
+            <h3 className="text-lg font-semibold text-white">Expenditure Trends</h3>
             <select
               value={selectedTimeframe}
               onChange={(e) => setSelectedTimeframe(e.target.value)}
-              className="text-sm border border-gray-300 rounded-md px-2 py-1"
+              className="text-sm border border-gray-600 rounded-md px-2 py-1 bg-gray-800 text-white"
             >
               <option value="6m">Last 6 months</option>
               <option value="12m">Last 12 months</option>
@@ -153,15 +153,15 @@ const AnalyticsOverview = () => {
         </div>
 
         {/* Risk Metrics Radar */}
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Risk & Performance Metrics</h3>
+        <div className="glass p-6 rounded-lg border border-gray-700">
+          <h3 className="text-lg font-semibold text-white mb-4">Risk & Performance Metrics</h3>
           <RadarChart data={riskMetricsData} />
         </div>
       </div>
 
       {/* Asset Allocation TreeMap */}
-      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Asset Allocation Breakdown</h3>
+      <div className="glass p-6 rounded-lg border border-gray-700">
+        <h3 className="text-lg font-semibold text-white mb-4">Asset Allocation Breakdown</h3>
         <TreeMap data={assetPerformanceData} />
       </div>
 

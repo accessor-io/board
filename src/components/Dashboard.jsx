@@ -17,7 +17,7 @@ import KarpatkeyReports from './KarpatkeyReports';
 import MilestoneTracker from './MilestoneTracker';
 import ProjectTracker from './ProjectTracker';
 import RealTimeData from './RealTimeData';
-import TreasuryVisualization3D from './TreasuryVisualization3D';
+// import TreasuryVisualization3D from './TreasuryVisualization3D';
 
 
 const Dashboard = () => {
@@ -33,7 +33,6 @@ const Dashboard = () => {
 
   const tabs = [
     { id: 'overview', name: 'Portfolio Overview' },
-    { id: '3d-visual', name: '🎯 3D Treasury' },
     { id: 'assets', name: 'Asset Management' },
     { id: 'analytics', name: 'Risk Analytics' },
     { id: 'transactions', name: 'Transaction History' },
@@ -66,38 +65,38 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-gray-900">
       {/* Executive Summary Bar */}
-      <div className="bg-white border-b border-slate-200">
+      <div className="glass border-b border-gray-700">
         <div className="px-4 py-3">
           <div className="grid grid-cols-4 gap-3">
-            <div className="border-r border-slate-200 pr-4">
-              <div className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-1">
+            <div className="border-r border-gray-700 pr-4">
+              <div className="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-1">
                 TOTAL AUM
               </div>
-              <div className="text-xl font-light text-slate-900">$926.8M</div>
-              <div className="text-sm text-emerald-600">+2.5% MTD</div>
+              <div className="text-xl font-light text-white">$926.8M</div>
+              <div className="text-sm text-green-400">+2.5% MTD</div>
             </div>
-            <div className="border-r border-slate-200 pr-4">
-              <div className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-1">
+            <div className="border-r border-gray-700 pr-4">
+              <div className="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-1">
                 LIQUID ASSETS
               </div>
-              <div className="text-xl font-light text-slate-900">$840.2M</div>
-              <div className="text-sm text-emerald-600">+1.8% MTD</div>
+              <div className="text-xl font-light text-white">$840.2M</div>
+              <div className="text-sm text-green-400">+1.8% MTD</div>
             </div>
-            <div className="border-r border-slate-200 pr-4">
-              <div className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-1">
+            <div className="border-r border-gray-700 pr-4">
+              <div className="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-1">
                 MONTHLY OUTFLOW
               </div>
-              <div className="text-xl font-light text-slate-900">$642K</div>
-              <div className="text-sm text-slate-600">+12.3% vs Prior</div>
+              <div className="text-xl font-light text-white">$642K</div>
+              <div className="text-sm text-gray-400">+12.3% vs Prior</div>
             </div>
             <div>
-              <div className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-1">
+              <div className="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-1">
                 CUSTODY ACCOUNTS
               </div>
-              <div className="text-xl font-light text-slate-900">12</div>
-              <div className="text-sm text-slate-600">No Change</div>
+              <div className="text-xl font-light text-white">12</div>
+              <div className="text-sm text-gray-400">No Change</div>
             </div>
           </div>
         </div>

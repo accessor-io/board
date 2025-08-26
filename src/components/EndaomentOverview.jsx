@@ -51,52 +51,52 @@ const EndaomentOverview = () => {
       </div>
 
       {/* ENDAOment Details */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">ENDAOment Fund Details</h3>
+      <div className="glass rounded-lg border border-gray-700 p-6">
+        <h3 className="text-lg font-semibold text-white mb-4">ENDAOment Fund Details</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Fund ID</label>
-            <p className="text-sm font-mono bg-gray-50 p-2 rounded">{endaoment.fundId}</p>
+            <label className="block text-sm font-medium text-gray-300 mb-2">Fund ID</label>
+            <p className="text-sm font-mono bg-gray-800 p-2 rounded text-white">{endaoment.fundId}</p>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Safe Wallet Address</label>
-            <p className="text-sm font-mono bg-gray-50 p-2 rounded">{endaoment.walletAddress}</p>
+            <label className="block text-sm font-medium text-gray-300 mb-2">Safe Wallet Address</label>
+            <p className="text-sm font-mono bg-gray-800 p-2 rounded text-white">{endaoment.walletAddress}</p>
           </div>
         </div>
       </div>
 
       {/* Recipients Table */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900">ENDAOment Recipients</h3>
-          <p className="text-sm text-gray-500 mt-1">Organizations and projects that received funding</p>
+      <div className="glass rounded-lg border border-gray-700 overflow-hidden">
+        <div className="px-6 py-4 border-b border-gray-700">
+          <h3 className="text-lg font-semibold text-white">ENDAOment Recipients</h3>
+          <p className="text-sm text-gray-400 mt-1">Organizations and projects that received funding</p>
         </div>
         
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-gray-700">
+            <thead className="bg-gray-800">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                   Recipient
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                   Amount (ETH)
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                   USD Value
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                   Purpose
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                   Transaction
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-gray-900 divide-y divide-gray-700">
               {endaoment.recipients.map((recipient, index) => (
-                <tr key={index} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 font-mono">
+                <tr key={index} className="hover:bg-gray-800">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white font-mono">
                     {formatAddress(recipient.walletAddress)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-mono">
