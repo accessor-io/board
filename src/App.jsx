@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Dashboard from './components/Dashboard';
+import Terminal from './components/Terminal';
 import PriceTicker from './components/PriceTicker';
 
 function App() {
@@ -139,7 +139,7 @@ function App() {
 
       {/* Main Content */}
       <div className="max-w-full mx-auto relative">
-        <Dashboard />
+        <Terminal />
       </div>
 
       {/* CSS Animations */}
