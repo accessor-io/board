@@ -61,21 +61,25 @@ const Terminal = () => {
 
   // Matrix rain effect
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
     const characters = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const drops = Array.from({ length: 50 }, () => ({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      speed: Math.random() * 5 + 1,
+    const drops = Array.from({ length: 30 }, () => ({
+      x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1920),
+      y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1080),
+      speed: Math.random() * 3 + 1,
       char: characters[Math.floor(Math.random() * characters.length)]
     }));
+
+    setMatrixRain(drops);
 
     const interval = setInterval(() => {
       setMatrixRain(prev => prev.map(drop => ({
         ...drop,
-        y: drop.y > window.innerHeight ? 0 : drop.y + drop.speed,
+        y: drop.y > (typeof window !== 'undefined' ? window.innerHeight : 1080) ? 0 : drop.y + drop.speed,
         char: characters[Math.floor(Math.random() * characters.length)]
       })));
-    }, 50);
+    }, 100);
 
     return () => clearInterval(interval);
   }, []);
@@ -373,39 +377,50 @@ const Terminal = () => {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      if (command.trim()) {
-        handleCommand(command);
-        setCommand('');
-        setHistoryIndex(-1);
+    try {
+      if (e.key === 'Enter') {
+        if (command.trim()) {
+          handleCommand(command);
+          setCommand('');
+          setHistoryIndex(-1);
+        }
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (commandHistory.length > 0) {
+          const newIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
+          setHistoryIndex(newIndex);
+          setCommand(commandHistory[commandHistory.length - 1 - newIndex]?.command || '');
+        }
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (historyIndex > 0) {
+          const newIndex = historyIndex - 1;
+          setHistoryIndex(newIndex);
+          setCommand(commandHistory[commandHistory.length - 1 - newIndex]?.command || '');
+        } else if (historyIndex === 0) {
+          setHistoryIndex(-1);
+          setCommand('');
+        }
+      } else if (e.key === 'Tab') {
+        e.preventDefault();
+        const suggestions = getSuggestions(command);
+        if (suggestions.length === 1) {
+          setCommand(suggestions[0]);
+        } else if (suggestions.length > 1) {
+          setCommandSuggestions(suggestions);
+        }
+      } else if (e.key === 'Escape') {
+        setCommandSuggestions([]);
       }
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      if (commandHistory.length > 0) {
-        const newIndex = historyIndex < commandHistory.length - 1 ? historyIndex + 1 : historyIndex;
-        setHistoryIndex(newIndex);
-        setCommand(commandHistory[commandHistory.length - 1 - newIndex].command);
-      }
-    } else if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      if (historyIndex > 0) {
-        const newIndex = historyIndex - 1;
-        setHistoryIndex(newIndex);
-        setCommand(commandHistory[commandHistory.length - 1 - newIndex].command);
-      } else if (historyIndex === 0) {
-        setHistoryIndex(-1);
-        setCommand('');
-      }
-    } else if (e.key === 'Tab') {
-      e.preventDefault();
-      const suggestions = getSuggestions(command);
-      if (suggestions.length === 1) {
-        setCommand(suggestions[0]);
-      } else if (suggestions.length > 1) {
-        setCommandSuggestions(suggestions);
-      }
-    } else if (e.key === 'Escape') {
-      setCommandSuggestions([]);
+    } catch (error) {
+      console.error('Terminal command error:', error);
+      setCommandHistory(prev => [...prev, {
+        command: command,
+        output: `Error: ${error.message}`,
+        type: 'error',
+        timestamp: new Date(),
+        directory: currentDirectory
+      }]);
     }
   };
 
@@ -901,4 +916,50 @@ const TerminalSection = ({ id, title, subtitle, children, isExpanded, onToggle, 
   );
 };
 
-export default Terminal;
+// Error Boundary Component
+class TerminalErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('Terminal Error:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen bg-black text-green-400 font-mono flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-red-400 text-2xl mb-4">TERMINAL ERROR</div>
+            <div className="text-green-300 mb-4">A terminal error has occurred</div>
+            <div className="text-gray-400 text-sm mb-6 max-w-md">
+              {this.state.error?.message || 'Unknown error'}
+            </div>
+            <button
+              onClick={() => this.setState({ hasError: false, error: null })}
+              className="px-4 py-2 bg-green-900 border border-green-500 text-green-300 hover:bg-green-800 transition-colors"
+            >
+              RESTART TERMINAL
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
+export default function TerminalWithErrorBoundary() {
+  return (
+    <TerminalErrorBoundary>
+      <Terminal />
+    </TerminalErrorBoundary>
+  );
+}
