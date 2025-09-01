@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import AnalyticsOverview from './AnalyticsOverview';
 import AssetTracker from './AssetTracker';
 import BlockchainData from './BlockchainData';
@@ -22,15 +22,81 @@ const Terminal = () => {
   const [commandHistory, setCommandHistory] = useState([]);
   const [activeSection, setActiveSection] = useState('overview');
   const [expandedSections, setExpandedSections] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [matrixRain, setMatrixRain] = useState([]);
+  const [typingText, setTypingText] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const [commandSuggestions, setCommandSuggestions] = useState([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
+  const [currentDirectory, setCurrentDirectory] = useState('/ens-treasury');
+  const [filesystem, setFilesystem] = useState({
+    '/': {
+      type: 'directory',
+      children: ['ens-treasury']
+    },
+    '/ens-treasury': {
+      type: 'directory',
+      children: ['overview', 'assets', 'analytics', 'transactions', 'wallets', 'service-providers', 'address-diagram', 'working-groups', 'contracts', 'expenditures', 'endaoment', 'karpatkey', 'milestones', 'projects', 'realtime']
+    },
+    '/ens-treasury/overview': { type: 'file', content: 'Portfolio Overview - Treasury composition and key metrics' },
+    '/ens-treasury/assets': { type: 'file', content: 'Asset Management - Allocation and performance tracking' },
+    '/ens-treasury/analytics': { type: 'file', content: 'Risk Analytics - Portfolio risk assessment and analytics' },
+    '/ens-treasury/transactions': { type: 'file', content: 'Transaction History - Multi-chain transaction data' },
+    '/ens-treasury/wallets': { type: 'file', content: 'Wallet Administration - Portfolio and access control' },
+    '/ens-treasury/service-providers': { type: 'file', content: 'Service Providers - External service management' },
+    '/ens-treasury/address-diagram': { type: 'file', content: 'Address Network - Wallet connections and relationships' },
+    '/ens-treasury/working-groups': { type: 'file', content: 'Working Groups - Spending and performance analysis' },
+    '/ens-treasury/contracts': { type: 'file', content: 'Smart Contracts - Active deployments and interactions' },
+    '/ens-treasury/expenditures': { type: 'file', content: 'Expenditure Records - Detailed tracking and categorization' },
+    '/ens-treasury/endaoment': { type: 'file', content: 'Endaoment Partnership - Charitable giving initiatives' },
+    '/ens-treasury/karpatkey': { type: 'file', content: 'Karpatkey Reports - Professional treasury management' },
+    '/ens-treasury/milestones': { type: 'file', content: 'Development Milestones - Project roadmap tracking' },
+    '/ens-treasury/projects': { type: 'file', content: 'Active Projects - Current development initiatives' },
+    '/ens-treasury/realtime': { type: 'file', content: 'Real-Time Data - Live feeds and monitoring' }
+  });
+
   const terminalRef = useRef(null);
   const inputRef = useRef(null);
+  const cursorRef = useRef(null);
+
+  // Matrix rain effect
+  useEffect(() => {
+    const characters = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const drops = Array.from({ length: 50 }, () => ({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      speed: Math.random() * 5 + 1,
+      char: characters[Math.floor(Math.random() * characters.length)]
+    }));
+
+    const interval = setInterval(() => {
+      setMatrixRain(prev => prev.map(drop => ({
+        ...drop,
+        y: drop.y > window.innerHeight ? 0 : drop.y + drop.speed,
+        char: characters[Math.floor(Math.random() * characters.length)]
+      })));
+    }, 50);
+
+    return () => clearInterval(interval);
+  }, []);
 
   // Update time every second
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
+  }, []);
+
+  // Typing animation
+  const typeText = useCallback(async (text, speed = 50) => {
+    setIsTyping(true);
+    setTypingText('');
+
+    for (let i = 0; i < text.length; i++) {
+      await new Promise(resolve => setTimeout(resolve, speed));
+      setTypingText(prev => prev + text[i]);
+    }
+
+    setIsTyping(false);
   }, []);
 
   // Scroll spy effect
@@ -56,47 +122,178 @@ const Terminal = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [activeSection]);
 
-  // Terminal commands
+  // Enhanced terminal commands
   const commands = {
     help: () => ({
-      output: `Available commands:
-  help                    Show this help message
-  clear                   Clear terminal history
-  ls                      List available sections
-  cd <section>           Navigate to section
-  expand <section>       Toggle section expansion
-  status                  Show system status
-  time                    Show current time
-  exit                    Exit terminal mode`,
+      output: `┌─ Available Commands ──────────────────────────────────────┐
+│ help              Display this help message                  │
+│ clear             Clear terminal screen                      │
+│ ls [path]         List directory contents                    │
+│ cd <directory>    Change directory                           │
+│ pwd               Print working directory                    │
+│ cat <file>        Display file contents                      │
+│ grep <pattern>    Search for pattern in current directory    │
+│ whoami            Display current user                       │
+│ date              Display current date and time              │
+│ uptime            Show system uptime                         │
+│ status            Display system status                      │
+│ expand <section>  Toggle section expansion                   │
+│ goto <section>    Navigate to section                        │
+│ history           Show command history                       │
+│ man <command>     Display manual for command                 │
+│ exit              Exit terminal session                      │
+└──────────────────────────────────────────────────────────────┘`,
       type: 'info'
     }),
 
     clear: () => {
       setCommandHistory([]);
-      return { output: 'Terminal cleared.', type: 'success' };
+      return { output: '\x1b[2J\x1b[H', type: 'system' };
     },
 
-    ls: () => ({
-      output: `Available sections:
-  overview               Portfolio Overview
-  assets                 Asset Management
-  analytics              Risk Analytics
-  transactions           Transaction History
-  wallets                Wallet Administration
-  service-providers      Service Providers
-  address-diagram        Address Network
-  working-groups         Working Groups
-  contracts              Smart Contracts
-  expenditures           Expenditure Records
-  endaoment              Endaoment Partnership
-  karpatkey              Karpatkey Reports
-  milestones             Development Milestones
-  projects               Active Projects
-  realtime               Real-Time Data`,
+    ls: (args) => {
+      const path = args[0] || currentDirectory;
+      const entry = filesystem[path];
+
+      if (!entry) {
+        return { output: `ls: cannot access '${path}': No such file or directory`, type: 'error' };
+      }
+
+      if (entry.type === 'file') {
+        return { output: path.split('/').pop(), type: 'info' };
+      }
+
+      const contents = entry.children.map(child => {
+        const childPath = path === '/' ? `/${child}` : `${path}/${child}`;
+        const childEntry = filesystem[childPath];
+        const type = childEntry?.type === 'directory' ? 'd' : '-';
+        const permissions = childEntry?.type === 'directory' ? 'drwxr-xr-x' : '-rw-r--r--';
+        const size = childEntry?.content?.length || 0;
+        const modified = new Date().toLocaleDateString();
+
+        return `${type}${permissions} 1 root root ${size.toString().padStart(8)} ${modified} ${child}`;
+      }).join('\n');
+
+      return { output: contents || 'total 0', type: 'info' };
+    },
+
+    cd: (args) => {
+      const path = args[0];
+
+      if (!path || path === '~') {
+        setCurrentDirectory('/ens-treasury');
+        return { output: '', type: 'success' };
+      }
+
+      if (path === '..') {
+        const parent = currentDirectory.split('/').slice(0, -1).join('/') || '/';
+        setCurrentDirectory(parent);
+        return { output: '', type: 'success' };
+      }
+
+      if (path === '/') {
+        setCurrentDirectory('/');
+        return { output: '', type: 'success' };
+      }
+
+      const newPath = path.startsWith('/') ? path : `${currentDirectory}/${path}`.replace(/\/+/g, '/');
+      const entry = filesystem[newPath];
+
+      if (!entry) {
+        return { output: `cd: ${path}: No such file or directory`, type: 'error' };
+      }
+
+      if (entry.type !== 'directory') {
+        return { output: `cd: ${path}: Not a directory`, type: 'error' };
+      }
+
+      setCurrentDirectory(newPath);
+      return { output: '', type: 'success' };
+    },
+
+    pwd: () => ({
+      output: currentDirectory,
       type: 'info'
     }),
 
-    cd: (args) => {
+    cat: (args) => {
+      const path = args[0];
+      if (!path) {
+        return { output: 'cat: missing file operand', type: 'error' };
+      }
+
+      const filePath = path.startsWith('/') ? path : `${currentDirectory}/${path}`.replace(/\/+/g, '/');
+      const entry = filesystem[filePath];
+
+      if (!entry) {
+        return { output: `cat: ${path}: No such file or directory`, type: 'error' };
+      }
+
+      if (entry.type !== 'file') {
+        return { output: `cat: ${path}: Is a directory`, type: 'error' };
+      }
+
+      return { output: entry.content, type: 'info' };
+    },
+
+    whoami: () => ({
+      output: 'ens-admin@terminal',
+      type: 'info'
+    }),
+
+    date: () => ({
+      output: currentTime.toLocaleString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        timeZoneName: 'short'
+      }),
+      type: 'info'
+    }),
+
+    uptime: () => {
+      const uptime = Math.floor((Date.now() - Date.now()) / 1000);
+      const hours = Math.floor(uptime / 3600);
+      const minutes = Math.floor((uptime % 3600) / 60);
+      return { output: `${hours}:${minutes.toString().padStart(2, '0')} up, 1 user, load average: 0.01, 0.02, 0.03`, type: 'info' };
+    },
+
+    status: () => ({
+      output: `┌─ System Status ─────────────────────────────────────────┐
+│ Active Section: ${activeSection.padEnd(40)} │
+│ Current Directory: ${currentDirectory.padEnd(34)} │
+│ Total Sections: 15${' '.repeat(39)} │
+│ Memory Usage: Normal${' '.repeat(38)} │
+│ Network Status: Connected${' '.repeat(35)} │
+│ Data Freshness: Real-time${' '.repeat(35)} │
+│ Terminal Uptime: ${Math.floor((Date.now() - Date.now()) / 1000)}s${' '.repeat(35)} │
+└────────────────────────────────────────────────────────────┘`,
+      type: 'info'
+    }),
+
+    expand: (args) => {
+      const section = args[0];
+      if (section) {
+        const sectionElement = document.getElementById(section);
+        if (sectionElement) {
+          setExpandedSections(prev => ({
+            ...prev,
+            [section]: !prev[section]
+          }));
+          return { output: `Section ${section} ${!expandedSections[section] ? 'expanded' : 'collapsed'}`, type: 'success' };
+        } else {
+          return { output: `Section '${section}' not found`, type: 'error' };
+        }
+      } else {
+        return { output: 'Usage: expand <section>', type: 'error' };
+      }
+    },
+
+    goto: (args) => {
       const section = args[0];
       const sectionElement = document.getElementById(section);
       if (sectionElement) {
@@ -104,47 +301,55 @@ const Terminal = () => {
         setActiveSection(section);
         return { output: `Navigated to ${section}`, type: 'success' };
       } else {
-        return { output: `Section '${section}' not found. Use 'ls' to see available sections.`, type: 'error' };
+        return { output: `Section '${section}' not found`, type: 'error' };
       }
     },
 
-    expand: (args) => {
-      const section = args[0];
-      if (section) {
-        setExpandedSections(prev => ({
-          ...prev,
-          [section]: !prev[section]
-        }));
-        return { output: `Toggled expansion for ${section}`, type: 'success' };
-      } else {
-        return { output: 'Please specify a section to expand.', type: 'error' };
+    history: () => ({
+      output: commandHistory.map((entry, index) =>
+        `${(index + 1).toString().padStart(4)}  ${entry.command}`
+      ).join('\n') || 'No commands in history',
+      type: 'info'
+    }),
+
+    man: (args) => {
+      const command = args[0];
+      if (!command) {
+        return { output: 'What manual page do you want?', type: 'error' };
       }
+
+      const manuals = {
+        help: 'HELP(1) User Commands HELP(1)\n\nNAME\n    help - display help information\n\nSYNOPSIS\n    help [COMMAND]\n\nDESCRIPTION\n    Display helpful information about builtin commands.',
+        ls: 'LS(1) User Commands LS(1)\n\nNAME\n    ls - list directory contents\n\nSYNOPSIS\n    ls [OPTION]... [FILE]...\n\nDESCRIPTION\n    List information about the FILEs (the current directory by default).',
+        cd: 'CD(1) User Commands CD(1)\n\nNAME\n    cd - change the current directory\n\nSYNOPSIS\n    cd [DIRECTORY]\n\nDESCRIPTION\n    Change the current directory to DIRECTORY.',
+        cat: 'CAT(1) User Commands CAT(1)\n\nNAME\n    cat - concatenate files and print on the standard output\n\nSYNOPSIS\n    cat [OPTION]... [FILE]...\n\nDESCRIPTION\n    Concatenate FILE(s), or standard input, to standard output.'
+      };
+
+      return { output: manuals[command] || `No manual entry for ${command}`, type: 'info' };
     },
-
-    status: () => ({
-      output: `System Status:
-  Active Section: ${activeSection}
-  Total Sections: 15
-  System Uptime: ${Math.floor((Date.now() - Date.now()) / 1000)}s
-  Memory Usage: Normal
-  Network Status: Connected
-  Data Freshness: Real-time`,
-      type: 'info'
-    }),
-
-    time: () => ({
-      output: `Current Time: ${currentTime.toLocaleString()}`,
-      type: 'info'
-    }),
 
     exit: () => {
       window.location.reload();
-      return { output: 'Exiting terminal...', type: 'warning' };
+      return { output: 'Logging out...', type: 'warning' };
     }
   };
 
+  // Command auto-completion
+  const getSuggestions = (input) => {
+    const availableCommands = Object.keys(commands);
+    const currentPath = currentDirectory;
+
+    if (!input) return availableCommands.slice(0, 5);
+
+    const suggestions = availableCommands.filter(cmd =>
+      cmd.toLowerCase().startsWith(input.toLowerCase())
+    );
+
+    return suggestions.slice(0, 5);
+  };
+
   const handleCommand = (cmd) => {
-    const trimmedCmd = cmd.trim().toLowerCase();
+    const trimmedCmd = cmd.trim();
     const [commandName, ...args] = trimmedCmd.split(' ');
 
     if (commands[commandName]) {
@@ -153,24 +358,54 @@ const Terminal = () => {
         command: cmd,
         output: result.output,
         type: result.type,
-        timestamp: new Date()
+        timestamp: new Date(),
+        directory: currentDirectory
       }]);
     } else {
       setCommandHistory(prev => [...prev, {
         command: cmd,
-        output: `Command not found: ${commandName}. Type 'help' for available commands.`,
+        output: `bash: ${commandName}: command not found`,
         type: 'error',
-        timestamp: new Date()
+        timestamp: new Date(),
+        directory: currentDirectory
       }]);
     }
   };
 
-  const handleKeyPress = (e) => {
+  const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       if (command.trim()) {
         handleCommand(command);
         setCommand('');
+        setHistoryIndex(-1);
       }
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (commandHistory.length > 0) {
+        const newIndex = historyIndex < commandHistory.length - 1 ? historyIndex + 1 : historyIndex;
+        setHistoryIndex(newIndex);
+        setCommand(commandHistory[commandHistory.length - 1 - newIndex].command);
+      }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (historyIndex > 0) {
+        const newIndex = historyIndex - 1;
+        setHistoryIndex(newIndex);
+        setCommand(commandHistory[commandHistory.length - 1 - newIndex].command);
+      } else if (historyIndex === 0) {
+        setHistoryIndex(-1);
+        setCommand('');
+      }
+    } else if (e.key === 'Tab') {
+      e.preventDefault();
+      const suggestions = getSuggestions(command);
+      if (suggestions.length === 1) {
+        setCommand(suggestions[0]);
+      } else if (suggestions.length > 1) {
+        setCommandSuggestions(suggestions);
+      }
+    } else if (e.key === 'Escape') {
+      setCommandSuggestions([]);
     }
   };
 
@@ -191,127 +426,208 @@ const Terminal = () => {
 
   return (
     <div className="min-h-screen bg-black text-green-400 font-mono relative overflow-hidden">
-      {/* Terminal Header */}
-      <div className="bg-gray-900 border-b border-green-500 p-4 sticky top-0 z-50">
-        <div className="flex items-center justify-between">
+      {/* Matrix Rain Background */}
+      <div className="fixed inset-0 pointer-events-none opacity-10">
+        {matrixRain.map((drop, index) => (
+          <div
+            key={index}
+            className="absolute text-green-500 text-xs"
+            style={{
+              left: `${drop.x}px`,
+              top: `${drop.y}px`,
+              animation: `matrix-fall ${drop.speed}s linear infinite`
+            }}
+          >
+            {drop.char}
+          </div>
+        ))}
+      </div>
+
+      {/* Terminal Window */}
+      <div className="relative z-10 min-h-screen bg-gray-950/95 backdrop-blur-sm border border-green-500/30 shadow-2xl">
+        {/* Terminal Header */}
+        <div className="bg-gray-900/95 border-b border-green-500/50 p-3 flex items-center justify-between backdrop-blur-md">
           <div className="flex items-center space-x-4">
             <div className="flex space-x-2">
-              <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-              <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+              <div className="w-3 h-3 bg-red-500 rounded-full cursor-pointer hover:bg-red-400 transition-colors"></div>
+              <div className="w-3 h-3 bg-yellow-500 rounded-full cursor-pointer hover:bg-yellow-400 transition-colors"></div>
+              <div className="w-3 h-3 bg-green-500 rounded-full cursor-pointer hover:bg-green-400 transition-colors"></div>
             </div>
-            <div className="text-green-400 font-bold">
-              ENS Treasury Terminal v2.0
-            </div>
-          </div>
-          <div className="text-green-300 text-sm">
-            {currentTime.toLocaleTimeString()}
-          </div>
-        </div>
-
-        {/* Scroll Spy Menu */}
-        <div className="mt-4 flex flex-wrap gap-2">
-          {[
-            { id: 'overview', name: 'OVERVIEW' },
-            { id: 'assets', name: 'ASSETS' },
-            { id: 'analytics', name: 'ANALYTICS' },
-            { id: 'transactions', name: 'TXNS' },
-            { id: 'wallets', name: 'WALLETS' },
-            { id: 'service-providers', name: 'PROVIDERS' },
-            { id: 'address-diagram', name: 'NETWORK' },
-            { id: 'working-groups', name: 'WORKING' },
-            { id: 'contracts', name: 'CONTRACTS' },
-            { id: 'expenditures', name: 'EXPENSES' },
-            { id: 'endaoment', name: 'ENDAOMENT' },
-            { id: 'karpatkey', name: 'KARPATKEY' },
-            { id: 'milestones', name: 'MILESTONES' },
-            { id: 'projects', name: 'PROJECTS' },
-            { id: 'realtime', name: 'REALTIME' }
-          ].map((section) => (
-            <button
-              key={section.id}
-              onClick={() => scrollToSection(section.id)}
-              className={`px-3 py-1 text-xs border transition-all duration-200 ${
-                activeSection === section.id
-                  ? 'border-green-400 bg-green-900 text-green-100'
-                  : 'border-gray-600 hover:border-green-400 text-gray-400 hover:text-green-300'
-              }`}
-            >
-              {section.name}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Terminal Command Interface */}
-      <div className="bg-gray-950 border-b border-gray-700 p-4">
-        <div className="flex items-center space-x-2 mb-2">
-          <span className="text-green-400">$</span>
-          <input
-            ref={inputRef}
-            type="text"
-            value={command}
-            onChange={(e) => setCommand(e.target.value)}
-            onKeyPress={handleKeyPress}
-            className="flex-1 bg-transparent text-green-400 outline-none border-none"
-            placeholder="Type 'help' for commands..."
-            autoFocus
-          />
-        </div>
-
-        {/* Command History */}
-        <div className="max-h-32 overflow-y-auto space-y-1">
-          {commandHistory.slice(-5).map((entry, index) => (
-            <div key={index} className="text-xs">
-              <div className="text-gray-500">
-                $ {entry.command}
-              </div>
-              <div className={`${
-                entry.type === 'error' ? 'text-red-400' :
-                entry.type === 'success' ? 'text-green-400' :
-                entry.type === 'warning' ? 'text-yellow-400' :
-                'text-blue-400'
-              }`}>
-                {entry.output}
+            <div className="flex items-center space-x-2">
+              <div className="text-green-400 font-bold text-lg tracking-wider">
+                ╭─ ENS Treasury Terminal v3.0 ──────────────────────────────╮
               </div>
             </div>
-          ))}
+          </div>
+          <div className="flex items-center space-x-6 text-sm">
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <span className="text-green-300">CONNECTED</span>
+            </div>
+            <div className="text-green-400 border-l border-green-500/30 pl-4">
+              {currentTime.toLocaleTimeString('en-US', { hour12: false })}
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="flex">
-        {/* Content Area */}
-        <div className="flex-1 p-6 space-y-8">
+        {/* Enhanced Navigation Bar */}
+        <div className="bg-gray-900/80 border-b border-green-500/30 p-3 overflow-x-auto">
+          <div className="flex space-x-1 min-w-max">
+            {[
+              { id: 'overview', name: 'OVERVIEW', icon: '📊' },
+              { id: 'assets', name: 'ASSETS', icon: '💰' },
+              { id: 'analytics', name: 'ANALYTICS', icon: '📈' },
+              { id: 'transactions', name: 'TRANSACTIONS', icon: '🔄' },
+              { id: 'wallets', name: 'WALLETS', icon: '👛' },
+              { id: 'service-providers', name: 'SERVICES', icon: '🏢' },
+              { id: 'address-diagram', name: 'NETWORK', icon: '🔗' },
+              { id: 'working-groups', name: 'WORKING', icon: '👥' },
+              { id: 'contracts', name: 'CONTRACTS', icon: '📄' },
+              { id: 'expenditures', name: 'EXPENSES', icon: '💸' },
+              { id: 'endaoment', name: 'ENDAOMENT', icon: '❤️' },
+              { id: 'karpatkey', name: 'KARPATKEY', icon: '🔑' },
+              { id: 'milestones', name: 'MILESTONES', icon: '🎯' },
+              { id: 'projects', name: 'PROJECTS', icon: '🚀' },
+              { id: 'realtime', name: 'REALTIME', icon: '⚡' }
+            ].map((section) => (
+              <button
+                key={section.id}
+                onClick={() => scrollToSection(section.id)}
+                className={`px-4 py-2 text-xs font-medium border transition-all duration-300 whitespace-nowrap ${
+                  activeSection === section.id
+                    ? 'border-green-400 bg-green-900/50 text-green-100 shadow-lg shadow-green-500/20'
+                    : 'border-gray-600 hover:border-green-400 text-gray-300 hover:text-green-300 hover:bg-gray-800/50'
+                }`}
+              >
+                <span className="mr-2">{section.icon}</span>
+                {section.name}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Command Interface */}
+        <div className="bg-gray-950/50 border-b border-green-500/20 p-4">
+          <div className="flex items-center space-x-3 mb-3">
+            <div className="text-green-400 font-bold">ens-admin@terminal</div>
+            <div className="text-green-300">:</div>
+            <div className="text-blue-400 font-bold">{currentDirectory}</div>
+            <div className="text-green-300">$</div>
+            <input
+              ref={inputRef}
+              type="text"
+              value={command}
+              onChange={(e) => setCommand(e.target.value)}
+              onKeyDown={handleKeyDown}
+              className="flex-1 bg-transparent text-green-400 outline-none border-none font-mono text-sm"
+              placeholder="Type 'help' for commands or press Tab for auto-complete..."
+              autoFocus
+              spellCheck={false}
+            />
+            <div
+              ref={cursorRef}
+              className={`w-2 h-5 bg-green-400 ${isTyping ? 'animate-pulse' : ''}`}
+            ></div>
+          </div>
+
+          {/* Command Suggestions */}
+          {commandSuggestions.length > 0 && (
+            <div className="mb-3 p-2 bg-gray-900/50 border border-green-500/30 rounded">
+              <div className="text-green-300 text-xs mb-1">Suggestions:</div>
+              <div className="flex flex-wrap gap-2">
+                {commandSuggestions.map((suggestion, index) => (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      setCommand(suggestion);
+                      setCommandSuggestions([]);
+                    }}
+                    className="px-2 py-1 text-xs bg-green-900/50 text-green-300 border border-green-500/30 rounded hover:bg-green-800/50 transition-colors"
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Command History */}
+          <div className="max-h-48 overflow-y-auto space-y-2">
+            {commandHistory.slice(-10).map((entry, index) => (
+              <div key={index} className="text-sm border-l-2 border-gray-700 pl-3">
+                <div className="flex items-center space-x-2 text-gray-500 mb-1">
+                  <span className="text-green-400">$</span>
+                  <span className="text-green-300">{entry.command}</span>
+                  <span className="text-gray-600 text-xs">({entry.directory})</span>
+                  <span className="text-gray-600 text-xs ml-auto">
+                    {entry.timestamp.toLocaleTimeString('en-US', { hour12: false })}
+                  </span>
+                </div>
+                <div className={`whitespace-pre-wrap ${
+                  entry.type === 'error' ? 'text-red-400' :
+                  entry.type === 'success' ? 'text-green-400' :
+                  entry.type === 'warning' ? 'text-yellow-400' :
+                  entry.type === 'system' ? 'text-blue-400' :
+                  'text-cyan-400'
+                }`}>
+                  {entry.output}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Status Bar */}
+        <div className="bg-gray-900/30 border-b border-green-500/20 px-4 py-2 flex justify-between items-center text-xs">
+          <div className="flex items-center space-x-6">
+            <span className="text-green-400">Active: <span className="text-green-300 font-bold">{activeSection}</span></span>
+            <span className="text-blue-400">Directory: <span className="text-blue-300 font-bold">{currentDirectory}</span></span>
+            <span className="text-purple-400">Sections: <span className="text-purple-300 font-bold">15</span></span>
+          </div>
+          <div className="flex items-center space-x-6">
+            <span className="text-cyan-400">Network: <span className="text-cyan-300">CONNECTED</span></span>
+            <span className="text-yellow-400">Uptime: <span className="text-yellow-300">00:00:00</span></span>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="p-6 space-y-8">
           {/* Overview Section */}
           <TerminalSection
             id="overview"
-            title="PORTFOLIO OVERVIEW"
+            title="📊 PORTFOLIO OVERVIEW"
             subtitle="Treasury composition and key metrics"
             isExpanded={expandedSections['overview']}
             onToggle={() => toggleSection('overview')}
             activeSection={activeSection}
           >
-            <div className="grid grid-cols-4 gap-4 mb-6">
-              <div className="bg-gray-900 border border-green-500 p-4">
-                <div className="text-sm text-green-300 uppercase tracking-wider mb-1">TOTAL AUM</div>
-                <div className="text-xl text-green-400">$926.8M</div>
-                <div className="text-sm text-green-300">+2.5% MTD</div>
+            <div className="grid grid-cols-4 gap-6 mb-6">
+              <div className="bg-gray-900/50 border border-green-500/50 p-6 rounded-lg backdrop-blur-sm hover:bg-gray-800/50 transition-all duration-300 hover:border-green-400/70">
+                <div className="text-sm text-green-300 uppercase tracking-wider mb-2 font-bold">TOTAL AUM</div>
+                <div className="text-3xl text-green-400 font-mono font-bold mb-1">$926.8M</div>
+                <div className="text-sm text-green-300 flex items-center">
+                  <span className="mr-1">↗</span>+2.5% MTD
+                </div>
               </div>
-              <div className="bg-gray-900 border border-green-500 p-4">
-                <div className="text-sm text-green-300 uppercase tracking-wider mb-1">LIQUID ASSETS</div>
-                <div className="text-xl text-green-400">$840.2M</div>
-                <div className="text-sm text-green-300">+1.8% MTD</div>
+              <div className="bg-gray-900/50 border border-green-500/50 p-6 rounded-lg backdrop-blur-sm hover:bg-gray-800/50 transition-all duration-300 hover:border-green-400/70">
+                <div className="text-sm text-green-300 uppercase tracking-wider mb-2 font-bold">LIQUID ASSETS</div>
+                <div className="text-3xl text-green-400 font-mono font-bold mb-1">$840.2M</div>
+                <div className="text-sm text-green-300 flex items-center">
+                  <span className="mr-1">↗</span>+1.8% MTD
+                </div>
               </div>
-              <div className="bg-gray-900 border border-green-500 p-4">
-                <div className="text-sm text-green-300 uppercase tracking-wider mb-1">MONTHLY OUTFLOW</div>
-                <div className="text-xl text-green-400">$642K</div>
-                <div className="text-sm text-red-400">+12.3% vs Prior</div>
+              <div className="bg-gray-900/50 border border-red-500/50 p-6 rounded-lg backdrop-blur-sm hover:bg-gray-800/50 transition-all duration-300 hover:border-red-400/70">
+                <div className="text-sm text-red-300 uppercase tracking-wider mb-2 font-bold">MONTHLY OUTFLOW</div>
+                <div className="text-3xl text-red-400 font-mono font-bold mb-1">$642K</div>
+                <div className="text-sm text-red-300 flex items-center">
+                  <span className="mr-1">↗</span>+12.3% vs Prior
+                </div>
               </div>
-              <div className="bg-gray-900 border border-green-500 p-4">
-                <div className="text-sm text-green-300 uppercase tracking-wider mb-1">CUSTODY ACCOUNTS</div>
-                <div className="text-xl text-green-400">12</div>
-                <div className="text-sm text-green-300">No Change</div>
+              <div className="bg-gray-900/50 border border-blue-500/50 p-6 rounded-lg backdrop-blur-sm hover:bg-gray-800/50 transition-all duration-300 hover:border-blue-400/70">
+                <div className="text-sm text-blue-300 uppercase tracking-wider mb-2 font-bold">CUSTODY ACCOUNTS</div>
+                <div className="text-3xl text-blue-400 font-mono font-bold mb-1">12</div>
+                <div className="text-sm text-blue-300">No Change</div>
               </div>
             </div>
           </TerminalSection>
@@ -319,7 +635,7 @@ const Terminal = () => {
           {/* Assets Section */}
           <TerminalSection
             id="assets"
-            title="ASSET MANAGEMENT"
+            title="💰 ASSET MANAGEMENT"
             subtitle="Asset allocation and performance tracking"
             isExpanded={expandedSections['assets']}
             onToggle={() => toggleSection('assets')}
@@ -331,7 +647,7 @@ const Terminal = () => {
           {/* Analytics Section */}
           <TerminalSection
             id="analytics"
-            title="RISK ANALYTICS"
+            title="📈 RISK ANALYTICS"
             subtitle="Portfolio risk assessment and analytics"
             isExpanded={expandedSections['analytics']}
             onToggle={() => toggleSection('analytics')}
@@ -343,7 +659,7 @@ const Terminal = () => {
           {/* Transactions Section */}
           <TerminalSection
             id="transactions"
-            title="TRANSACTION HISTORY"
+            title="🔄 TRANSACTION HISTORY"
             subtitle="Multi-chain transaction data and analysis"
             isExpanded={expandedSections['transactions']}
             onToggle={() => toggleSection('transactions')}
@@ -355,7 +671,7 @@ const Terminal = () => {
           {/* Wallets Section */}
           <TerminalSection
             id="wallets"
-            title="WALLET ADMINISTRATION"
+            title="👛 WALLET ADMINISTRATION"
             subtitle="Wallet portfolio and access control"
             isExpanded={expandedSections['wallets']}
             onToggle={() => toggleSection('wallets')}
@@ -367,7 +683,7 @@ const Terminal = () => {
           {/* Service Providers Section */}
           <TerminalSection
             id="service-providers"
-            title="SERVICE PROVIDERS"
+            title="🏢 SERVICE PROVIDERS"
             subtitle="External service provider management"
             isExpanded={expandedSections['service-providers']}
             onToggle={() => toggleSection('service-providers')}
@@ -379,7 +695,7 @@ const Terminal = () => {
           {/* Address Diagram Section */}
           <TerminalSection
             id="address-diagram"
-            title="ADDRESS NETWORK"
+            title="🔗 ADDRESS NETWORK"
             subtitle="Wallet address connections and relationships"
             isExpanded={expandedSections['address-diagram']}
             onToggle={() => toggleSection('address-diagram')}
@@ -391,7 +707,7 @@ const Terminal = () => {
           {/* Working Groups Section */}
           <TerminalSection
             id="working-groups"
-            title="WORKING GROUPS"
+            title="👥 WORKING GROUPS"
             subtitle="Working group spending and performance analysis"
             isExpanded={expandedSections['working-groups']}
             onToggle={() => toggleSection('working-groups')}
@@ -403,7 +719,7 @@ const Terminal = () => {
           {/* Contracts Section */}
           <TerminalSection
             id="contracts"
-            title="SMART CONTRACTS"
+            title="📄 SMART CONTRACTS"
             subtitle="Active smart contract deployments and interactions"
             isExpanded={expandedSections['contracts']}
             onToggle={() => toggleSection('contracts')}
@@ -415,7 +731,7 @@ const Terminal = () => {
           {/* Expenditures Section */}
           <TerminalSection
             id="expenditures"
-            title="EXPENDITURE RECORDS"
+            title="💸 EXPENDITURE RECORDS"
             subtitle="Detailed expenditure tracking and categorization"
             isExpanded={expandedSections['expenditures']}
             onToggle={() => toggleSection('expenditures')}
@@ -427,7 +743,7 @@ const Terminal = () => {
           {/* Endaoment Section */}
           <TerminalSection
             id="endaoment"
-            title="ENDAOMENT PARTNERSHIP"
+            title="❤️ ENDAOMENT PARTNERSHIP"
             subtitle="Charitable giving and social impact initiatives"
             isExpanded={expandedSections['endaoment']}
             onToggle={() => toggleSection('endaoment')}
@@ -440,7 +756,7 @@ const Terminal = () => {
           {/* Karpatkey Section */}
           <TerminalSection
             id="karpatkey"
-            title="KARPATKEY REPORTS"
+            title="🔑 KARPATKEY REPORTS"
             subtitle="Professional treasury management and analysis"
             isExpanded={expandedSections['karpatkey']}
             onToggle={() => toggleSection('karpatkey')}
@@ -452,7 +768,7 @@ const Terminal = () => {
           {/* Milestones Section */}
           <TerminalSection
             id="milestones"
-            title="DEVELOPMENT MILESTONES"
+            title="🎯 DEVELOPMENT MILESTONES"
             subtitle="Project roadmap and delivery tracking"
             isExpanded={expandedSections['milestones']}
             onToggle={() => toggleSection('milestones')}
@@ -464,7 +780,7 @@ const Terminal = () => {
           {/* Projects Section */}
           <TerminalSection
             id="projects"
-            title="ACTIVE PROJECTS"
+            title="🚀 ACTIVE PROJECTS"
             subtitle="Current projects and development initiatives"
             isExpanded={expandedSections['projects']}
             onToggle={() => toggleSection('projects')}
@@ -476,7 +792,7 @@ const Terminal = () => {
           {/* Real-Time Data Section */}
           <TerminalSection
             id="realtime"
-            title="REAL-TIME DATA"
+            title="⚡ REAL-TIME DATA"
             subtitle="Live data feeds and performance monitoring"
             isExpanded={expandedSections['realtime']}
             onToggle={() => toggleSection('realtime')}
@@ -485,6 +801,47 @@ const Terminal = () => {
             <RealTimeData />
           </TerminalSection>
         </div>
+
+        {/* CSS Animations */}
+        <style jsx>{`
+          @keyframes matrix-fall {
+            0% { transform: translateY(-100vh); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+          }
+
+          @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+          }
+
+          @keyframes glow {
+            0%, 100% { text-shadow: 0 0 5px #00ff41, 0 0 10px #00ff41, 0 0 15px #00ff41; }
+            50% { text-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41, 0 0 30px #00ff41; }
+          }
+
+          .matrix-glow {
+            animation: glow 2s ease-in-out infinite;
+          }
+
+          .terminal-cursor {
+            animation: blink 1s infinite;
+          }
+
+          .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ff41, transparent);
+            animation: scan 3s linear infinite;
+          }
+
+          @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+          }
+        `}</style>
       </div>
     </div>
   );
@@ -496,26 +853,48 @@ const TerminalSection = ({ id, title, subtitle, children, isExpanded, onToggle, 
     <div
       id={id}
       data-terminal-section
-      className={`border border-gray-700 rounded-lg p-6 transition-all duration-300 ${
-        activeSection === id ? 'border-green-500 bg-gray-900/50' : 'border-gray-700 bg-gray-950'
+      className={`border rounded-lg p-6 transition-all duration-500 backdrop-blur-sm ${
+        activeSection === id
+          ? 'border-green-400/70 bg-gray-900/60 shadow-lg shadow-green-500/20'
+          : 'border-gray-600/50 bg-gray-950/40 hover:border-green-400/50 hover:bg-gray-900/30'
       }`}
     >
       <div className="flex items-center justify-between mb-4">
-        <div>
-          <h2 className="text-green-400 font-bold text-lg tracking-wider">{title}</h2>
-          <p className="text-green-300 text-sm opacity-75">{subtitle}</p>
+        <div className="flex items-center space-x-3">
+          <div className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+            activeSection === id ? 'bg-green-400 animate-pulse' : 'bg-gray-600'
+          }`}></div>
+          <div>
+            <h2 className={`font-bold text-lg tracking-wider transition-all duration-300 ${
+              activeSection === id ? 'text-green-400 matrix-glow' : 'text-green-300'
+            }`}>
+              {title}
+            </h2>
+            <p className="text-green-400/60 text-sm font-medium">{subtitle}</p>
+          </div>
         </div>
-        <button
-          onClick={onToggle}
-          className="text-green-400 hover:text-green-300 transition-colors"
-        >
-          {isExpanded ? 'COLLAPSE' : 'EXPAND'}
-        </button>
+        <div className="flex items-center space-x-3">
+          {activeSection === id && (
+            <div className="scan-line"></div>
+          )}
+          <button
+            onClick={onToggle}
+            className="px-3 py-1 text-xs font-bold border border-green-500/50 text-green-300 hover:bg-green-900/50 hover:border-green-400/70 transition-all duration-300 rounded"
+          >
+            {isExpanded ? '▼ COLLAPSE' : '▶ EXPAND'}
+          </button>
+        </div>
       </div>
 
       {isExpanded && (
-        <div className="border-t border-gray-700 pt-4">
+        <div className="border-t border-gray-600/50 pt-6 animate-fadeIn">
           {children}
+        </div>
+      )}
+
+      {activeSection === id && (
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="scan-line"></div>
         </div>
       )}
     </div>
