@@ -44,16 +44,231 @@ const Terminal = () => {
   }, []);
 
   const commands = {
-    help: () => 'Available commands: help, clear, ls, status, time, whoami, date',
+    help: () => `┌─ Available Commands ──────────────────────────────────────┐
+│ Navigation Commands:                                        │
+│   ls              List all sections                         │
+│   cd <section>    Navigate to section                       │
+│   overview        Show portfolio overview                   │
+│   assets          Show asset management data                │
+│   analytics       Show risk analytics                       │
+│   transactions    Show transaction history                  │
+│   wallets         Show wallet administration                │
+│                                                           │
+│ System Commands:                                           │
+│   status          Show system status                        │
+│   time            Show current time                         │
+│   date            Show current date                         │
+│   whoami          Show current user                         │
+│   clear           Clear terminal screen                     │
+│   history         Show command history                      │
+│   uptime          Show system uptime                        │
+│   exit            Exit terminal                             │
+└─────────────────────────────────────────────────────────────┘`,
+
     clear: () => {
       setCommandHistory([]);
       return '';
     },
-    ls: () => 'overview  assets  analytics  transactions  wallets  contracts',
-    status: () => 'System Status: Operational - ENS Treasury Terminal v3.0',
-    time: () => currentTime.toLocaleTimeString(),
-    whoami: () => 'ens-admin@terminal',
-    date: () => currentTime.toLocaleDateString()
+
+    ls: () => `Available sections:
+  📊 overview        Portfolio Overview
+  💰 assets          Asset Management
+  📈 analytics       Risk Analytics
+  🔄 transactions    Transaction History
+  👛 wallets         Wallet Administration`,
+
+    overview: () => `┌─ PORTFOLIO OVERVIEW ─────────────────────────────────────┐
+│                                                              │
+│  TOTAL AUM:        $926.8M         +2.5% MTD                │
+│  LIQUID ASSETS:    $840.2M         +1.8% MTD                │
+│  MONTHLY OUTFLOW:  $642K           +12.3% vs Prior          │
+│  CUSTODY ACCOUNTS: 12               No Change               │
+│                                                              │
+│  Key Holdings:                                              │
+│  • ETH: $567.8M (61.3%)                                   │
+│  • USDC: $180.2M (19.5%)                                  │
+│  • ENS: $178.6M (19.2%)                                   │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘`,
+
+    assets: () => `┌─ ASSET MANAGEMENT ──────────────────────────────────────┐
+│                                                              │
+│  PRIMARY HOLDINGS:                                          │
+│  • Ethereum (ETH):    234,567.00    $567.8M (61.3%)        │
+│  • USD Coin (USDC):   180,200,000   $180.2M (19.5%)        │
+│  • ENS Token:         12,500,000    $178.6M (19.2%)        │
+│                                                              │
+│  ALLOCATION TARGETS:                                        │
+│  • Core Crypto:     60-70%         Current: 61.3% ✓         │
+│  • Stablecoins:     15-25%         Current: 19.5% ✓         │
+│  • Native Tokens:   15-25%         Current: 19.2% ✓         │
+│                                                              │
+│  CUSTODY BREAKDOWN:                                        │
+│  • Multi-Sig Treasury:     $746.4M (80.5%)                 │
+│  • Institutional Custody:  $180.2M (19.5%)                 │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘`,
+
+    analytics: () => `┌─ RISK ANALYTICS ──────────────────────────────────────┐
+│                                                              │
+│  PORTFOLIO VOLATILITY:                                       │
+│  • 30-Day: 18.2% annualized                                 │
+│  • Sharpe Ratio: 1.34 (30D rolling)                         │
+│                                                              │
+│  ASSET VOLATILITY:                                          │
+│  • ETH:  24.3% (30D)                                        │
+│  • ENS:  45.7% (30D)  ⚠️ HIGH                               │
+│  • USDC: 0.2% (30D)   ✓ LOW                                 │
+│                                                              │
+│  MARKET DEPTH ANALYSIS:                                     │
+│  • ETH:  $15.2B daily volume                                │
+│  • ENS:  $85.3M daily volume                                │
+│  • USDC: $8.7B daily volume                                 │
+│                                                              │
+│  RISK METRICS:                                              │
+│  • Maximum Drawdown: -12.4% (Last 90 days)                  │
+│  • Value at Risk (95%): $47.2M (1-day horizon)              │
+│  • Liquidity Score: Excellent                               │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘`,
+
+    transactions: () => `┌─ TRANSACTION HISTORY ─────────────────────────────────┐
+│                                                              │
+│  RECENT TRANSACTIONS (Last 30 days):                        │
+│                                                              │
+│  OUTBOUND TRANSACTIONS:                                     │
+│  • Grant Payments:       $425K (15 transactions)           │
+│  • Operational Expenses: $187K (32 transactions)           │
+│  • Delegation Rewards:   $156K (12 transactions)           │
+│                                                              │
+│  INBOUND TRANSACTIONS:                                      │
+│  • Registration Revenue: $156K (rolling)                    │
+│  • Staking Rewards:      $78K (daily)                       │
+│  • Ecosystem Contributions: $25K                           │
+│                                                              │
+│  TRANSACTION METRICS:                                       │
+│  • Daily Average Volume: $29.7K                            │
+│  • Weekly Trend: +12.3% increase                           │
+│  • Largest Transaction: $125K (ENS Labs Grant)             │
+│  • Transaction Frequency: 8.2 per day                      │
+│                                                              │
+│  COMPLIANCE STATUS:                                         │
+│  • AML Screening: All Clear (247/247 checked)              │
+│  • Sanctions Screening: No Matches                         │
+│  • Audit Trail: 100% documented                            │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘`,
+
+    wallets: () => `┌─ WALLET ADMINISTRATION ────────────────────────────────┐
+│                                                              │
+│  PRIMARY TREASURY WALLETS:                                  │
+│                                                              │
+│  1. Main Treasury Wallet                                    │
+│     Address: 0xFe89...4a8f                                   │
+│     Balance: $746.4M                                        │
+│     Holdings: ETH ($567.8M), ENS ($178.6M)                  │
+│     Multi-Sig: 4/7 threshold                                │
+│                                                              │
+│  2. Stablecoin Treasury                                     │
+│     Address: 0xCF60...7b2c                                   │
+│     Balance: $180.2M                                        │
+│     Holdings: USDC ($180.2M)                                │
+│     Custody: Coinbase Institutional                          │
+│                                                              │
+│  OPERATIONAL WALLETS:                                       │
+│                                                              │
+│  3. Grants Distribution                                     │
+│     Address: 0x9111...3d5e                                   │
+│     Balance: $2.8M                                          │
+│     Recent Activity: 4 transactions ($425K total)           │
+│                                                              │
+│  4. Operations Wallet                                       │
+│     Address: 0xebA7...9f1a                                   │
+│     Balance: $856K                                          │
+│     Purpose: Day-to-day operational expenses                │
+│                                                              │
+│  5. ETH Staking Wallet                                      │
+│     Address: 0xB162...6c8b                                   │
+│     Balance: $132.2M                                        │
+│     Validators: 1,705 active                                │
+│     APR: 3.8% current                                       │
+│                                                              │
+│  SECURITY STATUS:                                           │
+│  • Failed Login Attempts: 0 (Last 24h)                      │
+│  • Suspicious Activity: None detected                       │
+│  • Wallet Security Score: 98/100 (Excellent)                │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘`,
+
+    cd: (args) => {
+      const section = args[0];
+      const validSections = ['overview', 'assets', 'analytics', 'transactions', 'wallets'];
+
+      if (!section) {
+        return 'Usage: cd <section>\nAvailable sections: overview, assets, analytics, transactions, wallets';
+      }
+
+      if (validSections.includes(section)) {
+        document.getElementById(section)?.scrollIntoView({ behavior: 'smooth' });
+        return `Navigated to ${section} section`;
+      } else {
+        return `cd: ${section}: No such section\nAvailable sections: ${validSections.join(', ')}`;
+      }
+    },
+
+    status: () => `┌─ SYSTEM STATUS ────────────────────────────────────────┐
+│                                                              │
+│  System Status:    OPERATIONAL                              │
+│  Terminal Version: v3.0                                      │
+│  Network Status:   CONNECTED                                 │
+│  Data Freshness:   REAL-TIME                                 │
+│  Active Section:   overview                                  │
+│                                                              │
+│  PERFORMANCE METRICS:                                       │
+│  • Response Time:   <100ms                                  │
+│  • Memory Usage:    Normal                                   │
+│  • CPU Usage:       Low                                      │
+│  • Network Latency: 23ms                                     │
+│                                                              │
+│  SECURITY STATUS:                                           │
+│  • Authentication:  SECURE                                  │
+│  • Encryption:      ENABLED                                  │
+│  • Audit Trail:      ACTIVE                                  │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘`,
+
+    time: () => `Current Time: ${currentTime.toLocaleTimeString('en-US', { hour12: false })}`,
+    whoami: () => 'ens-admin@terminal (ENS DAO Treasury Administrator)',
+    date: () => `Current Date: ${currentTime.toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })}`,
+
+    history: () => commandHistory.map((entry, index) =>
+      `${String(index + 1).padStart(3)}  ${entry.timestamp.toLocaleTimeString('en-US', { hour12: false })}  ${entry.command}`
+    ).join('\n') || 'No commands in history',
+
+    uptime: () => {
+      const uptime = Math.floor((Date.now() - Date.now()) / 1000);
+      const hours = Math.floor(uptime / 3600);
+      const minutes = Math.floor((uptime % 3600) / 60);
+      return `System uptime: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00`;
+    },
+
+    exit: () => {
+      setCommandHistory(prev => [...prev, {
+        command: 'exit',
+        output: 'Logging out...',
+        type: 'warning',
+        timestamp: new Date()
+      }]);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+      return 'Logging out...';
+    }
   };
 
   const handleCommand = (cmd) => {
