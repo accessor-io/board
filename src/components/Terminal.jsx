@@ -17,6 +17,60 @@ import MilestoneTracker from './MilestoneTracker';
 import ProjectTracker from './ProjectTracker';
 import RealTimeData from './RealTimeData';
 
+// Terminal Section Component
+const TerminalSection = ({ id, title, subtitle, children, isExpanded, onToggle, activeSection }) => {
+  return (
+    <div
+      id={id}
+      data-terminal-section
+      className={`border rounded-lg p-6 transition-all duration-500 backdrop-blur-sm ${
+        activeSection === id
+          ? 'border-green-400/70 bg-gray-900/60 shadow-lg shadow-green-500/20'
+          : 'border-gray-600/50 bg-gray-950/40 hover:border-green-400/50 hover:bg-gray-900/30'
+      }`}
+    >
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center space-x-3">
+          <div className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+            activeSection === id ? 'bg-green-400 animate-pulse' : 'bg-gray-600'
+          }`}></div>
+          <div>
+            <h2 className={`font-bold text-lg tracking-wider transition-all duration-300 ${
+              activeSection === id ? 'text-green-400 matrix-glow' : 'text-green-300'
+            }`}>
+              {title}
+            </h2>
+            <p className="text-green-400/60 text-sm font-medium">{subtitle}</p>
+          </div>
+        </div>
+        <div className="flex items-center space-x-3">
+          {activeSection === id && (
+            <div className="scan-line"></div>
+          )}
+          <button
+            onClick={onToggle}
+            className="px-3 py-1 text-xs font-bold border border-green-500/50 text-green-300 hover:bg-green-900/50 hover:border-green-400/70 transition-all duration-300 rounded"
+          >
+            {isExpanded ? '▼ COLLAPSE' : '▶ EXPAND'}
+          </button>
+        </div>
+      </div>
+
+      {isExpanded && (
+        <div className="border-t border-gray-600/50 pt-6 animate-fadeIn">
+          {children}
+        </div>
+      )}
+
+      {activeSection === id && (
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="scan-line"></div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const Terminal = () => {
   const [command, setCommand] = useState('');
   const [commandHistory, setCommandHistory] = useState([]);
@@ -862,59 +916,7 @@ const Terminal = () => {
   );
 };
 
-// Terminal Section Component
-const TerminalSection = ({ id, title, subtitle, children, isExpanded, onToggle, activeSection }) => {
-  return (
-    <div
-      id={id}
-      data-terminal-section
-      className={`border rounded-lg p-6 transition-all duration-500 backdrop-blur-sm ${
-        activeSection === id
-          ? 'border-green-400/70 bg-gray-900/60 shadow-lg shadow-green-500/20'
-          : 'border-gray-600/50 bg-gray-950/40 hover:border-green-400/50 hover:bg-gray-900/30'
-      }`}
-    >
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center space-x-3">
-          <div className={`w-2 h-2 rounded-full transition-colors duration-300 ${
-            activeSection === id ? 'bg-green-400 animate-pulse' : 'bg-gray-600'
-          }`}></div>
-          <div>
-            <h2 className={`font-bold text-lg tracking-wider transition-all duration-300 ${
-              activeSection === id ? 'text-green-400 matrix-glow' : 'text-green-300'
-            }`}>
-              {title}
-            </h2>
-            <p className="text-green-400/60 text-sm font-medium">{subtitle}</p>
-          </div>
-        </div>
-        <div className="flex items-center space-x-3">
-          {activeSection === id && (
-            <div className="scan-line"></div>
-          )}
-          <button
-            onClick={onToggle}
-            className="px-3 py-1 text-xs font-bold border border-green-500/50 text-green-300 hover:bg-green-900/50 hover:border-green-400/70 transition-all duration-300 rounded"
-          >
-            {isExpanded ? '▼ COLLAPSE' : '▶ EXPAND'}
-          </button>
-        </div>
-      </div>
 
-      {isExpanded && (
-        <div className="border-t border-gray-600/50 pt-6 animate-fadeIn">
-          {children}
-        </div>
-      )}
-
-      {activeSection === id && (
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="scan-line"></div>
-        </div>
-      )}
-    </div>
-  );
-};
 
 // Error Boundary Component
 class TerminalErrorBoundary extends React.Component {
