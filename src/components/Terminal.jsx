@@ -108,30 +108,38 @@ const Terminal = () => {
   }, []);
 
   const commands = {
-    help: () => `┌─ Available Commands ──────────────────────────────────────┐
-│ Navigation Commands:                                        │
-│   ls              List all sections                         │
-│   cd <section>    Navigate to section                       │
-│   overview        Show portfolio overview                   │
-│   assets          Show asset management data                │
-│   analytics       Show risk analytics                       │
-│   transactions    Show ALL transactions from 12 wallets     │
-│   wallets         Show wallet administration                │
-│                                                           │
-│ Transaction Commands:                                      │
-│   tx <wallet>     Show transactions for specific wallet    │
-│   tx summary      Show transaction summary statistics      │
-│                                                           │
-│ System Commands:                                           │
-│   status          Show system status                        │
-│   time            Show current time                         │
-│   date            Show current date                         │
-│   whoami          Show current user                         │
-│   clear           Clear terminal screen                     │
-│   history         Show command history                      │
-│   uptime          Show system uptime                        │
-│   exit            Exit terminal                             │
-└─────────────────────────────────────────────────────────────┘`,
+    help: () => {
+      let output = '';
+      output += '┌─────────────────────────────────────────────────────────────┐\n';
+      output += '│                    AVAILABLE COMMANDS                         │\n';
+      output += '│                                                             │\n';
+      output += '│ NAVIGATION COMMANDS:                                        │\n';
+      output += '│ • ls              List all sections                         │\n';
+      output += '│ • cd <section>    Navigate to section                       │\n';
+      output += '│ • overview        Show portfolio overview                   │\n';
+      output += '│ • assets          Show asset management data                │\n';
+      output += '│ • analytics       Show risk analytics                       │\n';
+      output += '│ • transactions    Show ALL transactions from 12 wallets     │\n';
+      output += '│ • wallets         Show wallet administration                │\n';
+      output += '│                                                             │\n';
+      output += '│ TRANSACTION COMMANDS:                                       │\n';
+      output += '│ • tx <wallet>     Show transactions for specific wallet    │\n';
+      output += '│ • tx summary      Show transaction summary statistics      │\n';
+      output += '│                                                             │\n';
+      output += '│ SYSTEM COMMANDS:                                            │\n';
+      output += '│ • status          Show system status                        │\n';
+      output += '│ • time            Show current time                         │\n';
+      output += '│ • date            Show current date                         │\n';
+      output += '│ • whoami          Show current user                         │\n';
+      output += '│ • clear           Clear terminal screen                     │\n';
+      output += '│ • history         Show command history                      │\n';
+      output += '│ • uptime          Show system uptime                        │\n';
+      output += '│ • exit            Exit terminal                             │\n';
+      output += '│                                                             │\n';
+      output += '└─────────────────────────────────────────────────────────────┘\n';
+
+      return output;
+    },
 
     clear: () => {
       setCommandHistory([]);
@@ -324,41 +332,56 @@ const Terminal = () => {
         }
       ];
 
-      const transactionList = transactions.map((tx, index) =>
-        `│  ${String(index + 1).padStart(2)}. ${tx.hash}  │\n` +
-        `│      Wallet: ${tx.wallet.padEnd(35)} │\n` +
-        `│      Type:   ${tx.type.padEnd(35)} │\n` +
-        `│      ${tx.type === 'OUTBOUND' ? 'To' : 'From'}:   ${tx.type === 'OUTBOUND' ? tx.to : tx.from} │\n` +
-        `│      Value:  ${tx.value.padEnd(35)} │\n` +
-        `│      Desc:   ${tx.description.padEnd(35)} │\n` +
-        `│      Time:   ${tx.timestamp.padEnd(35)} │\n` +
-        `│      Status: ${tx.status.padEnd(35)} │\n` +
-        `│                                                          │`
-      ).join('\n├────────────────────────────────────────────────────┤\n');
+      let output = '';
 
-      return `┌─ TRANSACTION HISTORY ─────────────────────────────────┐
-│                                                          │
-│  RECENT TRANSACTIONS FROM ALL 12 WALLETS (Last 30 days) │
-│                                                          │
-├──────────────────────────────────────────────────────────┤
-${transactionList}
-├──────────────────────────────────────────────────────────┤
-│                                                          │
-│  TRANSACTION SUMMARY:                                    │
-│  • Total Transactions: 247 (Last 30 days)               │
-│  • Total Volume: $892K                                  │
-│  • Outbound: $612K (15 grants, 32 ops, 12 rewards)     │
-│  • Inbound: $280K (revenue, staking, contributions)    │
-│  • Largest: $125K (ENS Labs Grant)                      │
-│  • Daily Average: 8.2 transactions                      │
-│                                                          │
-│  COMPLIANCE STATUS:                                      │
-│  • AML Screening: ✓ All Clear (247/247 checked)        │
-│  • Sanctions: ✓ No Matches                              │
-│  • Audit Trail: ✓ 100% documented                       │
-│  • Risk Assessment: ✓ Low Risk                          │
-│                                                          │
-└──────────────────────────────────────────────────────────┘`;
+      // Header
+      output += '┌─────────────────────────────────────────────────────────────┐\n';
+      output += '│                    TRANSACTION HISTORY                        │\n';
+      output += '│               RECENT TRANSACTIONS FROM ALL 12 WALLETS       │\n';
+      output += '│                                                             │\n';
+      output += '├─────┬──────────┬────────────────────────────────────┬───────┤\n';
+      output += '│ #   │ Hash     │ Wallet                              │ Type  │\n';
+      output += '├─────┼──────────┼────────────────────────────────────┼───────┤\n';
+
+      // Transaction rows
+      transactions.forEach((tx, index) => {
+        const num = String(index + 1).padStart(2, ' ');
+        const hash = tx.hash.substring(0, 10);
+        const wallet = tx.wallet.substring(0, 34).padEnd(34);
+        const type = tx.type.substring(0, 5).padEnd(5);
+
+        output += `│ ${num} │ ${hash} │ ${wallet} │ ${type} │\n`;
+
+        // Additional details for each transaction
+        const addrLabel = tx.type === 'OUTBOUND' ? 'To:' : 'From:';
+        const addr = tx.type === 'OUTBOUND' ? tx.to : tx.from;
+        output += `│     │          │ ${addrLabel} ${addr.padEnd(30)} │       │\n`;
+
+        output += `│     │          │ Value: ${tx.value.padEnd(28)} │       │\n`;
+        output += `│     │          │ Desc: ${tx.description.substring(0, 29).padEnd(29)} │       │\n`;
+        output += `│     │          │ Time: ${tx.timestamp.padEnd(29)} │       │\n`;
+        output += `│     │          │ Status: ${tx.status.padEnd(26)} │       │\n`;
+        output += '├─────┼──────────┼────────────────────────────────────┼───────┤\n';
+      });
+
+      // Footer
+      output += '│                                                             │\n';
+      output += '│ TRANSACTION SUMMARY:                                        │\n';
+      output += '│ • Total Transactions: 247 (Last 30 days)                   │\n';
+      output += '│ • Total Volume: $892K                                       │\n';
+      output += '│ • Outbound: $612K (15 grants, 32 ops, 12 rewards)          │\n';
+      output += '│ • Inbound: $280K (revenue, staking, contributions)         │\n';
+      output += '│ • Largest: $125K (ENS Labs Grant)                          │\n';
+      output += '│ • Daily Average: 8.2 transactions                           │\n';
+      output += '│                                                             │\n';
+      output += '│ COMPLIANCE STATUS:                                          │\n';
+      output += '│ • AML Screening: ✓ All Clear (247/247 checked)             │\n';
+      output += '│ • Sanctions: ✓ No Matches                                   │\n';
+      output += '│ • Audit Trail: ✓ 100% documented                            │\n';
+      output += '│ • Risk Assessment: ✓ Low Risk                               │\n';
+      output += '└─────────────────────────────────────────────────────────────┘\n';
+
+      return output;
     },
 
     wallets: () => `┌─ WALLET ADMINISTRATION ────────────────────────────────┐
@@ -463,34 +486,50 @@ ${transactionList}
       const subCommand = args[0];
 
       if (!subCommand) {
-        return 'Usage: tx <wallet> or tx summary\n\nAvailable wallets:\n' +
-               walletDirectory.map(wallet => `  ${wallet.label}`).join('\n');
+        let output = '';
+        output += '┌─────────────────────────────────────────────────────────────┐\n';
+        output += '│                     TX COMMAND HELP                           │\n';
+        output += '│                                                             │\n';
+        output += '│ Usage: tx <wallet> or tx summary                           │\n';
+        output += '│                                                             │\n';
+        output += '│ Available wallets:                                          │\n';
+        walletDirectory.forEach(wallet => {
+          output += `│ • ${wallet.label.padEnd(55)} │\n`;
+        });
+        output += '│                                                             │\n';
+        output += '└─────────────────────────────────────────────────────────────┘\n';
+
+        return output;
       }
 
       if (subCommand === 'summary') {
-        return `┌─ TRANSACTION SUMMARY ──────────────────────────────────┐
-│                                                            │
-│  OVERALL STATISTICS (Last 30 days):                      │
-│  • Total Transactions: 247 across 12 wallets             │
-│  • Total Volume: $892K                                    │
-│  • Average per wallet: 20.6 transactions                 │
-│  • Peak day: 15 transactions (March 15)                  │
-│                                                            │
-│  BY WALLET TYPE:                                          │
-│  • DAO Treasury: 45 transactions ($312K)                 │
-│  • Multisig: 98 transactions ($423K)                     │
-│  • Working Groups: 89 transactions ($145K)               │
-│  • Endaoment: 15 transactions ($12K)                     │
-│                                                            │
-│  TRANSACTION TYPES:                                       │
-│  • Outbound Grants: 15 ($425K)                           │
-│  • Operational Expenses: 32 ($187K)                     │
-│  • Delegation Rewards: 12 ($156K)                       │
-│  • Staking Rewards: 45 ($78K)                           │
-│  • Registration Revenue: 23 ($156K)                     │
-│  • Other: 120 ($0)                                       │
-│                                                            │
-└────────────────────────────────────────────────────────────┘`;
+        let output = '';
+        output += '┌─────────────────────────────────────────────────────────────┐\n';
+        output += '│                    TRANSACTION SUMMARY                        │\n';
+        output += '│                                                             │\n';
+        output += '│ OVERALL STATISTICS (Last 30 days):                         │\n';
+        output += '│ • Total Transactions: 247 across 12 wallets               │\n';
+        output += '│ • Total Volume: $892K                                       │\n';
+        output += '│ • Average per wallet: 20.6 transactions                     │\n';
+        output += '│ • Peak day: 15 transactions (March 15)                      │\n';
+        output += '│                                                             │\n';
+        output += '│ BY WALLET TYPE:                                             │\n';
+        output += '│ • DAO Treasury: 45 transactions ($312K)                     │\n';
+        output += '│ • Multisig: 98 transactions ($423K)                         │\n';
+        output += '│ • Working Groups: 89 transactions ($145K)                   │\n';
+        output += '│ • Endaoment: 15 transactions ($12K)                         │\n';
+        output += '│                                                             │\n';
+        output += '│ TRANSACTION TYPES:                                          │\n';
+        output += '│ • Outbound Grants: 15 ($425K)                              │\n';
+        output += '│ • Operational Expenses: 32 ($187K)                         │\n';
+        output += '│ • Delegation Rewards: 12 ($156K)                           │\n';
+        output += '│ • Staking Rewards: 45 ($78K)                               │\n';
+        output += '│ • Registration Revenue: 23 ($156K)                         │\n';
+        output += '│ • Other: 120 ($0)                                           │\n';
+        output += '│                                                             │\n';
+        output += '└─────────────────────────────────────────────────────────────┘\n';
+
+        return output;
       }
 
       // Find wallet by name
@@ -500,8 +539,18 @@ ${transactionList}
       );
 
       if (!wallet) {
-        return `Wallet '${subCommand}' not found.\n\nAvailable wallets:\n` +
-               walletDirectory.map(w => `  ${w.label}`).join('\n');
+        let output = '';
+        output += '┌─────────────────────────────────────────────────────────────┐\n';
+        output += `│ Wallet '${subCommand}' not found.                            │\n`;
+        output += '│                                                             │\n';
+        output += '│ Available wallets:                                          │\n';
+        walletDirectory.forEach(w => {
+          output += `│ • ${w.label.padEnd(55)} │\n`;
+        });
+        output += '│                                                             │\n';
+        output += '└─────────────────────────────────────────────────────────────┘\n';
+
+        return output;
       }
 
       // Get transactions for this specific wallet
@@ -535,34 +584,48 @@ ${transactionList}
         }
       ];
 
-      const transactionList = walletTransactions.map((tx, index) =>
-        `│  ${String(index + 1).padStart(2)}. ${tx.hash} │\n` +
-        `│      Type:   ${tx.type.padEnd(35)} │\n` +
-        `│      ${tx.type === 'OUTBOUND' ? 'To' : 'From'}:   ${tx.type === 'OUTBOUND' ? tx.to : tx.from} │\n` +
-        `│      Value:  ${tx.value.padEnd(35)} │\n` +
-        `│      Desc:   ${tx.description.padEnd(35)} │\n` +
-        `│      Time:   ${tx.timestamp.padEnd(35)} │\n` +
-        `│      Status: ${tx.status.padEnd(35)} │`
-      ).join('\n├──────────────────────────────────────────────────┤\n');
+      let output = '';
 
-      return `┌─ TRANSACTIONS: ${wallet.label} ──────────────────────┐
-│                                                          │
-│  Wallet: ${wallet.label}                                 │
-│  Address: ${wallet.address}                              │
-│  Category: ${wallet.category}                            │
-│                                                          │
-├──────────────────────────────────────────────────────────┤
-${transactionList}
-├──────────────────────────────────────────────────────────┤
-│                                                          │
-│  Wallet Summary:                                         │
-│  • Total Transactions: 3 (Last 30 days)                 │
-│  • Total Volume: $255K                                  │
-│  • Outbound: $210K                                      │
-│  • Inbound: $45K                                        │
-│  • Last Activity: 2 hours ago                           │
-│                                                          │
-└──────────────────────────────────────────────────────────┘`;
+      // Header
+      output += `┌─ TRANSACTIONS: ${wallet.label} ──────────────────────┐\n`;
+      output += `│                                                          │\n`;
+      output += `│  Wallet: ${wallet.label.padEnd(46)} │\n`;
+      output += `│  Address: ${wallet.address.padEnd(46)} │\n`;
+      output += `│  Category: ${wallet.category.padEnd(44)} │\n`;
+      output += `│                                                          │\n`;
+      output += `├─────┬──────────┬────────────────────────────────────┬───────┤\n`;
+      output += `│ #   │ Hash     │ Details                             │ Type  │\n`;
+      output += `├─────┼──────────┼────────────────────────────────────┼───────┤\n`;
+
+      // Transaction rows
+      walletTransactions.forEach((tx, index) => {
+        const num = String(index + 1).padStart(2, ' ');
+        const hash = tx.hash.substring(0, 10);
+        const type = tx.type.substring(0, 5).padEnd(5);
+
+        output += `│ ${num} │ ${hash} │ ${tx.description.substring(0, 34).padEnd(34)} │ ${type} │\n`;
+
+        // Additional details
+        const addrLabel = tx.type === 'OUTBOUND' ? 'To:' : 'From:';
+        const addr = tx.type === 'OUTBOUND' ? tx.to : tx.from;
+        output += `│     │          │ ${addrLabel} ${addr.substring(0, 30).padEnd(30)} │       │\n`;
+        output += `│     │          │ Value: ${tx.value.padEnd(28)} │       │\n`;
+        output += `│     │          │ Time: ${tx.timestamp.padEnd(29)} │       │\n`;
+        output += `│     │          │ Status: ${tx.status.padEnd(26)} │       │\n`;
+        output += `├─────┼──────────┼────────────────────────────────────┼───────┤\n`;
+      });
+
+      // Footer
+      output += `│                                                          │\n`;
+      output += `│  Wallet Summary:                                         │\n`;
+      output += `│  • Total Transactions: 3 (Last 30 days)                 │\n`;
+      output += `│  • Total Volume: $255K                                  │\n`;
+      output += `│  • Outbound: $210K                                      │\n`;
+      output += `│  • Inbound: $45K                                        │\n`;
+      output += `│  • Last Activity: 2 hours ago                           │\n`;
+      output += `└──────────────────────────────────────────────────────────┘\n`;
+
+      return output;
     },
 
     exit: () => {
