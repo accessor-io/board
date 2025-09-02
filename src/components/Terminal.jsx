@@ -658,9 +658,9 @@ const Terminal = () => {
       {/* Modern Geometric Background */}
       <div className="fixed inset-0 pointer-events-none opacity-10">
         <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-950/30 to-indigo-950/20"></div>
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/8 rounded-full blur-3xl modern-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-500/8 rounded-full blur-3xl modern-pulse" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-blue-500/8 rounded-full blur-3xl modern-pulse" style={{ animationDelay: '4s' }}></div>
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/8 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-500/8 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-blue-500/8 rounded-full blur-3xl"></div>
         {/* Subtle grid pattern */}
         <div className="absolute inset-0 opacity-20" style={{
           backgroundImage: `radial-gradient(circle at 1px 1px, rgba(59, 130, 246, 0.15) 1px, transparent 0)`,
@@ -671,7 +671,7 @@ const Terminal = () => {
       {/* Terminal Window */}
       <div className="relative z-10 min-h-screen max-w-6xl mx-auto p-4">
         {/* Modern Terminal Header */}
-        <div className="bg-gradient-to-r from-slate-900/80 to-slate-800/80 backdrop-blur-md border border-slate-700/50 rounded-t-xl p-6 shadow-2xl shadow-slate-900/50">
+        <div className="bg-slate-900/90 border border-slate-700/50 rounded-t-xl p-6 shadow-xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-6">
               {/* Modern Window Controls */}
@@ -701,7 +701,7 @@ const Terminal = () => {
         </div>
 
         {/* Modern Navigation Bar */}
-        <div className="bg-gradient-to-r from-slate-900/60 to-slate-800/60 backdrop-blur-sm border-x border-slate-700/30 px-6 py-4">
+        <div className="bg-slate-800/80 border-x border-slate-700/30 px-6 py-4">
           <div className="flex flex-wrap gap-4">
             {[
               { id: 'overview', name: 'OVERVIEW', icon: '[OV]', color: 'from-cyan-500/20 to-blue-500/20 hover:from-cyan-500/30 hover:to-blue-500/30' },
@@ -713,7 +713,7 @@ const Terminal = () => {
               <button
                 key={section.id}
                 onClick={() => document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth' })}
-                className={`px-5 py-3 bg-gradient-to-r ${section.color} border border-slate-600/30 text-slate-200 rounded-xl hover:border-slate-500/50 transition-all duration-300 font-semibold shadow-lg hover:shadow-slate-900/30 hover:scale-105 backdrop-blur-sm`}
+                className={`px-5 py-3 bg-gradient-to-r ${section.color} border border-slate-600/30 text-slate-200 rounded-xl hover:border-slate-500/50 transition-all duration-200 font-semibold shadow-md hover:shadow-lg hover:scale-105`}
               >
                 <span className="mr-3 text-sm font-mono font-bold text-cyan-300 bg-slate-700/50 px-2 py-1 rounded-md">{section.icon}</span>
                 {section.name}
@@ -723,7 +723,7 @@ const Terminal = () => {
         </div>
 
         {/* Modern Command Interface */}
-        <div className="bg-gradient-to-b from-slate-900/70 to-slate-950/70 backdrop-blur-md border-x border-slate-700/30 px-8 py-8 min-h-[350px]">
+        <div className="bg-slate-900/80 border-x border-slate-700/30 px-8 py-8 min-h-[350px]">
           {/* Modern Command Prompt */}
           <div className="flex items-center space-x-4 mb-8">
             <div className="text-cyan-300 font-semibold text-xl bg-slate-800/50 px-4 py-2 rounded-lg border border-slate-600/30">
@@ -748,7 +748,7 @@ const Terminal = () => {
           {/* Modern Command History */}
           <div className="space-y-6 max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-slate-800/30">
             {commandHistory.map((entry, index) => (
-              <div key={index} className="bg-slate-800/30 rounded-xl border border-slate-700/30 p-4 backdrop-blur-sm hover:bg-slate-800/40 transition-all duration-200">
+              <div key={index} className="bg-slate-800/30 rounded-xl border border-slate-700/30 p-4 hover:bg-slate-800/40 transition-all duration-200">
                 <div className="flex items-center space-x-3 text-slate-400 mb-3">
                   <span className="text-emerald-300 font-bold bg-emerald-500/20 px-2 py-1 rounded-md text-sm">$</span>
                   <span className="text-slate-200 font-medium">{entry.command}</span>
@@ -769,7 +769,7 @@ const Terminal = () => {
         </div>
 
         {/* Modern Status Bar */}
-        <div className="bg-gradient-to-r from-slate-900/80 to-slate-800/80 backdrop-blur-md border border-slate-700/50 border-t-0 rounded-b-xl px-8 py-5">
+        <div className="bg-slate-800/90 border border-slate-700/50 border-t-0 rounded-b-xl px-8 py-5">
           <div className="flex justify-between items-center text-sm">
             <div className="flex items-center space-x-8">
               <div className="flex items-center space-x-2">
@@ -806,7 +806,7 @@ const Terminal = () => {
         {/* Content Sections */}
         <div className="mt-8 space-y-8">
           {/* Overview Section */}
-          <div id="overview" className="bg-gradient-to-r from-slate-900/80 to-slate-800/80 backdrop-blur-md border border-slate-700/50 rounded-xl p-8 shadow-2xl shadow-slate-900/50">
+          <div id="overview" className="bg-slate-900/90 border border-slate-700/50 rounded-xl p-8 shadow-xl">
             <div className="flex items-center space-x-4 mb-8">
               <div className="w-8 h-8 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">[OV]</span>
@@ -844,7 +844,7 @@ const Terminal = () => {
           </div>
 
           {/* Other sections */}
-          <div id="assets" className="bg-gradient-to-r from-slate-900/80 to-slate-800/80 backdrop-blur-md border border-slate-700/50 rounded-xl p-8 shadow-2xl shadow-slate-900/50">
+          <div id="assets" className="bg-slate-900/90 border border-slate-700/50 rounded-xl p-8 shadow-xl">
             <div className="flex items-center space-x-4 mb-6">
               <div className="w-8 h-8 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">[AS]</span>
@@ -854,7 +854,7 @@ const Terminal = () => {
             <p className="text-slate-300 text-lg leading-relaxed">Asset allocation and performance tracking system</p>
           </div>
 
-          <div id="analytics" className="bg-gradient-to-r from-slate-900/80 to-slate-800/80 backdrop-blur-md border border-slate-700/50 rounded-xl p-8 shadow-2xl shadow-slate-900/50">
+          <div id="analytics" className="bg-slate-900/90 border border-slate-700/50 rounded-xl p-8 shadow-xl">
             <div className="flex items-center space-x-4 mb-6">
               <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">[AN]</span>
@@ -864,7 +864,7 @@ const Terminal = () => {
             <p className="text-slate-300 text-lg leading-relaxed">Portfolio risk assessment and analytics dashboard</p>
           </div>
 
-          <div id="transactions" className="bg-gradient-to-r from-slate-900/80 to-slate-800/80 backdrop-blur-md border border-slate-700/50 rounded-xl p-8 shadow-2xl shadow-slate-900/50">
+          <div id="transactions" className="bg-slate-900/90 border border-slate-700/50 rounded-xl p-8 shadow-xl">
             <div className="flex items-center space-x-4 mb-6">
               <div className="w-8 h-8 bg-gradient-to-r from-pink-500 to-rose-500 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">[TX]</span>
@@ -874,7 +874,7 @@ const Terminal = () => {
             <p className="text-slate-300 text-lg leading-relaxed">Multi-chain transaction data and analysis tools</p>
           </div>
 
-          <div id="wallets" className="bg-gradient-to-r from-slate-900/80 to-slate-800/80 backdrop-blur-md border border-slate-700/50 rounded-xl p-8 shadow-2xl shadow-slate-900/50">
+          <div id="wallets" className="bg-slate-900/90 border border-slate-700/50 rounded-xl p-8 shadow-xl">
             <div className="flex items-center space-x-4 mb-6">
               <div className="w-8 h-8 bg-gradient-to-r from-amber-500 to-orange-500 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">[WL]</span>
@@ -886,31 +886,9 @@ const Terminal = () => {
         </div>
       </div>
 
-      {/* CSS Animations */}
+      {/* Custom Styles */}
       <style>{`
-        @keyframes pulse-glow {
-          0%, 100% {
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), 0 0 40px rgba(59, 130, 246, 0.1);
-          }
-          50% {
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.4), 0 0 60px rgba(59, 130, 246, 0.2);
-          }
-        }
-
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
-        }
-
-        .modern-pulse {
-          animation: pulse-glow 4s ease-in-out infinite;
-        }
-
-        .float-animation {
-          animation: float 6s ease-in-out infinite;
-        }
-
-        /* Custom scrollbar styling */
+        /* Custom scrollbar styling - only if needed */
         .scrollbar-thin::-webkit-scrollbar {
           width: 6px;
         }
