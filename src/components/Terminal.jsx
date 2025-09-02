@@ -654,112 +654,97 @@ const Terminal = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-indigo-950 text-slate-100 font-mono relative overflow-hidden">
-      {/* Modern Geometric Background */}
-      <div className="fixed inset-0 pointer-events-none opacity-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-950/30 to-indigo-950/20"></div>
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/8 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-500/8 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-blue-500/8 rounded-full blur-3xl"></div>
-        {/* Subtle grid pattern */}
-        <div className="absolute inset-0 opacity-20" style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, rgba(59, 130, 246, 0.15) 1px, transparent 0)`,
-          backgroundSize: '50px 50px'
-        }}></div>
-      </div>
+    <div className="min-h-screen bg-black text-green-400 font-mono relative">
 
       {/* Terminal Window */}
       <div className="relative z-10 min-h-screen max-w-6xl mx-auto p-4">
-        {/* Modern Terminal Header */}
-        <div className="bg-slate-900/90 border border-slate-700/50 rounded-t-xl p-6 shadow-xl">
+        {/* Terminal Header */}
+        <div className="bg-gray-900 border border-gray-600 p-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-6">
-              {/* Modern Window Controls */}
-              <div className="flex space-x-3">
-                <div className="w-4 h-4 bg-red-500/80 rounded-full border border-red-400/50 cursor-pointer hover:bg-red-400/90 transition-all duration-200 shadow-lg hover:shadow-red-500/30"></div>
-                <div className="w-4 h-4 bg-yellow-500/80 rounded-full border border-yellow-400/50 cursor-pointer hover:bg-yellow-400/90 transition-all duration-200 shadow-lg hover:shadow-yellow-500/30"></div>
-                <div className="w-4 h-4 bg-green-500/80 rounded-full border border-green-400/50 cursor-pointer hover:bg-green-400/90 transition-all duration-200 shadow-lg hover:shadow-green-500/30"></div>
+            <div className="flex items-center space-x-4">
+              {/* Window Controls */}
+              <div className="flex space-x-2">
+                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
               </div>
 
-              {/* Modern Title */}
-              <div className="text-cyan-300 font-semibold text-2xl tracking-wide bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent">
+              {/* Title */}
+              <div className="text-green-400 font-bold text-lg">
                 ENS Treasury Terminal v3.0
               </div>
             </div>
 
-            {/* Modern Status */}
-            <div className="flex items-center space-x-6 text-sm">
-              <div className="flex items-center space-x-3">
-                <div className="w-3 h-3 bg-emerald-400 rounded-full animate-pulse shadow-lg shadow-emerald-400/30"></div>
-                <span className="text-emerald-300 font-medium tracking-wide">CONNECTED</span>
+            {/* Status */}
+            <div className="flex items-center space-x-4 text-sm">
+              <div className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                <span className="text-green-300">CONNECTED</span>
               </div>
-              <div className="text-slate-300 font-mono bg-slate-800/50 px-3 py-1 rounded-lg border border-slate-600/30">
+              <div className="text-green-400 font-mono">
                 {currentTime.toLocaleTimeString('en-US', { hour12: false })}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Modern Navigation Bar */}
-        <div className="bg-slate-800/80 border-x border-slate-700/30 px-6 py-4">
-          <div className="flex flex-wrap gap-4">
+        {/* Navigation Bar */}
+        <div className="bg-gray-800 border-x border-gray-600 px-4 py-3">
+          <div className="flex flex-wrap gap-3">
             {[
-              { id: 'overview', name: 'OVERVIEW', icon: '[OV]', color: 'from-cyan-500/20 to-blue-500/20 hover:from-cyan-500/30 hover:to-blue-500/30' },
-              { id: 'assets', name: 'ASSETS', icon: '[AS]', color: 'from-emerald-500/20 to-teal-500/20 hover:from-emerald-500/30 hover:to-teal-500/30' },
-              { id: 'analytics', name: 'ANALYTICS', icon: '[AN]', color: 'from-purple-500/20 to-indigo-500/20 hover:from-purple-500/30 hover:to-indigo-500/30' },
-              { id: 'transactions', name: 'TRANSACTIONS', icon: '[TX]', color: 'from-pink-500/20 to-rose-500/20 hover:from-pink-500/30 hover:to-rose-500/30' },
-              { id: 'wallets', name: 'WALLETS', icon: '[WL]', color: 'from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30' }
+              { id: 'overview', name: 'OVERVIEW', icon: '[OV]' },
+              { id: 'assets', name: 'ASSETS', icon: '[AS]' },
+              { id: 'analytics', name: 'ANALYTICS', icon: '[AN]' },
+              { id: 'transactions', name: 'TRANSACTIONS', icon: '[TX]' },
+              { id: 'wallets', name: 'WALLETS', icon: '[WL]' }
             ].map((section) => (
               <button
                 key={section.id}
                 onClick={() => document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth' })}
-                className={`px-5 py-3 bg-gradient-to-r ${section.color} border border-slate-600/30 text-slate-200 rounded-xl hover:border-slate-500/50 transition-all duration-200 font-semibold shadow-md hover:shadow-lg hover:scale-105`}
+                className="px-3 py-2 bg-gray-700 border border-gray-500 text-green-300 hover:bg-gray-600 hover:border-gray-400"
               >
-                <span className="mr-3 text-sm font-mono font-bold text-cyan-300 bg-slate-700/50 px-2 py-1 rounded-md">{section.icon}</span>
+                <span className="mr-2 text-sm font-mono">{section.icon}</span>
                 {section.name}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Modern Command Interface */}
-        <div className="bg-slate-900/80 border-x border-slate-700/30 px-8 py-8 min-h-[350px]">
-          {/* Modern Command Prompt */}
-          <div className="flex items-center space-x-4 mb-8">
-            <div className="text-cyan-300 font-semibold text-xl bg-slate-800/50 px-4 py-2 rounded-lg border border-slate-600/30">
-              ens-admin@terminal
+        {/* Command Interface */}
+        <div className="bg-black border-x border-gray-600 px-4 py-6 min-h-[300px]">
+          {/* Command Prompt */}
+          <div className="flex items-center space-x-2 mb-4">
+            <div className="text-green-400 font-bold">
+              ens-admin@terminal:~$
             </div>
-            <div className="text-slate-400 text-2xl font-bold">:</div>
-            <div className="text-blue-300 font-bold text-xl bg-slate-800/50 px-3 py-2 rounded-lg border border-slate-600/30">~</div>
-            <div className="text-emerald-300 text-2xl font-bold bg-emerald-500/20 px-2 py-1 rounded-md">$</div>
             <input
               type="text"
               value={command}
               onChange={(e) => setCommand(e.target.value)}
               onKeyPress={handleKeyPress}
-              className="flex-1 bg-slate-800/50 text-slate-100 outline-none border border-slate-600/30 rounded-lg px-4 py-3 font-mono text-lg caret-cyan-300 focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20 transition-all duration-200 placeholder:text-slate-500"
+              className="flex-1 bg-black text-green-400 outline-none border-none font-mono caret-green-400"
               placeholder="Type 'help' for commands..."
               autoFocus
               spellCheck={false}
             />
-            <div className="w-4 h-8 bg-gradient-to-r from-cyan-400 to-blue-400 animate-pulse rounded-full shadow-lg"></div>
+            <div className="w-2 h-4 bg-green-400"></div>
           </div>
 
-          {/* Modern Command History */}
-          <div className="space-y-6 max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-slate-800/30">
+          {/* Command History */}
+          <div className="space-y-2 max-h-96 overflow-y-auto">
             {commandHistory.map((entry, index) => (
-              <div key={index} className="bg-slate-800/30 rounded-xl border border-slate-700/30 p-4 hover:bg-slate-800/40 transition-all duration-200">
-                <div className="flex items-center space-x-3 text-slate-400 mb-3">
-                  <span className="text-emerald-300 font-bold bg-emerald-500/20 px-2 py-1 rounded-md text-sm">$</span>
-                  <span className="text-slate-200 font-medium">{entry.command}</span>
-                  <span className="text-slate-500 text-xs ml-auto bg-slate-700/50 px-2 py-1 rounded-md">
+              <div key={index} className="border-l-2 border-green-500 pl-4 py-1">
+                <div className="flex items-center space-x-2 text-gray-400 mb-1">
+                  <span className="text-green-400 font-bold">$</span>
+                  <span className="text-green-300">{entry.command}</span>
+                  <span className="text-gray-600 text-xs ml-auto">
                     {entry.timestamp.toLocaleTimeString('en-US', { hour12: false })}
                   </span>
                 </div>
-                <div className={`font-mono text-sm leading-relaxed whitespace-pre-wrap ${
-                  entry.type === 'error' ? 'text-red-300' :
-                  entry.type === 'success' ? 'text-emerald-300' :
-                  'text-cyan-300'
+                <div className={`font-mono text-sm whitespace-pre-wrap ${
+                  entry.type === 'error' ? 'text-red-400' :
+                  entry.type === 'success' ? 'text-green-400' :
+                  'text-green-400'
                 }`}>
                   {entry.output}
                 </div>
@@ -768,37 +753,32 @@ const Terminal = () => {
           </div>
         </div>
 
-        {/* Modern Status Bar */}
-        <div className="bg-slate-800/90 border border-slate-700/50 border-t-0 rounded-b-xl px-8 py-5">
+        {/* Status Bar */}
+        <div className="bg-gray-800 border border-gray-600 border-t-0 px-4 py-3">
           <div className="flex justify-between items-center text-sm">
-            <div className="flex items-center space-x-8">
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                <span className="text-cyan-300 font-semibold">Active:</span>
-                <span className="text-slate-200 bg-slate-700/50 px-2 py-1 rounded-md">overview</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                <span className="text-blue-300 font-semibold">Directory:</span>
-                <span className="text-slate-200 bg-slate-700/50 px-2 py-1 rounded-md">~</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                <span className="text-purple-300 font-semibold">Sections:</span>
-                <span className="text-slate-200 bg-slate-700/50 px-2 py-1 rounded-md">15</span>
-              </div>
+            <div className="flex items-center space-x-6">
+              <span className="text-green-400">
+                <span className="font-bold">Active:</span>
+                <span className="text-green-300 ml-2">overview</span>
+              </span>
+              <span className="text-green-400">
+                <span className="font-bold">Directory:</span>
+                <span className="text-green-300 ml-2">~</span>
+              </span>
+              <span className="text-green-400">
+                <span className="font-bold">Sections:</span>
+                <span className="text-green-300 ml-2">5</span>
+              </span>
             </div>
-            <div className="flex items-center space-x-8">
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
-                <span className="text-emerald-300 font-semibold">Network:</span>
-                <span className="text-slate-200 bg-slate-700/50 px-2 py-1 rounded-md">CONNECTED</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-amber-400 rounded-full"></div>
-                <span className="text-amber-300 font-semibold">Uptime:</span>
-                <span className="text-slate-200 bg-slate-700/50 px-2 py-1 rounded-md">00:00:00</span>
-              </div>
+            <div className="flex items-center space-x-6">
+              <span className="text-green-400">
+                <span className="font-bold">Network:</span>
+                <span className="text-green-300 ml-2">CONNECTED</span>
+              </span>
+              <span className="text-green-400">
+                <span className="font-bold">Uptime:</span>
+                <span className="text-green-300 ml-2">00:00:00</span>
+              </span>
             </div>
           </div>
         </div>
@@ -806,107 +786,56 @@ const Terminal = () => {
         {/* Content Sections */}
         <div className="mt-8 space-y-8">
           {/* Overview Section */}
-          <div id="overview" className="bg-slate-900/90 border border-slate-700/50 rounded-xl p-8 shadow-xl">
-            <div className="flex items-center space-x-4 mb-8">
-              <div className="w-8 h-8 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">[OV]</span>
+          <div id="overview" className="bg-gray-900 border border-gray-600 p-6">
+            <h2 className="text-green-400 font-bold text-xl mb-4">[OV] PORTFOLIO OVERVIEW</h2>
+            <div className="grid grid-cols-4 gap-4">
+              <div className="bg-gray-800 border border-gray-500 p-4">
+                <div className="text-sm text-green-300 uppercase mb-2 font-bold">TOTAL AUM</div>
+                <div className="text-2xl text-green-400 font-mono font-bold mb-1">$926.8M</div>
+                <div className="text-sm text-green-300">+2.5% MTD</div>
               </div>
-              <h2 className="text-slate-100 font-bold text-2xl tracking-wide">PORTFOLIO OVERVIEW</h2>
-            </div>
-            <div className="grid grid-cols-4 gap-6">
-              <div className="bg-gradient-to-br from-emerald-900/40 to-emerald-800/40 border border-emerald-500/30 p-6 rounded-xl backdrop-blur-sm hover:border-emerald-400/50 transition-all duration-300 shadow-lg hover:shadow-emerald-500/20">
-                <div className="text-xs text-emerald-300 uppercase tracking-widest mb-4 font-bold">TOTAL AUM</div>
-                <div className="text-4xl text-emerald-200 font-mono font-bold mb-3">$926.8M</div>
-                <div className="text-sm text-emerald-300 flex items-center">
-                  <span className="mr-2 text-lg">▲</span>+2.5% MTD
-                </div>
+              <div className="bg-gray-800 border border-gray-500 p-4">
+                <div className="text-sm text-green-300 uppercase mb-2 font-bold">LIQUID ASSETS</div>
+                <div className="text-2xl text-green-400 font-mono font-bold mb-1">$840.2M</div>
+                <div className="text-sm text-green-300">+1.8% MTD</div>
               </div>
-              <div className="bg-gradient-to-br from-cyan-900/40 to-cyan-800/40 border border-cyan-500/30 p-6 rounded-xl backdrop-blur-sm hover:border-cyan-400/50 transition-all duration-300 shadow-lg hover:shadow-cyan-500/20">
-                <div className="text-xs text-cyan-300 uppercase tracking-widest mb-4 font-bold">LIQUID ASSETS</div>
-                <div className="text-4xl text-cyan-200 font-mono font-bold mb-3">$840.2M</div>
-                <div className="text-sm text-cyan-300 flex items-center">
-                  <span className="mr-2 text-lg">▲</span>+1.8% MTD
-                </div>
+              <div className="bg-gray-800 border border-gray-500 p-4">
+                <div className="text-sm text-green-300 uppercase mb-2 font-bold">MONTHLY OUTFLOW</div>
+                <div className="text-2xl text-green-400 font-mono font-bold mb-1">$642K</div>
+                <div className="text-sm text-green-300">+12.3% vs Prior</div>
               </div>
-              <div className="bg-gradient-to-br from-rose-900/40 to-rose-800/40 border border-rose-500/30 p-6 rounded-xl backdrop-blur-sm hover:border-rose-400/50 transition-all duration-300 shadow-lg hover:shadow-rose-500/20">
-                <div className="text-xs text-rose-300 uppercase tracking-widest mb-4 font-bold">MONTHLY OUTFLOW</div>
-                <div className="text-4xl text-rose-200 font-mono font-bold mb-3">$642K</div>
-                <div className="text-sm text-rose-300 flex items-center">
-                  <span className="mr-2 text-lg">▲</span>+12.3% vs Prior
-                </div>
-              </div>
-              <div className="bg-gradient-to-br from-violet-900/40 to-violet-800/40 border border-violet-500/30 p-6 rounded-xl backdrop-blur-sm hover:border-violet-400/50 transition-all duration-300 shadow-lg hover:shadow-violet-500/20">
-                <div className="text-xs text-violet-300 uppercase tracking-widest mb-4 font-bold">CUSTODY ACCOUNTS</div>
-                <div className="text-4xl text-violet-200 font-mono font-bold mb-3">12</div>
-                <div className="text-sm text-violet-300">No Change</div>
+              <div className="bg-gray-800 border border-gray-500 p-4">
+                <div className="text-sm text-green-300 uppercase mb-2 font-bold">CUSTODY ACCOUNTS</div>
+                <div className="text-2xl text-green-400 font-mono font-bold mb-1">12</div>
+                <div className="text-sm text-green-300">No Change</div>
               </div>
             </div>
           </div>
 
           {/* Other sections */}
-          <div id="assets" className="bg-slate-900/90 border border-slate-700/50 rounded-xl p-8 shadow-xl">
-            <div className="flex items-center space-x-4 mb-6">
-              <div className="w-8 h-8 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">[AS]</span>
-              </div>
-              <h2 className="text-slate-100 font-bold text-2xl tracking-wide">ASSET MANAGEMENT</h2>
-            </div>
-            <p className="text-slate-300 text-lg leading-relaxed">Asset allocation and performance tracking system</p>
+          <div id="assets" className="bg-gray-900 border border-gray-600 p-6">
+            <h2 className="text-green-400 font-bold text-xl mb-4">[AS] ASSET MANAGEMENT</h2>
+            <p className="text-green-300">Asset allocation and performance tracking system</p>
           </div>
 
-          <div id="analytics" className="bg-slate-900/90 border border-slate-700/50 rounded-xl p-8 shadow-xl">
-            <div className="flex items-center space-x-4 mb-6">
-              <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">[AN]</span>
-              </div>
-              <h2 className="text-slate-100 font-bold text-2xl tracking-wide">RISK ANALYTICS</h2>
-            </div>
-            <p className="text-slate-300 text-lg leading-relaxed">Portfolio risk assessment and analytics dashboard</p>
+          <div id="analytics" className="bg-gray-900 border border-gray-600 p-6">
+            <h2 className="text-green-400 font-bold text-xl mb-4">[AN] RISK ANALYTICS</h2>
+            <p className="text-green-300">Portfolio risk assessment and analytics dashboard</p>
           </div>
 
-          <div id="transactions" className="bg-slate-900/90 border border-slate-700/50 rounded-xl p-8 shadow-xl">
-            <div className="flex items-center space-x-4 mb-6">
-              <div className="w-8 h-8 bg-gradient-to-r from-pink-500 to-rose-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">[TX]</span>
-              </div>
-              <h2 className="text-slate-100 font-bold text-2xl tracking-wide">TRANSACTION HISTORY</h2>
-            </div>
-            <p className="text-slate-300 text-lg leading-relaxed">Multi-chain transaction data and analysis tools</p>
+          <div id="transactions" className="bg-gray-900 border border-gray-600 p-6">
+            <h2 className="text-green-400 font-bold text-xl mb-4">[TX] TRANSACTION HISTORY</h2>
+            <p className="text-green-300">Multi-chain transaction data and analysis tools</p>
           </div>
 
-          <div id="wallets" className="bg-slate-900/90 border border-slate-700/50 rounded-xl p-8 shadow-xl">
-            <div className="flex items-center space-x-4 mb-6">
-              <div className="w-8 h-8 bg-gradient-to-r from-amber-500 to-orange-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">[WL]</span>
-              </div>
-              <h2 className="text-slate-100 font-bold text-2xl tracking-wide">WALLET ADMINISTRATION</h2>
-            </div>
-            <p className="text-slate-300 text-lg leading-relaxed">Wallet portfolio and access control management</p>
+          <div id="wallets" className="bg-gray-900 border border-gray-600 p-6">
+            <h2 className="text-green-400 font-bold text-xl mb-4">[WL] WALLET ADMINISTRATION</h2>
+            <p className="text-green-300">Wallet portfolio and access control management</p>
           </div>
         </div>
       </div>
 
-      {/* Custom Styles */}
-      <style>{`
-        /* Custom scrollbar styling - only if needed */
-        .scrollbar-thin::-webkit-scrollbar {
-          width: 6px;
-        }
 
-        .scrollbar-thin::-webkit-scrollbar-track {
-          background: rgba(51, 65, 85, 0.1);
-          border-radius: 3px;
-        }
-
-        .scrollbar-thin::-webkit-scrollbar-thumb {
-          background: rgba(51, 65, 85, 0.5);
-          border-radius: 3px;
-        }
-
-        .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-          background: rgba(51, 65, 85, 0.7);
-        }
-      `}</style>
     </div>
   );
 };
