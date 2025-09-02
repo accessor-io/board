@@ -91,20 +91,22 @@ const Terminal = () => {
     help: () => {
       let output = '';
       output += '┌─────────────────────────────────────────────────────────────┐\n';
-      output += '│                    AVAILABLE COMMANDS                         │\n';
+      output += '│              ENS DAO FUNDING PROCESS TERMINAL                │\n';
+      output += '│                                                             │\n';
+      output += '│ FINANCIAL ANALYSIS COMMANDS:                                │\n';
+      output += '│ • overview        Funding process overview                  │\n';
+      output += '│ • assets          Treasury management & diversification     │\n';
+      output += '│ • analytics       Transparency challenges & governance      │\n';
+      output += '│ • transactions    Transaction history from all wallets      │\n';
+      output += '│ • wallets         Working group wallet structure            │\n';
+      output += '│                                                             │\n';
+      output += '│ WORKING GROUP ANALYSIS:                                     │\n';
+      output += '│ • tx <wallet>     Transactions for specific group          │\n';
+      output += '│ • tx summary      Overall transaction statistics            │\n';
       output += '│                                                             │\n';
       output += '│ NAVIGATION COMMANDS:                                        │\n';
       output += '│ • ls              List all sections                         │\n';
       output += '│ • cd <section>    Navigate to section                       │\n';
-      output += '│ • overview        Show portfolio overview                   │\n';
-      output += '│ • assets          Show asset management data                │\n';
-      output += '│ • analytics       Show risk analytics                       │\n';
-      output += '│ • transactions    Show ALL transactions from 12 wallets     │\n';
-      output += '│ • wallets         Show wallet administration                │\n';
-      output += '│                                                             │\n';
-      output += '│ TRANSACTION COMMANDS:                                       │\n';
-      output += '│ • tx <wallet>     Show transactions for specific wallet    │\n';
-      output += '│ • tx summary      Show transaction summary statistics      │\n';
       output += '│                                                             │\n';
       output += '│ SYSTEM COMMANDS:                                            │\n';
       output += '│ • status          Show system status                        │\n';
@@ -127,66 +129,111 @@ const Terminal = () => {
     },
 
     ls: () => `Available sections:
-  📊 overview        Portfolio Overview
-  💰 assets          Asset Management
-  📈 analytics       Risk Analytics
-  🔄 transactions    Transaction History
-  👛 wallets         Wallet Administration`,
+  [OV] overview        ENS DAO Funding Process Overview
+  [AS] assets          Treasury Management & Diversification
+  [AN] analytics       Financial Transparency & Challenges
+  [TX] transactions    Transaction History from All Wallets
+  [WL] wallets         Working Group Wallet Structure`,
 
-    overview: () => `┌─ PORTFOLIO OVERVIEW ─────────────────────────────────────┐
-│                                                              │
-│  TOTAL AUM:        $926.8M         +2.5% MTD                │
-│  LIQUID ASSETS:    $840.2M         +1.8% MTD                │
-│  MONTHLY OUTFLOW:  $642K           +12.3% vs Prior          │
-│  CUSTODY ACCOUNTS: 12               No Change               │
-│                                                              │
-│  Key Holdings:                                              │
-│  • ETH: $567.8M (61.3%)                                   │
-│  • USDC: $180.2M (19.5%)                                  │
-│  • ENS: $178.6M (19.2%)                                   │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘`,
+    overview: () => `┌─ ENS DAO FUNDING PROCESS OVERVIEW ──────────────────────┐
+│                                                                │
+│  FUNDING OBJECTIVE:                                            │
+│  Ensure initiatives, working groups, and development          │
+│  efforts are resourced while maintaining transparency         │
+│                                                                │
+│  PRIMARY REVENUE SOURCES:                                      │
+│  • .eth Registrations/Renewals: ~$1M/month                    │
+│  • Registrar Controller: ~$30K/day                            │
+│                                                                │
+│  MAIN DAO TREASURY HOLDINGS:                                   │
+│  • ETH: 3,320.41 ($246.5M total portfolio)                    │
+│  • ENS: 9,711,035.59                                          │
+│  • USDC: 7,425,507.53                                         │
+│                                                                │
+│  WORKING GROUPS (3):                                           │
+│  • Meta-Governance: Steward compensation, treasury mgmt       │
+│  • Ecosystem: Community development initiatives               │
+│  • Public Goods: Infrastructure and ecosystem support         │
+│                                                                │
+│  FUNDING WINDOWS:                                              │
+│  • Quarterly: January, April, July, October                   │
+│  • Social Proposals: 10,000 ENS threshold                     │
+│  • Executable Proposals: 100,000 ENS threshold               │
+│                                                                │
+│  ENS LABS FUNDING:                                            │
+│  • Continuous: $11,500/day (revocable)                        │
+│  • Q1 2025: $2.4M received                                    │
+│  • Q2 2025: $4.8M received                                    │
+│  • ENSv2 Budget: $9.7M annual                                 │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘`,
 
-    assets: () => `┌─ ASSET MANAGEMENT ──────────────────────────────────────┐
-│                                                              │
-│  PRIMARY HOLDINGS:                                          │
-│  • Ethereum (ETH):    234,567.00    $567.8M (61.3%)        │
-│  • USD Coin (USDC):   180,200,000   $180.2M (19.5%)        │
-│  • ENS Token:         12,500,000    $178.6M (19.2%)        │
-│                                                              │
-│  ALLOCATION TARGETS:                                        │
-│  • Core Crypto:     60-70%         Current: 61.3% ✓         │
-│  • Stablecoins:     15-25%         Current: 19.5% ✓         │
-│  • Native Tokens:   15-25%         Current: 19.2% ✓         │
-│                                                              │
-│  CUSTODY BREAKDOWN:                                        │
-│  • Multi-Sig Treasury:     $746.4M (80.5%)                 │
-│  • Institutional Custody:  $180.2M (19.5%)                 │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘`,
+    assets: () => `┌─ TREASURY MANAGEMENT & DIVERSIFICATION ──────────────┐
+│                                                                │
+│  REVENUE GENERATION:                                           │
+│  • .eth Registrations: ~$1M/month                             │
+│  • Registrar Controller: ~$30K/day                            │
+│  • Portfolio Value: $246.5M                                   │
+│                                                                │
+│  STABLECOIN RUNWAY STRATEGY:                                  │
+│  • Target: 24 months of expenses                              │
+│  • Initial Amount: $16,000,000 USD                            │
+│  • Assets: USDC + DAI in timelock                             │
+│                                                                │
+│  REVENUE SWEEPS:                                              │
+│  • Frequency: At least monthly                                │
+│  • Process: Convert ETH to stablecoins                        │
+│  • Purpose: Restore timelock balance                          │
+│                                                                │
+│  INVESTMENT STRATEGIES:                                       │
+│  • Element Finance: Fixed-rate vaults for yield              │
+│  • Real-World Assets: Tokenized T-bills                      │
+│  • Endowment Fund: Excess funds via Karpatkey                │
+│                                                                │
+│  WORKING GROUP FUNDING:                                       │
+│  • Meta-Governance: Steward compensation ($4K/month)         │
+│  • Ecosystem: Community development                           │
+│  • Public Goods: Infrastructure support                       │
+│                                                                │
+│  WALLET STRUCTURE:                                            │
+│  • Main Treasury: 0xFe89...4a8f                               │
+│  • Working Groups: Individual multi-sig wallets              │
+│  • ENS Labs: Continuous funding stream                        │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘`,
 
-    analytics: () => `┌─ RISK ANALYTICS ──────────────────────────────────────┐
-│                                                              │
-│  PORTFOLIO VOLATILITY:                                       │
-│  • 30-Day: 18.2% annualized                                 │
-│  • Sharpe Ratio: 1.34 (30D rolling)                         │
-│                                                              │
-│  ASSET VOLATILITY:                                          │
-│  • ETH:  24.3% (30D)                                        │
-│  • ENS:  45.7% (30D)  ⚠️ HIGH                               │
-│  • USDC: 0.2% (30D)   ✓ LOW                                 │
-│                                                              │
-│  MARKET DEPTH ANALYSIS:                                     │
-│  • ETH:  $15.2B daily volume                                │
-│  • ENS:  $85.3M daily volume                                │
-│  • USDC: $8.7B daily volume                                 │
-│                                                              │
-│  RISK METRICS:                                              │
-│  • Maximum Drawdown: -12.4% (Last 90 days)                  │
-│  • Value at Risk (95%): $47.2M (1-day horizon)              │
-│  • Liquidity Score: Excellent                               │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘`,
+    analytics: () => `┌─ FINANCIAL TRANSPARENCY & CHALLENGES ────────────────┐
+│                                                                │
+│  FINANCIAL REPORTING ISSUES:                                  │
+│  • Fragmented Sources: Steakhouse, Karpatkey, ENS Ledger      │
+│  • Money Flow Visualization, ENS Wallets, SafeNotes          │
+│  • Difficult to reconcile comprehensive data                  │
+│                                                                │
+│  WORKING GROUP CHALLENGES:                                    │
+│  • Unspent Funds: Large balances in group wallets            │
+│  • Example: Ecosystem group holds 600k+ unspent              │
+│  • Redundant funding requests when balances exist            │
+│                                                                │
+│  TRANSACTION VOLUME:                                          │
+│  • High Frequency: Many small transactions                    │
+│  • Complex Auditing: Broad distribution increases complexity │
+│                                                                │
+│  FUNDING PROCESS STRENGTHS:                                   │
+│  • Multi-Sig Security: 3/4 signature requirement             │
+│  • Transparent Proposals: Social + Executable phases         │
+│  • Regular Funding Windows: Quarterly schedule                │
+│                                                                │
+│  STEWARD COMPENSATION:                                        │
+│  • Stewards: $4,000 USDC/month (9 total)                      │
+│  • Secretary: $5,500 USDC/month                               │
+│  • Scribe: $3,000 USDC/month                                  │
+│                                                                │
+│  GOVERNANCE STRUCTURE:                                        │
+│  • Working Groups: 3 multi-sig wallets                       │
+│  • Lead Stewards: Initiate disbursements                      │
+│  • DAO Constitution: Guiding framework                        │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘`,
 
     transactions: () => {
       const transactions = [
@@ -364,46 +411,45 @@ const Terminal = () => {
       return output;
     },
 
-    wallets: () => `┌─ WALLET ADMINISTRATION ────────────────────────────────┐
-│                                                              │
-│  PRIMARY TREASURY WALLETS:                                  │
-│                                                              │
-│  1. Main Treasury Wallet                                    │
-│     Address: 0xFe89...4a8f                                   │
-│     Balance: $746.4M                                        │
-│     Holdings: ETH ($567.8M), ENS ($178.6M)                  │
-│     Multi-Sig: 4/7 threshold                                │
-│                                                              │
-│  2. Stablecoin Treasury                                     │
-│     Address: 0xCF60...7b2c                                   │
-│     Balance: $180.2M                                        │
-│     Holdings: USDC ($180.2M)                                │
-│     Custody: Coinbase Institutional                          │
-│                                                              │
-│  OPERATIONAL WALLETS:                                       │
-│                                                              │
-│  3. Grants Distribution                                     │
-│     Address: 0x9111...3d5e                                   │
-│     Balance: $2.8M                                          │
-│     Recent Activity: 4 transactions ($425K total)           │
-│                                                              │
-│  4. Operations Wallet                                       │
-│     Address: 0xebA7...9f1a                                   │
-│     Balance: $856K                                          │
-│     Purpose: Day-to-day operational expenses                │
-│                                                              │
-│  5. ETH Staking Wallet                                      │
-│     Address: 0xB162...6c8b                                   │
-│     Balance: $132.2M                                        │
-│     Validators: 1,705 active                                │
-│     APR: 3.8% current                                       │
-│                                                              │
-│  SECURITY STATUS:                                           │
-│  • Failed Login Attempts: 0 (Last 24h)                      │
-│  • Suspicious Activity: None detected                       │
-│  • Wallet Security Score: 98/100 (Excellent)                │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘`,
+    wallets: () => `┌─ WORKING GROUP WALLET STRUCTURE ───────────────────────┐
+│                                                                │
+│  WORKING GROUP GOVERNANCE:                                    │
+│  • 3 Working Groups: Meta-Gov, Ecosystem, Public Goods       │
+│  • Individual Multi-Sig Wallets: 4 keyholders each           │
+│  • Control: 3/4 signatures required for disbursements        │
+│                                                                │
+│  KEYHOLDER STRUCTURE:                                         │
+│  • 3 Elected Stewards per group                               │
+│  • 1 DAO Secretary (cross-group)                             │
+│  • Lead Steward: Initiates fund disbursements                │
+│                                                                │
+│  META-GOVERNANCE WORKING GROUP:                               │
+│  • Focus: Steward compensation, treasury management          │
+│  • Compensation: $4K/month per steward (9 total)             │
+│  • Secretary: $5.5K/month                                    │
+│  • Scribe: $3K/month                                         │
+│                                                                │
+│  ECOSYSTEM WORKING GROUP:                                    │
+│  • Focus: Community development initiatives                  │
+│  • Current Balance: 600K+ unspent                            │
+│  • Recent Request: 400K additional                           │
+│                                                                │
+│  PUBLIC GOODS WORKING GROUP:                                 │
+│  • Focus: Infrastructure and ecosystem support               │
+│  • High transaction volume for broad distribution            │
+│                                                                │
+│  FUNDING PROCESS:                                             │
+│  • Quarterly Windows: Jan, Apr, Jul, Oct                     │
+│  • Social Proposals: 10K ENS threshold                       │
+│  • Executable Proposals: 100K ENS threshold                  │
+│  • Urgent Situations: Bypass regular windows                 │
+│                                                                │
+│  ENS LABS FUNDING:                                           │
+│  • Continuous Stream: $11,500/day                            │
+│  • Revocable by either party                                 │
+│  • ENSv2 Budget: $9.7M annual                                │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘`,
 
     cd: (args) => {
       const section = args[0];
@@ -421,26 +467,35 @@ const Terminal = () => {
       }
     },
 
-    status: () => `┌─ SYSTEM STATUS ────────────────────────────────────────┐
-│                                                              │
-│  System Status:    OPERATIONAL                              │
-│  Terminal Version: v3.0                                      │
-│  Network Status:   CONNECTED                                 │
-│  Data Freshness:   REAL-TIME                                 │
-│  Active Section:   overview                                  │
-│                                                              │
-│  PERFORMANCE METRICS:                                       │
-│  • Response Time:   <100ms                                  │
-│  • Memory Usage:    Normal                                   │
-│  • CPU Usage:       Low                                      │
-│  • Network Latency: 23ms                                     │
-│                                                              │
-│  SECURITY STATUS:                                           │
-│  • Authentication:  SECURE                                  │
-│  • Encryption:      ENABLED                                  │
-│  • Audit Trail:      ACTIVE                                  │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘`,
+    status: () => `┌─ ENS DAO FINANCIAL SYSTEM STATUS ──────────────────────┐
+│                                                                │
+│  FUNDING PROCESS STATUS:                                       │
+│  • System Status:    OPERATIONAL                              │
+│  • Working Groups:   3 ACTIVE                                 │
+│  • Multi-Sig Wallets: ALL FUNCTIONAL                          │
+│  • Funding Windows:  QUARTERLY SCHEDULE                       │
+│                                                                │
+│  FINANCIAL METRICS:                                           │
+│  • Revenue Stream:   $1M/month (.eth registrations)           │
+│  • Registrar Controller: $30K/day                             │
+│  • Portfolio Value:  $246.5M                                  │
+│                                                                │
+│  WORKING GROUP STATUS:                                        │
+│  • Meta-Governance:  ACTIVE (Compensation Management)        │
+│  • Ecosystem:        ACTIVE (Community Development)          │
+│  • Public Goods:     ACTIVE (Infrastructure Support)         │
+│                                                                │
+│  ENS LABS STATUS:                                             │
+│  • Funding Stream:   ACTIVE ($11,500/day)                     │
+│  • ENSv2 Development: FUNDED ($9.7M annual)                   │
+│  • Q2 2025 Disbursed: $4.8M                                   │
+│                                                                │
+│  TRANSPARENCY METRICS:                                        │
+│  • Reporting Sources: MULTIPLE (Consolidation Needed)        │
+│  • Audit Trail:      ACTIVE                                   │
+│  • Public Oversight: ENABLED                                  │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘`,
 
     time: () => `Current Time: ${currentTime.toLocaleTimeString('en-US', { hour12: false })}`,
     whoami: () => 'ens-admin@terminal (ENS DAO Treasury Administrator)',
