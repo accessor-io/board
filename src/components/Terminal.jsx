@@ -91,31 +91,44 @@ const Terminal = () => {
     help: () => {
       let output = '';
       output += '┌─────────────────────────────────────────────────────────────┐\n';
-      output += '│              ENS DAO FUNDING PROCESS TERMINAL                │\n';
+      output += '│          ENS DAO TREASURY ANALYSIS TERMINAL                  │\n';
       output += '│                                                             │\n';
-      output += '│ FINANCIAL ANALYSIS COMMANDS:                                │\n';
-      output += '│ • overview        Funding process overview                  │\n';
-      output += '│ • assets          Treasury management & diversification     │\n';
-      output += '│ • analytics       Transparency challenges & governance      │\n';
+      output += '│ CORE ANALYSIS COMMANDS:                                    │\n';
+      output += '│ • overview        Revenue generation & funding mechanisms   │\n';
+      output += '│ • assets          Fund distribution & expenditures          │\n';
+      output += '│ • analytics       Accounting & transparency analysis       │\n';
       output += '│ • transactions    Transaction history from all wallets      │\n';
-      output += '│ • wallets         Working group wallet structure            │\n';
+      output += '│ • wallets         Working group multisig wallets           │\n';
+      output += '│ • status          Current financial infrastructure          │\n';
       output += '│                                                             │\n';
-      output += '│ WORKING GROUP ANALYSIS:                                     │\n';
-      output += '│ • tx <wallet>     Transactions for specific group          │\n';
-      output += '│ • tx summary      Overall transaction statistics            │\n';
+      output += '│ WORKING GROUP COMMANDS:                                     │\n';
+      output += '│ • wg meta          Meta-Governance details & compensation   │\n';
+      output += '│ • wg ecosystem     Ecosystem initiatives & grants          │\n';
+      output += '│ • wg public        Public goods funding & programs         │\n';
+      output += '│ • wg budgets       H1 2025 budget allocations              │\n';
+      output += '│ • wg spending      Q1/Q2 2025 expenditure tracking         │\n';
       output += '│                                                             │\n';
-      output += '│ NAVIGATION COMMANDS:                                        │\n';
+      output += '│ FINANCIAL QUERY COMMANDS:                                  │\n';
+      output += '│ • revenue          Revenue sources & collection            │\n';
+      output += '│ • compensation     Steward & officer compensation          │\n';
+      output += '│ • governance       ENS token distributions                 │\n';
+      output += '│ • investments      Treasury investment strategies          │\n';
+      output += '│ • challenges       Transparency & reporting issues         │\n';
+      output += '│ • summary          Complete treasury overview              │\n';
+      output += '│                                                             │\n';
+      output += '│ KEY ADDRESSES & TOOLS:                                     │\n';
+      output += '│ • Main Treasury: 0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7 │\n';
+      output += '│ • Registrar:     0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5 │\n';
+      output += '│ • ENS Labs:      coldwallet.ens.eth                        │\n';
+      output += '│ • Meta-Gov:      main.mg.wg.ens.eth                        │\n';
+      output += '│ • Live Balances: enswallets.xyz                            │\n';
+      output += '│ • Transactions:  safenotes.xyz/ens                         │\n';
+      output += '│                                                             │\n';
+      output += '│ SYSTEM COMMANDS:                                           │\n';
       output += '│ • ls              List all sections                         │\n';
-      output += '│ • cd <section>    Navigate to section                       │\n';
-      output += '│                                                             │\n';
-      output += '│ SYSTEM COMMANDS:                                            │\n';
-      output += '│ • status          Show system status                        │\n';
-      output += '│ • time            Show current time                         │\n';
-      output += '│ • date            Show current date                         │\n';
-      output += '│ • whoami          Show current user                         │\n';
       output += '│ • clear           Clear terminal screen                     │\n';
       output += '│ • history         Show command history                      │\n';
-      output += '│ • uptime          Show system uptime                        │\n';
+      output += '│ • time/date       Current time and date                     │\n';
       output += '│ • exit            Exit terminal                             │\n';
       output += '│                                                             │\n';
       output += '└─────────────────────────────────────────────────────────────┘\n';
@@ -129,109 +142,128 @@ const Terminal = () => {
     },
 
     ls: () => `Available sections:
-  [OV] overview        ENS DAO Funding Process Overview
-  [AS] assets          Treasury Management & Diversification
-  [AN] analytics       Financial Transparency & Challenges
+  [OV] overview        Funding Mechanisms & Revenue Sources
+  [AS] assets          Fund Distribution & Expenditures
+  [AN] analytics       Accounting Methods & Transparency Issues
   [TX] transactions    Transaction History from All Wallets
-  [WL] wallets         Working Group Wallet Structure`,
+  [WL] wallets         Working Group Multisig Wallets`,
 
-    overview: () => `┌─ ENS DAO FUNDING PROCESS OVERVIEW ──────────────────────┐
+    overview: () => `┌─ ENS DAO FUNDING MECHANISMS OVERVIEW ──────────────────┐
 │                                                                │
-│  FUNDING OBJECTIVE:                                            │
-│  Ensure initiatives, working groups, and development          │
-│  efforts are resourced while maintaining transparency         │
+│  REVENUE GENERATION (MONEY IN):                               │
+│  • Registration Fees: ETH for .eth domains                    │
+│    - 3-char: $640/year, 4-char: $160/year, 5+: $5/year        │
+│    - Recognized over service delivery period                  │
+│  • Premium Fees: Temporary auctions (21 days, $0-$100M+)     │
+│    - Recognized at transaction time                           │
+│  • Endowment DeFi: Karpatkey-managed yield                    │
+│    - Recognized monthly                                       │
 │                                                                │
-│  PRIMARY REVENUE SOURCES:                                      │
-│  • .eth Registrations/Renewals: ~$1M/month                    │
-│  • Registrar Controller: ~$30K/day                            │
+│  REVENUE INFLOW:                                              │
+│  • Registrar Controller: $30K/day (~$1M/month)                │
+│  • Address: 0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5        │
+│  • Monthly Sweeps: Revenue transferred to timelock           │
 │                                                                │
-│  MAIN DAO TREASURY HOLDINGS:                                   │
-│  • ETH: 3,320.41 ($246.5M total portfolio)                    │
-│  • ENS: 9,711,035.59                                          │
-│  • USDC: 7,425,507.53                                         │
-│                                                                │
-│  WORKING GROUPS (3):                                           │
-│  • Meta-Governance: Steward compensation, treasury mgmt       │
-│  • Ecosystem: Community development initiatives               │
-│  • Public Goods: Infrastructure and ecosystem support         │
-│                                                                │
-│  FUNDING WINDOWS:                                              │
-│  • Quarterly: January, April, July, October                   │
-│  • Social Proposals: 10,000 ENS threshold                     │
-│  • Executable Proposals: 100,000 ENS threshold               │
-│                                                                │
-│  ENS LABS FUNDING:                                            │
-│  • Continuous: $11,500/day (revocable)                        │
-│  • Q1 2025: $2.4M received                                    │
-│  • Q2 2025: $4.8M received                                    │
-│  • ENSv2 Budget: $9.7M annual                                 │
-│                                                                │
-└────────────────────────────────────────────────────────────────┘`,
-
-    assets: () => `┌─ TREASURY MANAGEMENT & DIVERSIFICATION ──────────────┐
-│                                                                │
-│  REVENUE GENERATION:                                           │
-│  • .eth Registrations: ~$1M/month                             │
-│  • Registrar Controller: ~$30K/day                            │
-│  • Portfolio Value: $246.5M                                   │
-│                                                                │
-│  STABLECOIN RUNWAY STRATEGY:                                  │
-│  • Target: 24 months of expenses                              │
-│  • Initial Amount: $16,000,000 USD                            │
-│  • Assets: USDC + DAI in timelock                             │
-│                                                                │
-│  REVENUE SWEEPS:                                              │
-│  • Frequency: At least monthly                                │
-│  • Process: Convert ETH to stablecoins                        │
-│  • Purpose: Restore timelock balance                          │
+│  TREASURY MANAGEMENT STRATEGY:                                │
+│  • Expenditure Runway: 24 months ($16M USDC/DAI target)      │
+│  • Revenue Handling: Monthly sweeps + stablecoin conversion   │
+│  • Excess Funds: ETH to endowment via Karpatkey               │
+│  • Risk Profile: USD-neutral, ETH-neutral                     │
 │                                                                │
 │  INVESTMENT STRATEGIES:                                       │
-│  • Element Finance: Fixed-rate vaults for yield              │
-│  • Real-World Assets: Tokenized T-bills                      │
-│  • Endowment Fund: Excess funds via Karpatkey                │
+│  • Element Finance: Fixed yield products (zero-coupon bonds) │
+│  • Real-World Assets: Tokenized T-bills                       │
+│  • Diversification: Multiple staking providers                │
+│  • Risk Mitigation: Protocol insurance consideration          │
 │                                                                │
-│  WORKING GROUP FUNDING:                                       │
-│  • Meta-Governance: Steward compensation ($4K/month)         │
-│  • Ecosystem: Community development                           │
-│  • Public Goods: Infrastructure support                       │
-│                                                                │
-│  WALLET STRUCTURE:                                            │
-│  • Main Treasury: 0xFe89...4a8f                               │
-│  • Working Groups: Individual multi-sig wallets              │
-│  • ENS Labs: Continuous funding stream                        │
+│  FUND DISTRIBUTION (MONEY OUT):                               │
+│  • ENS Labs: $11,500/day continuous funding                   │
+│  • Working Groups: Quarterly funding windows                  │
+│  • Compensation: Stewards ($4K/month), Secretary ($5.5K)     │
+│  • Governance: ENS token distributions via Hedgey            │
 │                                                                │
 └────────────────────────────────────────────────────────────────┘`,
 
-    analytics: () => `┌─ FINANCIAL TRANSPARENCY & CHALLENGES ────────────────┐
+    assets: () => `┌─ FUND DISTRIBUTION & EXPENDITURES ───────────────────┐
 │                                                                │
-│  FINANCIAL REPORTING ISSUES:                                  │
-│  • Fragmented Sources: Steakhouse, Karpatkey, ENS Ledger      │
-│  • Money Flow Visualization, ENS Wallets, SafeNotes          │
-│  • Difficult to reconcile comprehensive data                  │
+│  ENS LABS FUNDING:                                            │
+│  • Cold Wallet: coldwallet.ens.eth                            │
+│  • Continuous: $11,500/day ($4.2M/month)                      │
+│  • Q1 2025: $2.39M received, $1.3M expenses                   │
+│  • Q2 2025: $4.81M received, $1.5M expenses                   │
+│  • Primary Use: Employee compensation & benefits              │
 │                                                                │
-│  WORKING GROUP CHALLENGES:                                    │
-│  • Unspent Funds: Large balances in group wallets            │
-│  • Example: Ecosystem group holds 600k+ unspent              │
-│  • Redundant funding requests when balances exist            │
+│  WORKING GROUP BUDGETS (H1 2025):                             │
+│  • Meta-Governance: $544K + 5 ETH                             │
+│    - Steward Comp: $294K, DAO Tooling: $150K, Audits: $60K    │
+│    - Q1: $210K spent, Q2: $217K spent                         │
 │                                                                │
-│  TRANSACTION VOLUME:                                          │
-│  • High Frequency: Many small transactions                    │
-│  • Complex Auditing: Broad distribution increases complexity │
+│  • Ecosystem: $832K + 10 ETH                                  │
+│    - Hackathons: $300K, Grants: $232K, Bug Bounties: $100K    │
+│    - Q1: $269K spent, Q2: $194K + 5 ETH spent                 │
 │                                                                │
-│  FUNDING PROCESS STRENGTHS:                                   │
-│  • Multi-Sig Security: 3/4 signature requirement             │
-│  • Transparent Proposals: Social + Executable phases         │
-│  • Regular Funding Windows: Quarterly schedule                │
+│  • Public Goods: $343K + 23 ETH                               │
+│    - Builder Grants: $80K + 23 ETH, Strategic: $160K          │
+│    - Q1: $111K + 14.9 ETH spent, Q2: $264K spent              │
 │                                                                │
-│  STEWARD COMPENSATION:                                        │
-│  • Stewards: $4,000 USDC/month (9 total)                      │
-│  • Secretary: $5,500 USDC/month                               │
-│  • Scribe: $3,000 USDC/month                                  │
+│  COMPENSATION STRUCTURE:                                      │
+│  • Stewards (9 total): $4K/month each ($36K/month)            │
+│  • DAO Secretary: $5.5K/month                                 │
+│  • Scribe: $3K/month                                          │
+│  • ENS Tokens: 10K per steward term (2-year vesting)          │
 │                                                                │
-│  GOVERNANCE STRUCTURE:                                        │
-│  • Working Groups: 3 multi-sig wallets                       │
-│  • Lead Stewards: Initiate disbursements                      │
-│  • DAO Constitution: Guiding framework                        │
+│  GOVERNANCE DISTRIBUTIONS:                                    │
+│  • Via Hedgey.finance: Immediate voting + 2-year vesting      │
+│  • Q1 2025: 24,965 ENS distributed (EP 5.26)                  │
+│  • Ecosystem Grants: 250 ENS (Q1), 3,200 ENS (Q2)             │
+│  • Meta-Gov Multisig: 164K ENS for distribution               │
+│                                                                │
+│  OTHER EXPENSES:                                              │
+│  • DAO Tooling: Agora ($50K), Contract Audits                 │
+│  • Event Sponsorships, Legal/Compliance, Marketing            │
+│  • Bug Bounty Programs, IT & Software Hosting                 │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘`,
+
+    analytics: () => `┌─ ACCOUNTING & TRANSPARENCY ANALYSIS ───────────────┐
+│                                                                │
+│  ACCOUNTING METHODS:                                          │
+│  • Accrual Basis: Revenue recognized over service period      │
+│  • Registration Fees: Recognized over domain lifetime         │
+│  • Premium Fees: Recognized at transaction time               │
+│  • Endowment Yield: Recognized monthly                        │
+│                                                                │
+│  TRANSPARENCY CHALLENGES:                                     │
+│  • Fragmented Reporting: 6+ different sources                 │
+│    - Steakhouse, Karpatkey, ENS Ledger                        │
+│    - Money Flow Visualization, ENS Wallets, SafeNotes         │
+│  • RFP Needed: Comprehensive financial dashboard              │
+│                                                                │
+│  WORKING GROUP EFFICIENCY:                                   │
+│  • Unspent Balances: Significant funds held in wallets        │
+│  • Redundant Requests: Groups request despite available funds │
+│  • Audit Planning: Difficulty predicting contract audit costs │
+│                                                                │
+│  COMPENSATION ANALYSIS:                                       │
+│  • Secretary Debate: $5.5K/month vs perceived value           │
+│  • Steward Structure: $4K/month + 10K ENS (2-year vesting)    │
+│  • DAO as Public Good: Non-profit vs enterprise perspective   │
+│                                                                │
+│  BUDGET VS ACTUAL ANALYSIS (H1 2025):                         │
+│  • Meta-Governance: $544K budget, $427K spent (78%)           │
+│  • Ecosystem: $832K budget, $463K spent (56%)                 │
+│  • Public Goods: $343K budget, $375K spent (109%)             │
+│                                                                │
+│  ENS LABS FINANCIAL FLOW:                                     │
+│  • Revenue: $11,500/day continuous stream                     │
+│  • Expenses: Primarily employee compensation & benefits       │
+│  • Q1: $2.4M in, $1.3M out (54% utilization)                  │
+│  • Q2: $4.8M in, $1.5M out (31% utilization)                  │
+│                                                                │
+│  GOVERNANCE INCENTIVES:                                       │
+│  • ENS Distributions: Immediate voting power + vesting        │
+│  • Hedgey Contracts: 2-year vesting period                    │
+│  • Grant Recipients: ENS tokens for ecosystem participation   │
 │                                                                │
 └────────────────────────────────────────────────────────────────┘`,
 
@@ -411,43 +443,63 @@ const Terminal = () => {
       return output;
     },
 
-    wallets: () => `┌─ WORKING GROUP WALLET STRUCTURE ───────────────────────┐
+    wallets: () => `┌─ WORKING GROUP MULTISIG WALLETS ──────────────────────┐
 │                                                                │
-│  WORKING GROUP GOVERNANCE:                                    │
+│  WALLET CONTROL STRUCTURE:                                    │
 │  • 3 Working Groups: Meta-Gov, Ecosystem, Public Goods       │
-│  • Individual Multi-Sig Wallets: 4 keyholders each           │
-│  • Control: 3/4 signatures required for disbursements        │
-│                                                                │
-│  KEYHOLDER STRUCTURE:                                         │
-│  • 3 Elected Stewards per group                               │
-│  • 1 DAO Secretary (cross-group)                             │
-│  • Lead Steward: Initiates fund disbursements                │
-│                                                                │
-│  META-GOVERNANCE WORKING GROUP:                               │
-│  • Focus: Steward compensation, treasury management          │
-│  • Compensation: $4K/month per steward (9 total)             │
-│  • Secretary: $5.5K/month                                    │
-│  • Scribe: $3K/month                                         │
-│                                                                │
-│  ECOSYSTEM WORKING GROUP:                                    │
-│  • Focus: Community development initiatives                  │
-│  • Current Balance: 600K+ unspent                            │
-│  • Recent Request: 400K additional                           │
-│                                                                │
-│  PUBLIC GOODS WORKING GROUP:                                 │
-│  • Focus: Infrastructure and ecosystem support               │
-│  • High transaction volume for broad distribution            │
+│  • 4 Keyholders per wallet: 3 Stewards + 1 DAO Secretary     │
+│  • Signatures Required: 3 of 4 for disbursements             │
+│  • Live Balances: enswallets.xyz                             │
+│  • Annotated Transactions: safenotes.xyz/ens                 │
 │                                                                │
 │  FUNDING PROCESS:                                             │
-│  • Quarterly Windows: Jan, Apr, Jul, Oct                     │
-│  • Social Proposals: 10K ENS threshold                       │
-│  • Executable Proposals: 100K ENS threshold                  │
-│  • Urgent Situations: Bypass regular windows                 │
+│  • Collective Proposals during Funding Windows               │
+│  • Windows: January, April, July, October                    │
+│  • Social Proposal → Executable Proposal                    │
+│  • Urgent Situations: Bypass regular windows                │
 │                                                                │
-│  ENS LABS FUNDING:                                           │
-│  • Continuous Stream: $11,500/day                            │
-│  • Revocable by either party                                 │
-│  • ENSv2 Budget: $9.7M annual                                │
+│  META-GOVERNANCE MULTISIG (main.mg.wg.ens.eth):              │
+│  • Holdings: 83.627 ETH, 240,738 USDC, 164K ENS             │
+│  • Purpose: Steward comp, DAO tooling, audits, governance    │
+│  • Budget H1 2025: $544K + 5 ETH                             │
+│  • Q1 2025 Expenses: $210K                                   │
+│  • Q2 2025 Expenses: $217K                                   │
+│                                                                │
+│  ECOSYSTEM WORKING GROUP:                                     │
+│  • Budget H1 2025: $832K + 10 ETH                            │
+│  • Q1 2025 Expenses: $269K                                   │
+│  • Q2 2025 Expenses: $194K + 5 ETH                          │
+│  • Note: Held 600K+ unspent when requesting 400K            │
+│                                                                │
+│  PUBLIC GOODS MULTISIGS:                                      │
+│  • Main Multisig: 157.5K USDC, 39.5 ETH, 200 ENS            │
+│  • Large Grants: 187K USDC                                   │
+│  • Budget H1 2025: $343K + 23 ETH                            │
+│  • Q1 2025 Expenses: $111K + 14.9 ETH                       │
+│  • Q2 2025 Expenses: $264K                                   │
+│                                                                │
+│  GOVERNANCE DISTRIBUTIONS:                                    │
+│  • Via Hedgey Contracts: 2-year vesting period               │
+│  • Q1 2025: 24,965 ENS (EP 5.26) + 250 ENS grants           │
+│  • Q2 2025: 3,200 ENS (Term 6 grants)                        │
+│  • Recovery: 589 ENS to users who lost tokens               │
+│                                                                │
+│  COMPENSATION STRUCTURE:                                      │
+│  • Stewards (9 total): $4K/month each ($36K/month)           │
+│  • DAO Secretary: $5.5K/month (compensation debate)          │
+│  • Scribe: $3K/month                                         │
+│  • ENS Tokens: 10K per steward term (2-year vesting)         │
+│                                                                │
+│  TRANSPARENCY CHALLENGES:                                     │
+│  • Fragmented Reporting: Multiple sources hard to reconcile  │
+│  • Unspent Balances: Groups hold large reserves              │
+│  • High Transaction Volume: Many small disbursements         │
+│  • RFP Proposed: Comprehensive financial dashboard           │
+│                                                                │
+│  MAIN DAO WALLET (SOURCE):                                    │
+│  • Address: 0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7        │
+│  • Purpose: Primary treasury, funds working groups           │
+│  • Total Transactions: ~$100M (ETH/USDC)                     │
 │                                                                │
 └────────────────────────────────────────────────────────────────┘`,
 
@@ -467,33 +519,44 @@ const Terminal = () => {
       }
     },
 
-    status: () => `┌─ ENS DAO FINANCIAL SYSTEM STATUS ──────────────────────┐
+    status: () => `┌─ ENS DAO FINANCIAL INFRASTRUCTURE ───────────────────┐
 │                                                                │
-│  FUNDING PROCESS STATUS:                                       │
-│  • System Status:    OPERATIONAL                              │
-│  • Working Groups:   3 ACTIVE                                 │
-│  • Multi-Sig Wallets: ALL FUNCTIONAL                          │
-│  • Funding Windows:  QUARTERLY SCHEDULE                       │
+│  PRIMARY TREASURY WALLETS:                                    │
+│  • Main Wallet/Timelock: 0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7 │
+│    - 3,320.41 ETH ($14.46M), 9.7M ENS ($224.62M)             │
+│    - 7.4M USDC ($7.42M), Total: $246.5M                      │
+│  • Governor Contract: Controls timelock operations           │
 │                                                                │
-│  FINANCIAL METRICS:                                           │
-│  • Revenue Stream:   $1M/month (.eth registrations)           │
-│  • Registrar Controller: $30K/day                             │
-│  • Portfolio Value:  $246.5M                                  │
+│  WORKING GROUP MULTISIGS:                                     │
+│  • Meta-Governance: main.mg.wg.ens.eth                        │
+│    - 83.627 ETH, 240,738 USDC, 164K ENS                      │
+│  • Ecosystem: 600K+ unspent balances                         │
+│  • Public Goods Main: 157.5K USDC, 39.5 ETH, 200 ENS         │
+│  • Public Goods Large: 187K USDC                             │
+│  • 3/4 Signatures Required: Stewards + DAO Secretary          │
 │                                                                │
-│  WORKING GROUP STATUS:                                        │
-│  • Meta-Governance:  ACTIVE (Compensation Management)        │
-│  • Ecosystem:        ACTIVE (Community Development)          │
-│  • Public Goods:     ACTIVE (Infrastructure Support)         │
+│  REVENUE COLLECTION:                                          │
+│  • Registrar Controller: 0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5 │
+│    - $30K/day inflow (~$1M/month)                             │
+│    - Collects .eth registration/renewal fees                  │
+│  • Monthly Sweeps: Revenue transferred to timelock            │
 │                                                                │
-│  ENS LABS STATUS:                                             │
-│  • Funding Stream:   ACTIVE ($11,500/day)                     │
-│  • ENSv2 Development: FUNDED ($9.7M annual)                   │
-│  • Q2 2025 Disbursed: $4.8M                                   │
+│  ENS LABS FUNDING:                                           │
+│  • Cold Wallet: coldwallet.ens.eth                            │
+│  • Continuous Stream: $11,500/day                             │
+│  • Q1 2025: $2.39M received, $1.3M expenses                   │
+│  • Q2 2025: $4.81M received, $1.5M expenses                   │
 │                                                                │
-│  TRANSPARENCY METRICS:                                        │
-│  • Reporting Sources: MULTIPLE (Consolidation Needed)        │
-│  • Audit Trail:      ACTIVE                                   │
-│  • Public Oversight: ENABLED                                  │
+│  ENDOWMENT MANAGEMENT:                                        │
+│  • Fund Manager: Karpatkey                                    │
+│  • Investment Strategies: Element Finance, RWA                │
+│  • Excess Revenue: ETH transferred to endowment               │
+│  • Risk Mitigation: Diversified staking providers             │
+│                                                                │
+│  ADDITIONAL WALLETS:                                          │
+│  • ENS Cold Wallet: 0x690F0581eCecCf8389c223170778cD9D029606F2 │
+│    - ETH, ENS, USDC, DAI holdings                             │
+│  • Working Group Multisigs: Live on enswallets.xyz            │
 │                                                                │
 └────────────────────────────────────────────────────────────────┘`,
 
@@ -516,6 +579,400 @@ const Terminal = () => {
       const minutes = Math.floor((uptime % 3600) / 60);
       return `System uptime: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00`;
     },
+
+    // Working Group Commands
+    wg: (args) => {
+      const subCommand = args[0];
+
+      if (!subCommand) {
+        return `┌─ WORKING GROUP COMMANDS ──────────────────────────────┐
+│                                                              │
+│ Available working group commands:                           │
+│ • wg meta          Meta-Governance details                  │
+│ • wg ecosystem     Ecosystem initiatives                    │
+│ • wg public        Public goods programs                    │
+│ • wg budgets       H1 2025 budget allocations               │
+│ • wg spending      Q1/Q2 2025 expenditure tracking          │
+│                                                              │
+└──────────────────────────────────────────────────────────────┘`;
+      }
+
+      if (subCommand === 'meta') {
+        return `┌─ META-GOVERNANCE WORKING GROUP ──────────────────────┐
+│                                                                │
+│ MULTISIG ADDRESS: main.mg.wg.ens.eth                         │
+│ • Holdings: 83.627 ETH, 240,738 USDC, 164K ENS             │
+│                                                                │
+│ RESPONSIBILITIES:                                             │
+│ • Steward compensation management                             │
+│ • DAO tooling and infrastructure                              │
+│ • Contract audits and security                                │
+│ • Governance token distributions                              │
+│                                                                │
+│ H1 2025 BUDGET: $544K + 5 ETH                                │
+│ • Steward Compensation: $294K (9 stewards × $4K/month)       │
+│ • DAO Tooling: $150K (Agora: $50K)                           │
+│ • Contract Audits: $60K                                       │
+│ • Discretionary Funds: $40K                                   │
+│                                                                │
+│ Q1 2025 EXPENSES: $210K                                      │
+│ Q2 2025 EXPENSES: $217K                                      │
+│                                                                │
+│ GOVERNANCE DISTRIBUTIONS:                                    │
+│ • Q1 2025: 24,965 ENS via Hedgey (EP 5.26)                   │
+│ • Q2 2025: Additional distributions                          │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘`;
+      }
+
+      if (subCommand === 'ecosystem') {
+        return `┌─ ECOSYSTEM WORKING GROUP ───────────────────────────┐
+│                                                                │
+│ FOCUS AREAS:                                                  │
+│ • Hackathons and developer events                             │
+│ • Grant programs for ecosystem projects                       │
+│ • Bug bounty programs                                         │
+│ • Audit support for ecosystem tools                           │
+│                                                                │
+│ H1 2025 BUDGET: $832K + 10 ETH                               │
+│ • Hackathons: $300K                                           │
+│ • Grants: $232K (including 10 ETH)                            │
+│ • Bug Bounties: $100K                                         │
+│ • Audit Support: $100K                                        │
+│ • Other Initiatives: $100K                                    │
+│                                                                │
+│ Q1 2025 EXPENSES: $269K                                       │
+│ Q2 2025 EXPENSES: $194K + 5 ETH                              │
+│                                                                │
+│ GRANTS DISTRIBUTED:                                           │
+│ • Q1 2025: 250 ENS to Term 5 grant recipients                 │
+│ • Q2 2025: 3,200 ENS to Term 6 grant recipients               │
+│                                                                │
+│ NOTE: Group held 600K+ unspent when requesting 400K          │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘`;
+      }
+
+      if (subCommand === 'public') {
+        return `┌─ PUBLIC GOODS WORKING GROUP ────────────────────────┐
+│                                                                │
+│ MULTISIG WALLETS:                                             │
+│ • Main Multisig: 157.5K USDC, 39.5 ETH, 200 ENS              │
+│ • Large Grants Multisig: 187K USDC                            │
+│                                                                │
+│ PROGRAM AREAS:                                                │
+│ • Builder Grants: Funding for ecosystem builders              │
+│ • Giveth Round Partnership: Community funding rounds          │
+│ • Strategic Grants: High-impact public goods projects         │
+│ • Event Support: Community events and conferences             │
+│                                                                │
+│ H1 2025 BUDGET: $343K + 23 ETH                               │
+│ • Builder Grants: $80K + 23 ETH                               │
+│ • Giveth Partnership: $50K                                    │
+│ • Strategic Grants: $160K                                     │
+│ • Event Support: $22K                                         │
+│ • Discretionary: $31K                                         │
+│                                                                │
+│ Q1 2025 EXPENSES: $111K + 14.9 ETH                           │
+│ Q2 2025 EXPENSES: $264K                                       │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘`;
+      }
+
+      if (subCommand === 'budgets') {
+        return `┌─ WORKING GROUP BUDGETS H1 2025 ───────────────────┐
+│                                                                │
+│ META-GOVERNANCE: $544K + 5 ETH                               │
+│ • Steward Compensation: $294K (54%)                          │
+│ • DAO Tooling: $150K (28%) - Agora $50K                       │
+│ • Contract Audits: $60K (11%)                                 │
+│ • Discretionary Funds: $40K (7%)                              │
+│                                                                │
+│ ECOSYSTEM: $832K + 10 ETH                                     │
+│ • Hackathons: $300K (36%)                                     │
+│ • Grants: $232K (28%) - Includes 10 ETH                       │
+│ • Bug Bounties: $100K (12%)                                   │
+│ • Audit Support: $100K (12%)                                  │
+│ • Other Initiatives: $100K (12%)                              │
+│                                                                │
+│ PUBLIC GOODS: $343K + 23 ETH                                  │
+│ • Builder Grants: $80K + 23 ETH (23%)                         │
+│ • Giveth Partnership: $50K (15%)                              │
+│ • Strategic Grants: $160K (47%)                               │
+│ • Event Support: $22K (6%)                                    │
+│ • Discretionary: $31K (9%)                                    │
+│                                                                │
+│ TOTAL BUDGET: $1.72M + 38 ETH                                 │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘`;
+      }
+
+      if (subCommand === 'spending') {
+        return `┌─ WORKING GROUP EXPENSES Q1/Q2 2025 ───────────────┐
+│                                                                │
+│ Q1 2025 TOTAL: $590K                                          │
+│ • Meta-Governance: $210K (36%)                               │
+│ • Ecosystem: $269K (46%)                                      │
+│ • Public Goods: $111K (19%)                                   │
+│                                                                │
+│ Q2 2025 TOTAL: $675K                                          │
+│ • Meta-Governance: $217K (32%)                               │
+│ • Ecosystem: $194K (29%)                                      │
+│ • Public Goods: $264K (39%)                                   │
+│                                                                │
+│ H1 2025 TOTAL SPENT: $1.27M (74% of budget)                   │
+│                                                                │
+│ ENS LABS FUNDING:                                             │
+│ • Q1 2025: $2.39M received, $1.3M spent                      │
+│ • Q2 2025: $4.81M received, $1.5M spent                      │
+│                                                                │
+│ GOVERNANCE DISTRIBUTIONS:                                     │
+│ • Q1 2025: 25,215 ENS total (24,965 + 250)                   │
+│ • Q2 2025: 3,200 ENS (Ecosystem grants)                       │
+│ • Recovery: 589 ENS (accidentally sent tokens)                │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘`;
+      }
+
+      return `Unknown working group command: ${subCommand}`;
+    },
+
+    // Financial Query Commands
+    revenue: () => `┌─ REVENUE GENERATION & COLLECTION ───────────────────┐
+│                                                                │
+│ PRIMARY REVENUE SOURCES:                                      │
+│ • Registration Fees: ETH for .eth domains                     │
+│   - 3-char: $640/year, 4-char: $160/year, 5+: $5/year         │
+│   - Accrual basis: Recognized over service period             │
+│                                                                │
+│ • Premium Fees: Temporary auctions (21 days)                  │
+│   - High starting prices ($100M+), decrease to $0             │
+│   - Recognized at transaction time                            │
+│                                                                │
+│ • Endowment DeFi Results: Karpatkey-managed yield             │
+│   - Monthly recognition basis                                  │
+│                                                                │
+│ REVENUE INFLOW MECHANISM:                                     │
+│ • Registrar Controller: 0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5 │
+│   - $30K/day average inflow (~$1M/month)                       │
+│   - Collects all .eth registration/renewal fees                │
+│                                                                │
+│ • Monthly Revenue Sweeps:                                      │
+│   - Funds transferred to DAO timelock                          │
+│   - Portion converted to stablecoins (USDC/DAI)                │
+│   - Excess ETH sent to endowment fund                          │
+│                                                                │
+│ HISTORICAL SCALE:                                              │
+│ • Monthly Revenue: ~$1M from domain registrations             │
+│ • Annual Revenue: ~$12M from ENS ecosystem                    │
+│ • Growth Driver: Increasing domain registrations               │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘`,
+
+    compensation: () => `┌─ COMPENSATION STRUCTURE ──────────────────────────┐
+│                                                                │
+│ STEWARD COMPENSATION:                                         │
+│ • Monthly Rate: $4,000 USDC per steward                       │
+│ • Total Stewards: 9 across all working groups                 │
+│ • Monthly Total: $36,000 for steward compensation             │
+│                                                                │
+│ ENS TOKEN ALLOCATIONS:                                        │
+│ • Historical: 10,000 ENS per steward term                     │
+│ • Vesting: 2-year vesting period                              │
+│ • Purpose: Long-term alignment and commitment                 │
+│                                                                │
+│ DAO OFFICERS:                                                 │
+│ • DAO Secretary: $5,500 USDC per month                        │
+│   - Manages working group coordination                        │
+│   - Oversees proposal processes                               │
+│                                                                │
+│ • Scribe: $3,000 USDC per month                               │
+│   - Documentation and record keeping                          │
+│   - Historical DAO operations                                 │
+│                                                                │
+│ COMPENSATION MANAGEMENT:                                      │
+│ • Responsible Party: Meta-Governance Working Group           │
+│ • Funding Source: Main DAO treasury                           │
+│ • Distribution: Monthly USDC payments                         │
+│                                                                │
+│ DEBATES & CONSIDERATIONS:                                     │
+│ • Secretary Compensation: Ongoing discussion about value      │
+│ • Market Alignment: Comparison with similar roles             │
+│ • DAO as Public Good: Non-profit compensation philosophy      │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘`,
+
+    governance: () => `┌─ GOVERNANCE TOKEN DISTRIBUTIONS ───────────────────┐
+│                                                                │
+│ DISTRIBUTION MECHANISM:                                       │
+│ • Via Hedgey.finance: Smart contract vesting                   │
+│ • Immediate Voting Power: Tokens available immediately         │
+│ • 2-Year Vesting Period: Gradual token release                │
+│ • Purpose: Long-term ecosystem alignment                      │
+│                                                                │
+│ Q1 2025 DISTRIBUTIONS:                                        │
+│ • Meta-Governance: 24,965 ENS (EP 5.26)                      │
+│ • Ecosystem Grants: 250 ENS (Term 5 recipients)              │
+│ • Total Q1: 25,215 ENS distributed                            │
+│                                                                │
+│ Q2 2025 DISTRIBUTIONS:                                        │
+│ • Ecosystem Grants: 3,200 ENS (Term 6 recipients)             │
+│ • Additional Programs: Ongoing distributions                  │
+│                                                                │
+│ SPECIAL DISTRIBUTIONS:                                        │
+│ • Token Recovery: 589 ENS restored to users                   │
+│ • Accident Resolution: Tokens accidentally sent to contracts  │
+│                                                                │
+│ ENS HOLDINGS IN MULTISIGS:                                    │
+│ • Meta-Governance: 164K ENS earmarked for distribution        │
+│ • Public Goods Main: 200 ENS                                  │
+│ • Ecosystem: Additional grant pools                           │
+│                                                                │
+│ GOVERNANCE IMPACT:                                            │
+│ • Voting Power Distribution: Broad ecosystem participation    │
+│ • Incentive Alignment: Long-term commitment                    │
+│ • Ecosystem Growth: Token distribution for contributions      │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘`,
+
+    investments: () => `┌─ TREASURY INVESTMENT STRATEGIES ──────────────────┐
+│                                                                │
+│ FUND MANAGER: Karpatkey                                       │
+│ • Primary Manager: Endowment fund administration              │
+│ • Fee Structure: Service-based compensation                   │
+│ • Risk Management: Conservative investment approach           │
+│                                                                │
+│ CONSERVATIVE YIELD STRATEGIES:                               │
+│ • Element Finance: Fixed-rate products                        │
+│   - Zero-coupon bonds equivalent                              │
+│   - Predictable returns for operating expenses                │
+│   - Liquidity features for treasury management                │
+│                                                                │
+│ REAL-WORLD ASSETS (RWA):                                     │
+│ • Tokenized T-bills: Low-risk fixed income                    │
+│ • Diversification Strategy: Reduce reliance on DeFi          │
+│ • Risk Profile: USD-neutral, ETH-neutral                      │
+│ • Market Context: Higher returns than current DeFi yields     │
+│                                                                │
+│ STAKING DIVERSIFICATION:                                     │
+│ • Multiple Providers: Lido, StakeWise, etc.                   │
+│ • Risk Mitigation: Avoid single points of failure             │
+│ • Insurance Consideration: Protocol coverage evaluation       │
+│                                                                │
+│ SMART CONTRACT RISKS:                                        │
+│ • DeFi Vulnerabilities: Ongoing assessment                    │
+│ • Insurance Coverage: Potential risk mitigation               │
+│ • Conservative Approach: Wealth preservation focus            │
+│                                                                │
+│ ENDOWMENT FUND:                                              │
+│ • Excess Revenue Destination: Monthly sweeps                  │
+│ • Long-term Growth: Investment for sustainability             │
+│ • Karpatkey Management: Professional fund administration      │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘`,
+
+    challenges: () => `┌─ TRANSPARENCY & REPORTING CHALLENGES ──────────────┐
+│                                                                │
+│ FRAGMENTED FINANCIAL REPORTING:                              │
+│ • Multiple Sources: Steakhouse, Karpatkey, ENS Ledger        │
+│ • Money Flow Visualization, ENS Wallets, SafeNotes          │
+│ • Comprehensive Dashboard: RFP proposed for consolidation    │
+│                                                                │
+│ WORKING GROUP ISSUES:                                       │
+│ • Unspent Funds: Significant balances in multisigs           │
+│ • Example: Ecosystem with 600K+ unspent                      │
+│ • Redundant Requests: Funds requested despite availability   │
+│                                                                │
+│ COMPENSATION DEBATES:                                        │
+│ • Secretary Role: $5.5K/month value assessment               │
+│ • Reporting Quality: Financial transparency concerns         │
+│ • Market Alignment: External compensation comparisons        │
+│                                                                │
+│ TRANSACTION COMPLEXITY:                                      │
+│ • High Volume: Many small disbursement transactions          │
+│ • Audit Challenges: Broad distribution increases complexity  │
+│ • Documentation: Need for detailed transaction tracking      │
+│                                                                │
+│ DAO GOVERNANCE PHILOSOPHY:                                  │
+│ • Public Good Focus: Non-profit vs enterprise approach       │
+│ • Cost Control: Balancing efficiency with transparency       │
+│ • Long-term Sustainability: Treasury management priorities   │
+│                                                                │
+│ PROPOSED SOLUTIONS:                                          │
+│ • Financial Dashboard: Comprehensive reporting platform      │
+│ • Improved Tracking: Better transaction documentation        │
+│ • Process Optimization: Streamlined fund request procedures  │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘`,
+
+    summary: () => `┌─ ENS DAO TREASURY COMPLETE SUMMARY ──────────────────┐
+│                                                                │
+│ TREASURY OVERVIEW:                                            │
+│ • Total Value: $246.5M (ETH $14.46M, ENS $224.62M, USDC $7.42M) │
+│ • Main Wallet: 0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7     │
+│ • Monthly Revenue: ~$1M from domain registrations              │
+│ • Working Groups: 3 multisigs (Meta-Gov, Ecosystem, Public)    │
+│                                                                │
+│ REVENUE SOURCES:                                               │
+│ • Registration Fees: 3-char $640/year, 4-char $160/year        │
+│ • Premium Auctions: Up to $100M+ starting prices               │
+│ • Endowment DeFi: Karpatkey-managed yield                      │
+│ • Registrar Controller: 0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5 │
+│                                                                │
+│ TREASURY MANAGEMENT:                                          │
+│ • Expenditure Runway: 24 months ($16M USDC/DAI target)        │
+│ • Monthly Sweeps: Revenue → Stablecoins → Endowment           │
+│ • Investment Strategy: Element Finance, RWA, Diversification  │
+│ • Fund Manager: Karpatkey (fees for service)                  │
+│                                                                │
+│ WORKING GROUP BUDGETS H1 2025:                                │
+│ • Meta-Governance: $544K + 5 ETH                              │
+│ • Ecosystem: $832K + 10 ETH                                   │
+│ • Public Goods: $343K + 23 ETH                                │
+│ • Total: $1.72M + 38 ETH                                       │
+│                                                                │
+│ Q1 2025 EXPENDITURES:                                         │
+│ • Meta-Governance: $210K spent                                │
+│ • Ecosystem: $269K spent                                       │
+│ • Public Goods: $111K spent                                    │
+│ • ENS Labs: $2.39M received, $1.3M spent                       │
+│                                                                │
+│ COMPENSATION STRUCTURE:                                        │
+│ • Stewards: $4K/month each (9 total = $36K/month)             │
+│ • DAO Secretary: $5.5K/month                                  │
+│ • Scribe: $3K/month                                           │
+│ • ENS Tokens: 10K per steward term (2-year vesting)           │
+│                                                                │
+│ GOVERNANCE DISTRIBUTIONS:                                     │
+│ • Via Hedgey.finance: Immediate voting + 2-year vesting       │
+│ • Q1 2025: 25,215 ENS total distributed                        │
+│ • Q2 2025: 3,200 ENS (Ecosystem grants)                        │
+│                                                                │
+│ WORKING GROUP WALLETS:                                        │
+│ • Meta-Governance: main.mg.wg.ens.eth (83.6 ETH, 240K USDC)   │
+│ • Ecosystem: 600K+ unspent (held when requesting 400K)        │
+│ • Public Goods Main: 157.5K USDC, 39.5 ETH, 200 ENS           │
+│ • Public Goods Large: 187K USDC                               │
+│ • ENS Labs: coldwallet.ens.eth                                 │
+│                                                                │
+│ TRANSPARENCY CHALLENGES:                                      │
+│ • Fragmented Reporting: 6+ different sources                  │
+│ • Unspent Funds: Significant balances in multisigs            │
+│ • High Transaction Volume: Many small disbursements           │
+│ • RFP Proposed: Comprehensive financial dashboard             │
+│                                                                │
+│ KEY FINANCIAL ADDRESSES:                                      │
+│ • Main Treasury: 0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7    │
+│ • Registrar: 0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5       │
+│ • Meta-Gov: main.mg.wg.ens.eth                                │
+│ • ENS Labs: coldwallet.ens.eth                                │
+│ • ENS Cold: 0x690F0581eCecCf8389c223170778cD9D029606F2        │
+│                                                                │
+│ FINANCIAL TRACKING TOOLS:                                     │
+│ • Live Balances: enswallets.xyz                               │
+│ • Annotated Transactions: safenotes.xyz/ens                   │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘`,
 
     tx: (args) => {
       const subCommand = args[0];
