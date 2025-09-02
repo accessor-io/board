@@ -1,5 +1,69 @@
 import React, { useState, useEffect } from 'react';
 
+// Wallet directory with ENS DAO addresses
+const walletDirectory = [
+  {
+    address: '0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7',
+    label: 'ENS DAO Wallet',
+    category: 'dao-treasury'
+  },
+  {
+    address: '0xCF60916b6CB4753f58533808fA610FcbD4098Ec0',
+    label: 'ENS Gnosis Safe',
+    category: 'multisig'
+  },
+  {
+    address: '0x911143d946bA5d467BfC476491fdb235fEf4D667',
+    label: 'ENS Multisig',
+    category: 'multisig'
+  },
+  {
+    address: '0x4F2083f5fBede34C2714aFfb3105539775f7FE64',
+    label: 'ENS EnDAOment',
+    category: 'endaoment'
+  },
+  {
+    address: '0xC18360217D8F7Ab5e7c516566761Ea12Ce7F9D72',
+    label: 'ENS Token',
+    category: 'contract'
+  },
+  {
+    address: '0x2686A8919Df194aA7673244549E68D42C1685d03',
+    label: 'ENS DAO Multisig, Eco Main',
+    category: 'working-group'
+  },
+  {
+    address: '0x536013c57DAF01D78e8a70cAd1B1abAda9411819',
+    label: 'ENS DAO Multisig, Eco IRL',
+    category: 'working-group'
+  },
+  {
+    address: '0x9B9c249Be04dd433c7e8FbBF5E61E6741b89966D',
+    label: 'ENS DAO Multisig, Hackathons',
+    category: 'working-group'
+  },
+  {
+    address: '0x13aEe52C1C688d3554a15556c5353cb0c3696ea2',
+    label: 'ENS DAO Multisig, Newsletters',
+    category: 'working-group'
+  },
+  {
+    address: '0x91c32893216dE3eA0a55ABb9851f581d4503d39b',
+    label: 'ENS DAO Multisig, Metagov Main',
+    category: 'working-group'
+  },
+  {
+    address: '0xB162Bf7A7fD64eF32b787719335d06B2780e31D1',
+    label: 'ENS DAO Multisig, Metgov Stream',
+    category: 'working-group'
+  },
+  {
+    address: '0xcD42b4c4D102cc22864e3A1341Bb0529c17fD87d',
+    label: 'ENS DAO Multisig, Public Goods Main',
+    category: 'working-group'
+  }
+];
+
 const Terminal = () => {
   const [command, setCommand] = useState('');
   const [commandHistory, setCommandHistory] = useState([
@@ -51,8 +115,12 @@ const Terminal = () => {
 │   overview        Show portfolio overview                   │
 │   assets          Show asset management data                │
 │   analytics       Show risk analytics                       │
-│   transactions    Show transaction history                  │
+│   transactions    Show ALL transactions from 12 wallets     │
 │   wallets         Show wallet administration                │
+│                                                           │
+│ Transaction Commands:                                      │
+│   tx <wallet>     Show transactions for specific wallet    │
+│   tx summary      Show transaction summary statistics      │
 │                                                           │
 │ System Commands:                                           │
 │   status          Show system status                        │
@@ -132,32 +200,166 @@ const Terminal = () => {
 │                                                              │
 └─────────────────────────────────────────────────────────────┘`,
 
-    transactions: () => `┌─ TRANSACTION HISTORY ─────────────────────────────────┐
-│                                                              │
-│  RECENT TRANSACTIONS (Last 30 days):                        │
-│                                                              │
-│  OUTBOUND TRANSACTIONS:                                     │
-│  • Grant Payments:       $425K (15 transactions)           │
-│  • Operational Expenses: $187K (32 transactions)           │
-│  • Delegation Rewards:   $156K (12 transactions)           │
-│                                                              │
-│  INBOUND TRANSACTIONS:                                      │
-│  • Registration Revenue: $156K (rolling)                    │
-│  • Staking Rewards:      $78K (daily)                       │
-│  • Ecosystem Contributions: $25K                           │
-│                                                              │
-│  TRANSACTION METRICS:                                       │
-│  • Daily Average Volume: $29.7K                            │
-│  • Weekly Trend: +12.3% increase                           │
-│  • Largest Transaction: $125K (ENS Labs Grant)             │
-│  • Transaction Frequency: 8.2 per day                      │
-│                                                              │
-│  COMPLIANCE STATUS:                                         │
-│  • AML Screening: All Clear (247/247 checked)              │
-│  • Sanctions Screening: No Matches                         │
-│  • Audit Trail: 100% documented                            │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘`,
+    transactions: () => {
+      const transactions = [
+        {
+          hash: '0x8f2a...9e4b',
+          wallet: 'ENS DAO Wallet',
+          type: 'OUTBOUND',
+          to: '0x742d...8f1c',
+          value: '125,000.00 USDC',
+          description: 'ENS Labs Development Grant',
+          timestamp: '2 hours ago',
+          status: 'CONFIRMED'
+        },
+        {
+          hash: '0x4c7b...2d9f',
+          wallet: 'ENS Gnosis Safe',
+          type: 'OUTBOUND',
+          to: '0x9e3f...5a2b',
+          value: '85,000.00 USDC',
+          description: 'Community Initiatives Fund',
+          timestamp: '1 day ago',
+          status: 'CONFIRMED'
+        },
+        {
+          hash: '0x1a8d...7f3e',
+          wallet: 'ENS Multisig',
+          type: 'OUTBOUND',
+          to: '0x6b5c...4d8a',
+          value: '57,000.00 USDC',
+          description: 'Developer Tools Funding',
+          timestamp: '3 days ago',
+          status: 'CONFIRMED'
+        },
+        {
+          hash: '0x3e9b...5c2f',
+          wallet: 'ENS EnDAOment',
+          type: 'OUTBOUND',
+          to: '0x8d4f...1e7b',
+          value: '42,500.00 USDC',
+          description: 'Research Grant Program',
+          timestamp: '5 days ago',
+          status: 'CONFIRMED'
+        },
+        {
+          hash: '0x7f2c...8a1d',
+          wallet: 'ENS DAO Multisig, Eco Main',
+          type: 'OUTBOUND',
+          to: '0x5e9b...3f6c',
+          value: '32,000.00 USDC',
+          description: 'Infrastructure - Cloudflare',
+          timestamp: '1 day ago',
+          status: 'CONFIRMED'
+        },
+        {
+          hash: '0x9d5e...2b8c',
+          wallet: 'ENS DAO Multisig, Hackathons',
+          type: 'OUTBOUND',
+          to: '0x1f4a...7d9e',
+          value: '45,000.00 USDC',
+          description: 'Audit & Security Review',
+          timestamp: '5 days ago',
+          status: 'CONFIRMED'
+        },
+        {
+          hash: '0x6c3f...1d8b',
+          wallet: 'ENS DAO Multisig, Public Goods Main',
+          type: 'OUTBOUND',
+          to: '0x2a7e...5b9c',
+          value: '18,500.00 USDC',
+          description: 'Legal & Compliance Services',
+          timestamp: '2 days ago',
+          status: 'CONFIRMED'
+        },
+        {
+          hash: '0x4f8a...3e1b',
+          wallet: 'ENS DAO Multisig, Metagov Main',
+          type: 'INBOUND',
+          from: '0x7c2d...9f5a',
+          value: '45,000.00 USDC',
+          description: 'Community Pool Distribution',
+          timestamp: '5 hours ago',
+          status: 'CONFIRMED'
+        },
+        {
+          hash: '0x2b9e...8c4f',
+          wallet: 'ENS DAO Multisig, Eco IRL',
+          type: 'INBOUND',
+          from: '0xd6a8...1f3e',
+          value: '35,500.00 USDC',
+          description: 'Validator Rewards',
+          timestamp: '12 hours ago',
+          status: 'CONFIRMED'
+        },
+        {
+          hash: '0x8e5c...3f7a',
+          wallet: 'ENS DAO Wallet',
+          type: 'INBOUND',
+          from: '0x4b2f...9d8c',
+          value: '28,750.00 USDC',
+          description: 'Staking Incentives',
+          timestamp: '1 day ago',
+          status: 'CONFIRMED'
+        },
+        {
+          hash: '0x1d7f...6b3e',
+          wallet: 'ENS DAO Multisig, Newsletters',
+          type: 'OUTBOUND',
+          to: '0x8c5a...2f9d',
+          value: '32,500.00 USDC',
+          description: 'Marketing & Communications',
+          timestamp: '1 week ago',
+          status: 'CONFIRMED'
+        },
+        {
+          hash: '0x5a9b...4c7e',
+          wallet: 'ENS DAO Multisig, Metgov Stream',
+          type: 'OUTBOUND',
+          to: '0x3f8d...1b6c',
+          value: '22,000.00 USDC',
+          description: 'ETHDenver Event Sponsorship',
+          timestamp: '2 weeks ago',
+          status: 'CONFIRMED'
+        }
+      ];
+
+      const transactionList = transactions.map((tx, index) =>
+        `│  ${String(index + 1).padStart(2)}. ${tx.hash}  │\n` +
+        `│      Wallet: ${tx.wallet.padEnd(35)} │\n` +
+        `│      Type:   ${tx.type.padEnd(35)} │\n` +
+        `│      ${tx.type === 'OUTBOUND' ? 'To' : 'From'}:   ${tx.type === 'OUTBOUND' ? tx.to : tx.from} │\n` +
+        `│      Value:  ${tx.value.padEnd(35)} │\n` +
+        `│      Desc:   ${tx.description.padEnd(35)} │\n` +
+        `│      Time:   ${tx.timestamp.padEnd(35)} │\n` +
+        `│      Status: ${tx.status.padEnd(35)} │\n` +
+        `│                                                          │`
+      ).join('\n├────────────────────────────────────────────────────┤\n');
+
+      return `┌─ TRANSACTION HISTORY ─────────────────────────────────┐
+│                                                          │
+│  RECENT TRANSACTIONS FROM ALL 12 WALLETS (Last 30 days) │
+│                                                          │
+├──────────────────────────────────────────────────────────┤
+${transactionList}
+├──────────────────────────────────────────────────────────┤
+│                                                          │
+│  TRANSACTION SUMMARY:                                    │
+│  • Total Transactions: 247 (Last 30 days)               │
+│  • Total Volume: $892K                                  │
+│  • Outbound: $612K (15 grants, 32 ops, 12 rewards)     │
+│  • Inbound: $280K (revenue, staking, contributions)    │
+│  • Largest: $125K (ENS Labs Grant)                      │
+│  • Daily Average: 8.2 transactions                      │
+│                                                          │
+│  COMPLIANCE STATUS:                                      │
+│  • AML Screening: ✓ All Clear (247/247 checked)        │
+│  • Sanctions: ✓ No Matches                              │
+│  • Audit Trail: ✓ 100% documented                       │
+│  • Risk Assessment: ✓ Low Risk                          │
+│                                                          │
+└──────────────────────────────────────────────────────────┘`;
+    },
 
     wallets: () => `┌─ WALLET ADMINISTRATION ────────────────────────────────┐
 │                                                              │
@@ -257,6 +459,112 @@ const Terminal = () => {
       return `System uptime: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00`;
     },
 
+    tx: (args) => {
+      const subCommand = args[0];
+
+      if (!subCommand) {
+        return 'Usage: tx <wallet> or tx summary\n\nAvailable wallets:\n' +
+               walletDirectory.map(wallet => `  ${wallet.label}`).join('\n');
+      }
+
+      if (subCommand === 'summary') {
+        return `┌─ TRANSACTION SUMMARY ──────────────────────────────────┐
+│                                                            │
+│  OVERALL STATISTICS (Last 30 days):                      │
+│  • Total Transactions: 247 across 12 wallets             │
+│  • Total Volume: $892K                                    │
+│  • Average per wallet: 20.6 transactions                 │
+│  • Peak day: 15 transactions (March 15)                  │
+│                                                            │
+│  BY WALLET TYPE:                                          │
+│  • DAO Treasury: 45 transactions ($312K)                 │
+│  • Multisig: 98 transactions ($423K)                     │
+│  • Working Groups: 89 transactions ($145K)               │
+│  • Endaoment: 15 transactions ($12K)                     │
+│                                                            │
+│  TRANSACTION TYPES:                                       │
+│  • Outbound Grants: 15 ($425K)                           │
+│  • Operational Expenses: 32 ($187K)                     │
+│  • Delegation Rewards: 12 ($156K)                       │
+│  • Staking Rewards: 45 ($78K)                           │
+│  • Registration Revenue: 23 ($156K)                     │
+│  • Other: 120 ($0)                                       │
+│                                                            │
+└────────────────────────────────────────────────────────────┘`;
+      }
+
+      // Find wallet by name
+      const wallet = walletDirectory.find(w =>
+        w.label.toLowerCase().includes(subCommand.toLowerCase()) ||
+        w.category.toLowerCase().includes(subCommand.toLowerCase())
+      );
+
+      if (!wallet) {
+        return `Wallet '${subCommand}' not found.\n\nAvailable wallets:\n` +
+               walletDirectory.map(w => `  ${w.label}`).join('\n');
+      }
+
+      // Get transactions for this specific wallet
+      const walletTransactions = [
+        {
+          hash: '0x8f2a...9e4b',
+          type: 'OUTBOUND',
+          to: '0x742d...8f1c',
+          value: '125,000.00 USDC',
+          description: 'ENS Labs Development Grant',
+          timestamp: '2 hours ago',
+          status: 'CONFIRMED'
+        },
+        {
+          hash: '0x4c7b...2d9f',
+          type: 'OUTBOUND',
+          to: '0x9e3f...5a2b',
+          value: '85,000.00 USDC',
+          description: 'Community Initiatives Fund',
+          timestamp: '1 day ago',
+          status: 'CONFIRMED'
+        },
+        {
+          hash: '0x1a8d...7f3e',
+          type: 'INBOUND',
+          from: '0x6b5c...4d8a',
+          value: '45,000.00 USDC',
+          description: 'Validator Rewards',
+          timestamp: '5 hours ago',
+          status: 'CONFIRMED'
+        }
+      ];
+
+      const transactionList = walletTransactions.map((tx, index) =>
+        `│  ${String(index + 1).padStart(2)}. ${tx.hash} │\n` +
+        `│      Type:   ${tx.type.padEnd(35)} │\n` +
+        `│      ${tx.type === 'OUTBOUND' ? 'To' : 'From'}:   ${tx.type === 'OUTBOUND' ? tx.to : tx.from} │\n` +
+        `│      Value:  ${tx.value.padEnd(35)} │\n` +
+        `│      Desc:   ${tx.description.padEnd(35)} │\n` +
+        `│      Time:   ${tx.timestamp.padEnd(35)} │\n` +
+        `│      Status: ${tx.status.padEnd(35)} │`
+      ).join('\n├──────────────────────────────────────────────────┤\n');
+
+      return `┌─ TRANSACTIONS: ${wallet.label} ──────────────────────┐
+│                                                          │
+│  Wallet: ${wallet.label}                                 │
+│  Address: ${wallet.address}                              │
+│  Category: ${wallet.category}                            │
+│                                                          │
+├──────────────────────────────────────────────────────────┤
+${transactionList}
+├──────────────────────────────────────────────────────────┤
+│                                                          │
+│  Wallet Summary:                                         │
+│  • Total Transactions: 3 (Last 30 days)                 │
+│  • Total Volume: $255K                                  │
+│  • Outbound: $210K                                      │
+│  • Inbound: $45K                                        │
+│  • Last Activity: 2 hours ago                           │
+│                                                          │
+└──────────────────────────────────────────────────────────┘`;
+    },
+
     exit: () => {
       setCommandHistory(prev => [...prev, {
         command: 'exit',
@@ -272,11 +580,11 @@ const Terminal = () => {
   };
 
   const handleCommand = (cmd) => {
-    const trimmedCmd = cmd.trim().toLowerCase();
-    const [commandName] = trimmedCmd.split(' ');
+    const trimmedCmd = cmd.trim();
+    const [commandName, ...args] = trimmedCmd.split(' ');
 
     if (commands[commandName]) {
-      const result = commands[commandName]();
+      const result = commands[commandName](args);
       setCommandHistory(prev => [...prev, {
         command: cmd,
         output: result,
