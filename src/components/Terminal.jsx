@@ -818,7 +818,7 @@ const Terminal = () => {
         </div>
 
         {/* CSS Animations */}
-        <style jsx>{`
+        <style>{`
           @keyframes matrix-fall {
             0% { transform: translateY(-100vh); opacity: 1; }
             100% { transform: translateY(100vh); opacity: 0; }
@@ -832,6 +832,11 @@ const Terminal = () => {
           @keyframes glow {
             0%, 100% { text-shadow: 0 0 5px #00ff41, 0 0 10px #00ff41, 0 0 15px #00ff41; }
             50% { text-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41, 0 0 30px #00ff41; }
+          }
+
+          @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
           }
 
           .matrix-glow {
@@ -850,11 +855,6 @@ const Terminal = () => {
             height: 2px;
             background: linear-gradient(90deg, transparent, #00ff41, transparent);
             animation: scan 3s linear infinite;
-          }
-
-          @keyframes scan {
-            0% { top: 0; }
-            100% { top: 100%; }
           }
         `}</style>
       </div>
