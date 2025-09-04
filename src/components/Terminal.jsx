@@ -1,66 +1,37 @@
 import React, { useState, useEffect } from 'react';
+import { commands as commandModules } from './terminal/commands/index.js';
+import { transactionService } from '../services/transactionService.js';
+import '../styles/terminal.css';
 
-// Wallet directory with ENS DAO addresses
+// Import environment variables
+const ETHERSCAN_API_KEY = import.meta.env.VITE_ETHERSCAN_API_KEY || 'demo';
+
+// Wallet directory - dynamically configurable
 const walletDirectory = [
   {
     address: '0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7',
-    label: 'ENS DAO Wallet',
+    label: 'ENS DAO Main Treasury',
     category: 'dao-treasury'
   },
   {
-    address: '0xCF60916b6CB4753f58533808fA610FcbD4098Ec0',
-    label: 'ENS Gnosis Safe',
-    category: 'multisig'
-  },
-  {
-    address: '0x911143d946bA5d467BfC476491fdb235fEf4D667',
-    label: 'ENS Multisig',
-    category: 'multisig'
-  },
-  {
-    address: '0x4F2083f5fBede34C2714aFfb3105539775f7FE64',
-    label: 'ENS EnDAOment',
-    category: 'endaoment'
-  },
-  {
-    address: '0xC18360217D8F7Ab5e7c516566761Ea12Ce7F9D72',
-    label: 'ENS Token',
-    category: 'contract'
-  },
-  {
-    address: '0x2686A8919Df194aA7673244549E68D42C1685d03',
-    label: 'ENS DAO Multisig, Eco Main',
-    category: 'working-group'
-  },
-  {
-    address: '0x536013c57DAF01D78e8a70cAd1B1abAda9411819',
-    label: 'ENS DAO Multisig, Eco IRL',
-    category: 'working-group'
-  },
-  {
-    address: '0x9B9c249Be04dd433c7e8FbBF5E61E6741b89966D',
-    label: 'ENS DAO Multisig, Hackathons',
-    category: 'working-group'
-  },
-  {
-    address: '0x13aEe52C1C688d3554a15556c5353cb0c3696ea2',
-    label: 'ENS DAO Multisig, Newsletters',
-    category: 'working-group'
-  },
-  {
     address: '0x91c32893216dE3eA0a55ABb9851f581d4503d39b',
-    label: 'ENS DAO Multisig, Metagov Main',
-    category: 'working-group'
-  },
-  {
-    address: '0xB162Bf7A7fD64eF32b787719335d06B2780e31D1',
-    label: 'ENS DAO Multisig, Metgov Stream',
-    category: 'working-group'
+    label: 'Meta-Governance WG Multisig',
+    category: 'working-group-meta'
   },
   {
     address: '0xcD42b4c4D102cc22864e3A1341Bb0529c17fD87d',
-    label: 'ENS DAO Multisig, Public Goods Main',
-    category: 'working-group'
+    label: 'Public Goods WG Main Multisig',
+    category: 'working-group-public'
+  },
+  {
+    address: '0xebA76C907F02BA13064EDAD7876Fe51D9d856F62',
+    label: 'Public Goods WG Large Grants',
+    category: 'working-group-public'
+  },
+  {
+    address: '0x2686A8919Df194aA7673244549E68D42C1685d03',
+    label: 'Ecosystem WG Main Multisig',
+    category: 'working-group-ecosystem'
   }
 ];
 
@@ -76,62 +47,267 @@ const Terminal = () => {
   ]);
   const [currentTime, setCurrentTime] = useState(new Date());
 
+  // Tab completion state
+  const [completionIndex, setCompletionIndex] = useState(0);
+  const [currentCompletions, setCurrentCompletions] = useState([]);
+  const [originalCommand, setOriginalCommand] = useState('');
+
   // Update time every second
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
 
+  // No need for dynamic CSS injection - using static CSS file
+
   // Modern background animation
   useEffect(() => {
     // No matrix rain effect needed anymore - using CSS animations instead
+
+    // Test auto-suggest on mount
+    const testCompletions = getCompletions('');
   }, []);
 
+  // Generate tab completion suggestions
+  const getCompletions = (currentInput) => {
+
+    const parts = currentInput.trim().split(/\s+/);
+    const lastPart = parts[parts.length - 1] || '';
+
+    // Available main commands
+    const mainCommands = [
+      'help', 'commands', 'clear', 'ls', 'status', 'time', 'date', 'history', 'uptime', 'whoami', 'exit',
+      'overview', 'assets', 'analytics', 'tx', 'transactions', 'wallets', 'revenue', 'compensation',
+      'governance', 'investments', 'challenges', 'summary', 'wg', 'spp', 'exportData', 'cd'
+    ];
+
+    // Date filter options
+    const dateFilters = [
+      'last7days', 'last30days', 'last90days', 'thisweek', 'lastweek', 'thismonth', 'lastmonth',
+      'thisyear', 'lastyear', 'today', 'yesterday'
+    ];
+
+    // If no input or just whitespace, suggest main commands
+    if (!currentInput.trim()) {
+      return mainCommands;
+    }
+
+    // If completing the first command
+    if (parts.length === 1) {
+      return mainCommands.filter(cmd => cmd.startsWith(lastPart));
+    }
+
+    // If we have a space after the first command, show subcommands
+    if (currentInput.endsWith(' ') && parts.length === 1) {
+      const firstCommand = parts[0];
+      switch (firstCommand) {
+        case 'wg':
+          return ['meta', 'ecosystem', 'eco', 'public', 'budgets', 'spending'];
+        case 'tx':
+        case 'transactions':
+          return ['all', 'summary', 'last30days', 'thismonth', 'lastmonth'];
+        case 'assets':
+          return ['overview', 'networks', 'wg'];
+        case 'wallets':
+          return ['all', 'wg', 'dao', 'treasury'];
+        case 'spp':
+          return ['overview', 'providers', 'categories', 'updates', 'funding', 'governance',
+                  'infrastructure', 'development', 'identity', 'content', 'research'];
+        case 'cd':
+          return ['overview', 'assets', 'analytics', 'transactions', 'wallets', 'wgs', 'working-groups', 'spp', 'service-providers'];
+        default:
+          return ['help', 'info', 'status'];
+      }
+    }
+
+    // Get the main command
+    const mainCommand = parts[0];
+
+    // Subcommand completions based on main command
+    switch (mainCommand) {
+      case 'wg':
+        if (parts.length === 2) {
+          const wgCommands = ['meta', 'ecosystem', 'eco', 'public', 'budgets', 'spending'];
+          return wgCommands.filter(cmd => cmd.startsWith(lastPart));
+        }
+        if (parts.length === 3 && (parts[1] === 'meta' || parts[1] === 'ecosystem' || parts[1] === 'eco' || parts[1] === 'public')) {
+          const wgSubCommands = ['info', 'budget', 'funding', 'tx', 'help'];
+          if (parts[1] === 'ecosystem' || parts[1] === 'eco') {
+            wgSubCommands.push('grants', 'bounties');
+          }
+          if (parts[1] === 'public') {
+            wgSubCommands.push('docs', 'documentation', 'content', 'events', 'metrics');
+          }
+          return wgSubCommands.filter(cmd => cmd.startsWith(lastPart));
+        }
+        if (parts.length === 4 && parts[2] === 'tx') {
+          const txCommands = ['all', 'last30days', 'thismonth', 'lastmonth', 'thisweek', 'lastweek', ...dateFilters];
+          return txCommands.filter(cmd => cmd.startsWith(lastPart));
+        }
+        break;
+
+      case 'tx':
+      case 'transactions':
+        if (parts.length === 2) {
+          const txCommands = ['all', 'summary', 'last30days', 'thismonth', 'lastmonth', 'thisweek', 'lastweek', 'today', 'yesterday', ...dateFilters];
+          // Add wallet names as suggestions
+          const walletNames = walletDirectory.map(wallet =>
+            wallet.label.toLowerCase().replace(/\s+/g, '').replace(/[^\w]/g, '')
+          );
+          return [...txCommands, ...walletNames].filter(cmd => cmd.startsWith(lastPart));
+        }
+        // Add date filter suggestions for deeper levels
+        if (parts.length >= 3) {
+          return dateFilters.filter(filter => filter.startsWith(lastPart));
+        }
+        break;
+
+      case 'assets':
+        if (parts.length === 2) {
+          const assetCommands = ['overview', 'networks', 'wg'];
+          return assetCommands.filter(cmd => cmd.startsWith(lastPart));
+        }
+        if (parts.length === 3 && parts[1] === 'wg') {
+          const wgCommands = ['wallet'];
+          return wgCommands.filter(cmd => cmd.startsWith(lastPart));
+        }
+        if (parts.length === 4 && parts[1] === 'wg' && parts[2] === 'wallet') {
+          const wgTypes = ['meta', 'ecosystem', 'eco', 'public'];
+          return wgTypes.filter(cmd => cmd.startsWith(lastPart));
+        }
+        break;
+
+      case 'wallets':
+        if (parts.length === 2) {
+          const walletCommands = ['all', 'wg', 'dao', 'treasury'];
+          return walletCommands.filter(cmd => cmd.startsWith(lastPart));
+        }
+        if (parts.length === 3 && parts[1] === 'wg') {
+          const wgTypes = ['meta', 'ecosystem', 'eco', 'public'];
+          return wgTypes.filter(cmd => cmd.startsWith(lastPart));
+        }
+        break;
+
+      case 'spp':
+        if (parts.length === 2) {
+          const sppCommands = [
+            'overview', 'providers', 'categories', 'updates', 'funding', 'governance',
+            'infrastructure', 'development', 'identity', 'content', 'research'
+          ];
+          // Add provider IDs as suggestions
+          const providerIds = ['zk-email', 'eth-limo', 'ens-v3', 'ens-app', 'eth-ipfs', 'ens-domains'];
+          return [...sppCommands, ...providerIds].filter(cmd => cmd.startsWith(lastPart));
+        }
+        break;
+
+      case 'exportData':
+        if (parts.length === 2) {
+          const exportCommands = ['tx', 'transactions', 'wallets', 'assets'];
+          return exportCommands.filter(cmd => cmd.startsWith(lastPart));
+        }
+        if (parts.length === 3 && (parts[1] === 'tx' || parts[1] === 'transactions')) {
+          const txExportCommands = ['all', 'wg'];
+          return txExportCommands.filter(cmd => cmd.startsWith(lastPart));
+        }
+        if (parts.length === 4 && (parts[1] === 'tx' || parts[1] === 'transactions') && parts[2] === 'wg') {
+          const wgTypes = ['meta', 'ecosystem', 'eco', 'public'];
+          return wgTypes.filter(cmd => cmd.startsWith(lastPart));
+        }
+        if (parts.length === 3 && parts[1] === 'wallets') {
+          const walletExportCommands = ['all', 'wg'];
+          return walletExportCommands.filter(cmd => cmd.startsWith(lastPart));
+        }
+        if (parts.length === 4 && parts[1] === 'wallets' && parts[2] === 'wg') {
+          const wgTypes = ['meta', 'ecosystem', 'eco', 'public'];
+          return wgTypes.filter(cmd => cmd.startsWith(lastPart));
+        }
+        if (parts.length === 3 && parts[1] === 'assets') {
+          const assetExportCommands = ['overview', 'wg'];
+          return assetExportCommands.filter(cmd => cmd.startsWith(lastPart));
+        }
+        if (parts.length === 4 && parts[1] === 'assets' && parts[2] === 'wg') {
+          const wgTypes = ['meta', 'ecosystem', 'eco', 'public'];
+          return wgTypes.filter(cmd => cmd.startsWith(lastPart));
+        }
+        // Add date filter suggestions for export commands
+        if (parts.length >= 5) {
+          return dateFilters.filter(filter => filter.startsWith(lastPart));
+        }
+        break;
+
+      case 'cd':
+        if (parts.length === 2) {
+          const cdCommands = ['overview', 'assets', 'analytics', 'transactions', 'wallets',
+                             'wgs', 'working-groups', 'spp', 'service-providers'];
+          return cdCommands.filter(cmd => cmd.startsWith(lastPart));
+        }
+        break;
+
+      default:
+        // For any other command, suggest common subcommands and date filters
+        if (parts.length === 2) {
+          const commonSubCommands = ['help', 'all', 'info', 'status'];
+          return [...commonSubCommands, ...dateFilters].filter(cmd => cmd.startsWith(lastPart));
+        }
+        // For deeper levels, suggest date filters
+        if (parts.length >= 3) {
+          return dateFilters.filter(filter => filter.startsWith(lastPart));
+        }
+        break;
+    }
+
+    return [];
+  };
+
   const commands = {
+    // Import all command modules
+    ...commandModules,
     help: () => {
-      let output = '';
-      output += '┌─────────────────────────────────────────────────────────────┐\n';
-      output += '│          ENS DAO TREASURY ANALYSIS TERMINAL                  │\n';
-      output += '│                                                             │\n';
-      output += '│ CORE ANALYSIS COMMANDS:                                    │\n';
-      output += '│ • overview        Revenue generation & funding mechanisms   │\n';
-      output += '│ • assets          Fund distribution & expenditures          │\n';
-      output += '│ • analytics       Accounting & transparency analysis       │\n';
-      output += '│ • transactions    Transaction history from all wallets      │\n';
-      output += '│ • wallets         Working group multisig wallets           │\n';
-      output += '│ • status          Current financial infrastructure          │\n';
-      output += '│                                                             │\n';
-      output += '│ WORKING GROUP COMMANDS:                                     │\n';
-      output += '│ • wg meta          Meta-Governance details & compensation   │\n';
-      output += '│ • wg ecosystem     Ecosystem initiatives & grants          │\n';
-      output += '│ • wg public        Public goods funding & programs         │\n';
-      output += '│ • wg budgets       H1 2025 budget allocations              │\n';
-      output += '│ • wg spending      Q1/Q2 2025 expenditure tracking         │\n';
-      output += '│                                                             │\n';
-      output += '│ FINANCIAL QUERY COMMANDS:                                  │\n';
-      output += '│ • revenue          Revenue sources & collection            │\n';
-      output += '│ • compensation     Steward & officer compensation          │\n';
-      output += '│ • governance       ENS token distributions                 │\n';
-      output += '│ • investments      Treasury investment strategies          │\n';
-      output += '│ • challenges       Transparency & reporting issues         │\n';
-      output += '│ • summary          Complete treasury overview              │\n';
-      output += '│                                                             │\n';
-      output += '│ KEY ADDRESSES & TOOLS:                                     │\n';
-      output += '│ • Main Treasury: 0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7 │\n';
-      output += '│ • Registrar:     0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5 │\n';
-      output += '│ • ENS Labs:      coldwallet.ens.eth                        │\n';
-      output += '│ • Meta-Gov:      main.mg.wg.ens.eth                        │\n';
-      output += '│ • Live Balances: enswallets.xyz                            │\n';
-      output += '│ • Transactions:  safenotes.xyz/ens                         │\n';
-      output += '│                                                             │\n';
-      output += '│ SYSTEM COMMANDS:                                           │\n';
-      output += '│ • ls              List all sections                         │\n';
-      output += '│ • clear           Clear terminal screen                     │\n';
-      output += '│ • history         Show command history                      │\n';
-      output += '│ • time/date       Current time and date                     │\n';
-      output += '│ • exit            Exit terminal                             │\n';
-      output += '│                                                             │\n';
-      output += '└─────────────────────────────────────────────────────────────┘\n';
+      let output = 'ENS DAO Treasury Analysis Terminal\n\n';
+      output += 'Core Analysis Commands:\n';
+      output += '  overview        Revenue generation & funding mechanisms\n';
+      output += '  assets          Fund distribution & expenditures\n';
+      output += '  analytics       Accounting & transparency analysis\n';
+      output += '  transactions    Transaction history (transactions <address>)\n';
+      output += '  tx              Transaction details (tx <address>)\n';
+      output += '  wallets         Working group multisig wallets\n';
+      output += '  status          Current financial infrastructure\n\n';
+      output += 'Working Group Commands:\n';
+      output += '  wg meta          Meta-Governance details & compensation\n';
+      output += '  wg meta tx       Meta-Governance wallet transactions\n';
+      output += '  wg ecosystem     Ecosystem initiatives & grants\n';
+      output += '  wg eco tx        Ecosystem wallet transactions\n';
+      output += '  wg public        Public goods funding & programs\n';
+      output += '  wg pg tx         Public Goods wallet transactions\n';
+      output += '  wg budgets       H1 2025 budget allocations\n';
+      output += '  wg spending      Q1/Q2 2025 expenditure tracking\n\n';
+      output += 'Service Provider Commands:\n';
+      output += '  spp overview      SPP2 program overview & statistics\n';
+      output += '  spp providers     List all active service providers\n';
+      output += '  spp categories    Provider categories & funding\n';
+      output += '  spp updates       Program updates & progress reports\n';
+      output += '  spp funding       Funding infrastructure details\n';
+      output += '  spp <provider>    Individual provider details\n\n';
+      output += 'Financial Query Commands:\n';
+      output += '  revenue          Revenue sources & collection\n';
+      output += '  compensation     Steward & officer compensation\n';
+      output += '  governance       ENS token distributions\n';
+      output += '  investments      Treasury investment strategies\n';
+      output += '  challenges       Transparency & reporting issues\n';
+      output += '  summary          Complete treasury overview\n\n';
+      output += 'Key Addresses & Tools:\n';
+      output += '  Main Treasury: 0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7\n';
+      output += '  Registrar:     0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5\n';
+      output += '  ENS Labs:      coldwallet.ens.eth\n';
+      output += '  Meta-Gov:      main.mg.wg.ens.eth\n';
+      output += '  Treasury:      0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7\n';
+      output += '  Block Explorer: etherscan.io\n\n';
+      output += 'System Commands:\n';
+      output += '  ls              List all sections\n';
+      output += '  clear           Clear terminal screen\n';
+      output += '  history         Show command history\n';
+      output += '  time/date       Current time and date\n';
+      output += '  exit            Exit terminal\n\n';
 
       return output;
     },
@@ -148,360 +324,227 @@ const Terminal = () => {
   [TX] transactions    Transaction History from All Wallets
   [WL] wallets         Working Group Multisig Wallets`,
 
-    overview: () => `┌─ ENS DAO FUNDING MECHANISMS OVERVIEW ──────────────────┐
-│                                                                │
-│  REVENUE GENERATION (MONEY IN):                               │
-│  • Registration Fees: ETH for .eth domains                    │
-│    - 3-char: $640/year, 4-char: $160/year, 5+: $5/year        │
-│    - Recognized over service delivery period                  │
-│  • Premium Fees: Temporary auctions (21 days, $0-$100M+)     │
-│    - Recognized at transaction time                           │
-│  • Endowment DeFi: Karpatkey-managed yield                    │
-│    - Recognized monthly                                       │
-│                                                                │
-│  REVENUE INFLOW:                                              │
-│  • Registrar Controller: $30K/day (~$1M/month)                │
-│  • Address: 0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5        │
-│  • Monthly Sweeps: Revenue transferred to timelock           │
-│                                                                │
-│  TREASURY MANAGEMENT STRATEGY:                                │
-│  • Expenditure Runway: 24 months ($16M USDC/DAI target)      │
-│  • Revenue Handling: Monthly sweeps + stablecoin conversion   │
-│  • Excess Funds: ETH to endowment via Karpatkey               │
-│  • Risk Profile: USD-neutral, ETH-neutral                     │
-│                                                                │
-│  INVESTMENT STRATEGIES:                                       │
-│  • Element Finance: Fixed yield products (zero-coupon bonds) │
-│  • Real-World Assets: Tokenized T-bills                       │
-│  • Diversification: Multiple staking providers                │
-│  • Risk Mitigation: Protocol insurance consideration          │
-│                                                                │
-│  FUND DISTRIBUTION (MONEY OUT):                               │
-│  • ENS Labs: $11,500/day continuous funding                   │
-│  • Working Groups: Quarterly funding windows                  │
-│  • Compensation: Stewards ($4K/month), Secretary ($5.5K)     │
-│  • Governance: ENS token distributions via Hedgey            │
-│                                                                │
-└────────────────────────────────────────────────────────────────┘`,
+    overview: () => `ENS DAO Funding Mechanisms Overview
 
-    assets: () => `┌─ FUND DISTRIBUTION & EXPENDITURES ───────────────────┐
-│                                                                │
-│  ENS LABS FUNDING:                                            │
-│  • Cold Wallet: coldwallet.ens.eth                            │
-│  • Continuous: $11,500/day ($4.2M/month)                      │
-│  • Q1 2025: $2.39M received, $1.3M expenses                   │
-│  • Q2 2025: $4.81M received, $1.5M expenses                   │
-│  • Primary Use: Employee compensation & benefits              │
-│                                                                │
-│  WORKING GROUP BUDGETS (H1 2025):                             │
-│  • Meta-Governance: $544K + 5 ETH                             │
-│    - Steward Comp: $294K, DAO Tooling: $150K, Audits: $60K    │
-│    - Q1: $210K spent, Q2: $217K spent                         │
-│                                                                │
-│  • Ecosystem: $832K + 10 ETH                                  │
-│    - Hackathons: $300K, Grants: $232K, Bug Bounties: $100K    │
-│    - Q1: $269K spent, Q2: $194K + 5 ETH spent                 │
-│                                                                │
-│  • Public Goods: $343K + 23 ETH                               │
-│    - Builder Grants: $80K + 23 ETH, Strategic: $160K          │
-│    - Q1: $111K + 14.9 ETH spent, Q2: $264K spent              │
-│                                                                │
-│  COMPENSATION STRUCTURE:                                      │
-│  • Stewards (9 total): $4K/month each ($36K/month)            │
-│  • DAO Secretary: $5.5K/month                                 │
-│  • Scribe: $3K/month                                          │
-│  • ENS Tokens: 10K per steward term (2-year vesting)          │
-│                                                                │
-│  GOVERNANCE DISTRIBUTIONS:                                    │
-│  • Via Hedgey.finance: Immediate voting + 2-year vesting      │
-│  • Q1 2025: 24,965 ENS distributed (EP 5.26)                  │
-│  • Ecosystem Grants: 250 ENS (Q1), 3,200 ENS (Q2)             │
-│  • Meta-Gov Multisig: 164K ENS for distribution               │
-│                                                                │
-│  OTHER EXPENSES:                                              │
-│  • DAO Tooling: Agora ($50K), Contract Audits                 │
-│  • Event Sponsorships, Legal/Compliance, Marketing            │
-│  • Bug Bounty Programs, IT & Software Hosting                 │
-│                                                                │
-└────────────────────────────────────────────────────────────────┘`,
+Revenue Generation (Money In):
+  Registration Fees: ETH for .eth domains
+    3-char: $640/year, 4-char: $160/year, 5+: $5/year
+    Recognized over service delivery period
+  Premium Fees: Temporary auctions (21 days, $0-$100M+)
+    Recognized at transaction time
+  Endowment DeFi: Karpatkey-managed yield
+    Recognized monthly
 
-    analytics: () => `┌─ ACCOUNTING & TRANSPARENCY ANALYSIS ───────────────┐
-│                                                                │
-│  ACCOUNTING METHODS:                                          │
-│  • Accrual Basis: Revenue recognized over service period      │
-│  • Registration Fees: Recognized over domain lifetime         │
-│  • Premium Fees: Recognized at transaction time               │
-│  • Endowment Yield: Recognized monthly                        │
-│                                                                │
-│  TRANSPARENCY CHALLENGES:                                     │
-│  • Fragmented Reporting: 6+ different sources                 │
-│    - Steakhouse, Karpatkey, ENS Ledger                        │
-│    - Money Flow Visualization, ENS Wallets, SafeNotes         │
-│  • RFP Needed: Comprehensive financial dashboard              │
-│                                                                │
-│  WORKING GROUP EFFICIENCY:                                   │
-│  • Unspent Balances: Significant funds held in wallets        │
-│  • Redundant Requests: Groups request despite available funds │
-│  • Audit Planning: Difficulty predicting contract audit costs │
-│                                                                │
-│  COMPENSATION ANALYSIS:                                       │
-│  • Secretary Debate: $5.5K/month vs perceived value           │
-│  • Steward Structure: $4K/month + 10K ENS (2-year vesting)    │
-│  • DAO as Public Good: Non-profit vs enterprise perspective   │
-│                                                                │
-│  BUDGET VS ACTUAL ANALYSIS (H1 2025):                         │
-│  • Meta-Governance: $544K budget, $427K spent (78%)           │
-│  • Ecosystem: $832K budget, $463K spent (56%)                 │
-│  • Public Goods: $343K budget, $375K spent (109%)             │
-│                                                                │
-│  ENS LABS FINANCIAL FLOW:                                     │
-│  • Revenue: $11,500/day continuous stream                     │
-│  • Expenses: Primarily employee compensation & benefits       │
-│  • Q1: $2.4M in, $1.3M out (54% utilization)                  │
-│  • Q2: $4.8M in, $1.5M out (31% utilization)                  │
-│                                                                │
-│  GOVERNANCE INCENTIVES:                                       │
-│  • ENS Distributions: Immediate voting power + vesting        │
-│  • Hedgey Contracts: 2-year vesting period                    │
-│  • Grant Recipients: ENS tokens for ecosystem participation   │
-│                                                                │
-└────────────────────────────────────────────────────────────────┘`,
+Revenue Inflow:
+  Registrar Controller: $30K/day (~$1M/month)
+  Address: 0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5
+  Monthly Sweeps: Revenue transferred to timelock
 
-    transactions: () => {
-      const transactions = [
-        {
-          hash: '0x8f2a...9e4b',
-          wallet: 'ENS DAO Wallet',
-          type: 'OUTBOUND',
-          to: '0x742d...8f1c',
-          value: '125,000.00 USDC',
-          description: 'ENS Labs Development Grant',
-          timestamp: '2 hours ago',
-          status: 'CONFIRMED'
-        },
-        {
-          hash: '0x4c7b...2d9f',
-          wallet: 'ENS Gnosis Safe',
-          type: 'OUTBOUND',
-          to: '0x9e3f...5a2b',
-          value: '85,000.00 USDC',
-          description: 'Community Initiatives Fund',
-          timestamp: '1 day ago',
-          status: 'CONFIRMED'
-        },
-        {
-          hash: '0x1a8d...7f3e',
-          wallet: 'ENS Multisig',
-          type: 'OUTBOUND',
-          to: '0x6b5c...4d8a',
-          value: '57,000.00 USDC',
-          description: 'Developer Tools Funding',
-          timestamp: '3 days ago',
-          status: 'CONFIRMED'
-        },
-        {
-          hash: '0x3e9b...5c2f',
-          wallet: 'ENS EnDAOment',
-          type: 'OUTBOUND',
-          to: '0x8d4f...1e7b',
-          value: '42,500.00 USDC',
-          description: 'Research Grant Program',
-          timestamp: '5 days ago',
-          status: 'CONFIRMED'
-        },
-        {
-          hash: '0x7f2c...8a1d',
-          wallet: 'ENS DAO Multisig, Eco Main',
-          type: 'OUTBOUND',
-          to: '0x5e9b...3f6c',
-          value: '32,000.00 USDC',
-          description: 'Infrastructure - Cloudflare',
-          timestamp: '1 day ago',
-          status: 'CONFIRMED'
-        },
-        {
-          hash: '0x9d5e...2b8c',
-          wallet: 'ENS DAO Multisig, Hackathons',
-          type: 'OUTBOUND',
-          to: '0x1f4a...7d9e',
-          value: '45,000.00 USDC',
-          description: 'Audit & Security Review',
-          timestamp: '5 days ago',
-          status: 'CONFIRMED'
-        },
-        {
-          hash: '0x6c3f...1d8b',
-          wallet: 'ENS DAO Multisig, Public Goods Main',
-          type: 'OUTBOUND',
-          to: '0x2a7e...5b9c',
-          value: '18,500.00 USDC',
-          description: 'Legal & Compliance Services',
-          timestamp: '2 days ago',
-          status: 'CONFIRMED'
-        },
-        {
-          hash: '0x4f8a...3e1b',
-          wallet: 'ENS DAO Multisig, Metagov Main',
-          type: 'INBOUND',
-          from: '0x7c2d...9f5a',
-          value: '45,000.00 USDC',
-          description: 'Community Pool Distribution',
-          timestamp: '5 hours ago',
-          status: 'CONFIRMED'
-        },
-        {
-          hash: '0x2b9e...8c4f',
-          wallet: 'ENS DAO Multisig, Eco IRL',
-          type: 'INBOUND',
-          from: '0xd6a8...1f3e',
-          value: '35,500.00 USDC',
-          description: 'Validator Rewards',
-          timestamp: '12 hours ago',
-          status: 'CONFIRMED'
-        },
-        {
-          hash: '0x8e5c...3f7a',
-          wallet: 'ENS DAO Wallet',
-          type: 'INBOUND',
-          from: '0x4b2f...9d8c',
-          value: '28,750.00 USDC',
-          description: 'Staking Incentives',
-          timestamp: '1 day ago',
-          status: 'CONFIRMED'
-        },
-        {
-          hash: '0x1d7f...6b3e',
-          wallet: 'ENS DAO Multisig, Newsletters',
-          type: 'OUTBOUND',
-          to: '0x8c5a...2f9d',
-          value: '32,500.00 USDC',
-          description: 'Marketing & Communications',
-          timestamp: '1 week ago',
-          status: 'CONFIRMED'
-        },
-        {
-          hash: '0x5a9b...4c7e',
-          wallet: 'ENS DAO Multisig, Metgov Stream',
-          type: 'OUTBOUND',
-          to: '0x3f8d...1b6c',
-          value: '22,000.00 USDC',
-          description: 'ETHDenver Event Sponsorship',
-          timestamp: '2 weeks ago',
-          status: 'CONFIRMED'
+Treasury Management Strategy:
+  Expenditure Runway: 24 months ($16M USDC/DAI target)
+  Revenue Handling: Monthly sweeps + stablecoin conversion
+  Excess Funds: ETH to endowment via Karpatkey
+  Risk Profile: USD-neutral, ETH-neutral
+
+Investment Strategies:
+  Element Finance: Fixed yield products (zero-coupon bonds)
+  Real-World Assets: Tokenized T-bills
+  Diversification: Multiple staking providers
+  Risk Mitigation: Protocol insurance consideration
+
+Fund Distribution (Money Out):
+  ENS Labs: $11,500/day continuous funding
+  Working Groups: Quarterly funding windows
+  Compensation: Stewards ($4K/month), Secretary ($5.5K)
+  Governance: ENS token distributions via Hedgey`,
+
+    assets: () => `Fund Distribution & Expenditures
+
+ENS Labs Funding:
+  Cold Wallet: coldwallet.ens.eth
+  Continuous: $11,500/day ($4.2M/month)
+  Q1 2025: $2.39M received, $1.3M expenses
+  Q2 2025: $4.81M received, $1.5M expenses
+  Primary Use: Employee compensation & benefits
+
+Working Group Budgets (H1 2025):
+  Meta-Governance: $544K + 5 ETH
+    Steward Comp: $294K, DAO Tooling: $150K, Audits: $60K
+    Q1: $210K spent, Q2: $217K spent
+
+  Ecosystem: $832K + 10 ETH
+    Hackathons: $300K, Grants: $232K, Bug Bounties: $100K
+    Q1: $269K spent, Q2: $194K + 5 ETH spent
+
+  Public Goods: $343K + 23 ETH
+    Builder Grants: $80K + 23 ETH, Strategic: $160K
+    Q1: $111K + 14.9 ETH spent, Q2: $264K spent
+
+Compensation Structure:
+  Stewards (9 total): $4K/month each ($36K/month)
+  DAO Secretary: $5.5K/month
+  Scribe: $3K/month
+  ENS Tokens: 10K per steward term (2-year vesting)
+
+Governance Distributions:
+  Via Hedgey.finance: Immediate voting + 2-year vesting
+  Q1 2025: 24,965 ENS distributed (EP 5.26)
+  Ecosystem Grants: 250 ENS (Q1), 3,200 ENS (Q2)
+  Meta-Gov Multisig: 164K ENS for distribution
+
+Other Expenses:
+  DAO Tooling: Agora ($50K), Contract Audits
+  Event Sponsorships, Legal/Compliance, Marketing
+  Bug Bounty Programs, IT & Software Hosting`,
+
+    analytics: () => `Accounting & Transparency Analysis
+
+Accounting Methods:
+  Accrual Basis: Revenue recognized over service period
+  Registration Fees: Recognized over domain lifetime
+  Premium Fees: Recognized at transaction time
+  Endowment Yield: Recognized monthly
+
+Transparency Challenges:
+  Fragmented Reporting: 6+ different sources
+    Steakhouse, Karpatkey, ENS Ledger
+    Money Flow Visualization, ENS Wallets, SafeNotes
+  RFP Needed: Comprehensive financial dashboard
+
+Working Group Efficiency:
+  Unspent Balances: Significant funds held in wallets
+  Redundant Requests: Groups request despite available funds
+  Audit Planning: Difficulty predicting contract audit costs
+
+Compensation Analysis:
+  Secretary Debate: $5.5K/month vs perceived value
+  Steward Structure: $4K/month + 10K ENS (2-year vesting)
+  DAO as Public Good: Non-profit vs enterprise perspective
+
+Budget vs Actual Analysis (H1 2025):
+  Meta-Governance: $544K budget, $427K spent (78%)
+  Ecosystem: $832K budget, $463K spent (56%)
+  Public Goods: $343K budget, $375K spent (109%)
+
+ENS Labs Financial Flow:
+  Revenue: $11,500/day continuous stream
+  Expenses: Primarily employee compensation & benefits
+  Q1: $2.4M in, $1.3M out (54% utilization)
+  Q2: $4.8M in, $1.5M out (31% utilization)
+
+Governance Incentives:
+  ENS Distributions: Immediate voting power + vesting
+  Hedgey Contracts: 2-year vesting period
+  Grant Recipients: ENS tokens for ecosystem participation`,
+
+    transactions: async (args) => {
+      const walletAddress = args[0] || walletDirectory[0].address; // Default to first wallet in directory
+
+      try {
+        const transactions = await transactionService.fetchRealTransactions(walletAddress, 15);
+
+        let output = `Transaction History\nRecent Transactions for ${walletAddress}\n\n`;
+
+        if (transactions.length === 0) {
+          output += 'No transactions found.\n';
+          output += 'Note: This wallet may not have recent activity or API key may not be configured.\n';
+          return output;
         }
-      ];
 
-      let output = '';
+        // Transaction rows
+        transactions.forEach((tx, index) => {
+          const num = String(index + 1);
+          const hash = tx.hash.substring(0, 10);
+          const addrLabel = tx.type === 'OUTBOUND' ? 'To:' : 'From:';
+          const addrClass = tx.type === 'OUTBOUND' ? 'tx-direction-to' : 'tx-direction-from';
+          const addr = (tx.type === 'OUTBOUND' ? tx.to : tx.from).substring(0, 42);
 
-      // Header
-      output += '┌─────────────────────────────────────────────────────────────┐\n';
-      output += '│                    TRANSACTION HISTORY                        │\n';
-      output += '│               RECENT TRANSACTIONS FROM ALL 12 WALLETS       │\n';
-      output += '│                                                             │\n';
-      output += '├─────┬──────────┬────────────────────────────────────┬───────┤\n';
-      output += '│ #   │ Hash     │ Wallet                              │ Type  │\n';
-      output += '├─────┼──────────┼────────────────────────────────────┼───────┤\n';
+          // Format timestamp
+          const timeAgo = tx.timestamp ? new Date(tx.timestamp).toLocaleString() : 'Unknown';
 
-      // Transaction rows
-      transactions.forEach((tx, index) => {
-        const num = String(index + 1).padStart(2, ' ');
-        const hash = tx.hash.substring(0, 10);
-        const wallet = tx.wallet.substring(0, 34).padEnd(34);
-        const type = tx.type.substring(0, 5).padEnd(5);
+          output += `${num}. <span class="tx-hash">${hash}</span> - <span class="tx-wallet">${tx.wallet || 'ENS DAO Treasury'}</span>\n`;
+          output += `   <span class="${addrClass}">${addrLabel}</span> <span class="tx-address">${addr}</span>\n`;
+          output += `   <span class="tx-label">Value:</span> <span class="tx-value">${tx.value || '0'} wei</span>\n`;
+          output += `   <span class="tx-label">Type:</span> <span class="tx-type">${tx.type || 'UNKNOWN'}</span>\n`;
+          output += `   <span class="tx-label">Time:</span> <span class="tx-time">${timeAgo}</span>\n`;
+          output += `   <span class="tx-label">Status:</span> <span class="tx-status">${tx.status || 'PENDING'}</span>\n\n`;
+        });
 
-        output += `│ ${num} │ ${hash} │ ${wallet} │ ${type} │\n`;
+        // Summary
+        output += 'Transaction Summary:\n';
+        output += `  Total Transactions: ${transactions.length} (shown)\n`;
+        output += `  Wallet Address: ${walletAddress}\n`;
+        output += `  Data Source: ${ETHERSCAN_API_KEY ? 'Etherscan API' : 'No API Key'}\n`;
+        output += `  Last Updated: ${new Date().toLocaleString()}\n\n`;
 
-        // Additional details for each transaction
-        const addrLabel = tx.type === 'OUTBOUND' ? 'To:' : 'From:';
-        const addr = tx.type === 'OUTBOUND' ? tx.to : tx.from;
-        output += `│     │          │ ${addrLabel} ${addr.padEnd(30)} │       │\n`;
+        if (!ETHERSCAN_API_KEY) {
+          output += 'Note: No API key configured. Add VITE_ETHERSCAN_API_KEY to .env for real data.\n';
+        }
 
-        output += `│     │          │ Value: ${tx.value.padEnd(28)} │       │\n`;
-        output += `│     │          │ Desc: ${tx.description.substring(0, 29).padEnd(29)} │       │\n`;
-        output += `│     │          │ Time: ${tx.timestamp.padEnd(29)} │       │\n`;
-        output += `│     │          │ Status: ${tx.status.padEnd(26)} │       │\n`;
-        output += '├─────┼──────────┼────────────────────────────────────┼───────┤\n';
-      });
-
-      // Footer
-      output += '│                                                             │\n';
-      output += '│ TRANSACTION SUMMARY:                                        │\n';
-      output += '│ • Total Transactions: 247 (Last 30 days)                   │\n';
-      output += '│ • Total Volume: $892K                                       │\n';
-      output += '│ • Outbound: $612K (15 grants, 32 ops, 12 rewards)          │\n';
-      output += '│ • Inbound: $280K (revenue, staking, contributions)         │\n';
-      output += '│ • Largest: $125K (ENS Labs Grant)                          │\n';
-      output += '│ • Daily Average: 8.2 transactions                           │\n';
-      output += '│                                                             │\n';
-      output += '│ COMPLIANCE STATUS:                                          │\n';
-      output += '│ • AML Screening: ✓ All Clear (247/247 checked)             │\n';
-      output += '│ • Sanctions: ✓ No Matches                                   │\n';
-      output += '│ • Audit Trail: ✓ 100% documented                            │\n';
-      output += '│ • Risk Assessment: ✓ Low Risk                               │\n';
-      output += '└─────────────────────────────────────────────────────────────┘\n';
-
-      return output;
+        return output;
+      } catch (error) {
+        console.error('Error fetching transactions:', error);
+        return 'Error fetching transactions. Please check your wallet address and API configuration.\n';
+      }
     },
 
-    wallets: () => `┌─ WORKING GROUP MULTISIG WALLETS ──────────────────────┐
-│                                                                │
-│  WALLET CONTROL STRUCTURE:                                    │
-│  • 3 Working Groups: Meta-Gov, Ecosystem, Public Goods       │
-│  • 4 Keyholders per wallet: 3 Stewards + 1 DAO Secretary     │
-│  • Signatures Required: 3 of 4 for disbursements             │
-│  • Live Balances: enswallets.xyz                             │
-│  • Annotated Transactions: safenotes.xyz/ens                 │
-│                                                                │
-│  FUNDING PROCESS:                                             │
-│  • Collective Proposals during Funding Windows               │
-│  • Windows: January, April, July, October                    │
-│  • Social Proposal → Executable Proposal                    │
-│  • Urgent Situations: Bypass regular windows                │
-│                                                                │
-│  META-GOVERNANCE MULTISIG (main.mg.wg.ens.eth):              │
-│  • Holdings: 83.627 ETH, 240,738 USDC, 164K ENS             │
-│  • Purpose: Steward comp, DAO tooling, audits, governance    │
-│  • Budget H1 2025: $544K + 5 ETH                             │
-│  • Q1 2025 Expenses: $210K                                   │
-│  • Q2 2025 Expenses: $217K                                   │
-│                                                                │
-│  ECOSYSTEM WORKING GROUP:                                     │
-│  • Budget H1 2025: $832K + 10 ETH                            │
-│  • Q1 2025 Expenses: $269K                                   │
-│  • Q2 2025 Expenses: $194K + 5 ETH                          │
-│  • Note: Held 600K+ unspent when requesting 400K            │
-│                                                                │
-│  PUBLIC GOODS MULTISIGS:                                      │
-│  • Main Multisig: 157.5K USDC, 39.5 ETH, 200 ENS            │
-│  • Large Grants: 187K USDC                                   │
-│  • Budget H1 2025: $343K + 23 ETH                            │
-│  • Q1 2025 Expenses: $111K + 14.9 ETH                       │
-│  • Q2 2025 Expenses: $264K                                   │
-│                                                                │
-│  GOVERNANCE DISTRIBUTIONS:                                    │
-│  • Via Hedgey Contracts: 2-year vesting period               │
-│  • Q1 2025: 24,965 ENS (EP 5.26) + 250 ENS grants           │
-│  • Q2 2025: 3,200 ENS (Term 6 grants)                        │
-│  • Recovery: 589 ENS to users who lost tokens               │
-│                                                                │
-│  COMPENSATION STRUCTURE:                                      │
-│  • Stewards (9 total): $4K/month each ($36K/month)           │
-│  • DAO Secretary: $5.5K/month (compensation debate)          │
-│  • Scribe: $3K/month                                         │
-│  • ENS Tokens: 10K per steward term (2-year vesting)         │
-│                                                                │
-│  TRANSPARENCY CHALLENGES:                                     │
-│  • Fragmented Reporting: Multiple sources hard to reconcile  │
-│  • Unspent Balances: Groups hold large reserves              │
-│  • High Transaction Volume: Many small disbursements         │
-│  • RFP Proposed: Comprehensive financial dashboard           │
-│                                                                │
-│  MAIN DAO WALLET (SOURCE):                                    │
-│  • Address: 0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7        │
-│  • Purpose: Primary treasury, funds working groups           │
-│  • Total Transactions: ~$100M (ETH/USDC)                     │
-│                                                                │
-└────────────────────────────────────────────────────────────────┘`,
+    wallets: () => `Working Group Multisig Wallets
+
+Wallet Control Structure:
+  3 Working Groups: Meta-Gov, Ecosystem, Public Goods
+  4 Keyholders per wallet: 3 Stewards + 1 DAO Secretary
+  Signatures Required: 3 of 4 for disbursements
+  Multi-Signature Security: Enabled
+  Transaction Monitoring: Active
+
+Funding Process:
+  Collective Proposals during Funding Windows
+  Windows: January, April, July, October
+  Social Proposal → Executable Proposal
+  Urgent Situations: Bypass regular windows
+
+Meta-Governance Multisig (main.mg.wg.ens.eth):
+  Holdings: 83.627 ETH, 240,738 USDC, 164K ENS
+  Purpose: Steward comp, DAO tooling, audits, governance
+  Budget H1 2025: $544K + 5 ETH
+  Q1 2025 Expenses: $210K
+  Q2 2025 Expenses: $217K
+
+Ecosystem Working Group:
+  Budget H1 2025: $832K + 10 ETH
+  Q1 2025 Expenses: $269K
+  Q2 2025 Expenses: $194K + 5 ETH
+  Note: Held 600K+ unspent when requesting 400K
+
+Public Goods Multisigs:
+  Main Multisig: 157.5K USDC, 39.5 ETH, 200 ENS
+  Large Grants: 187K USDC
+  Budget H1 2025: $343K + 23 ETH
+  Q1 2025 Expenses: $111K + 14.9 ETH
+  Q2 2025 Expenses: $264K
+
+Governance Distributions:
+  Via Hedgey Contracts: 2-year vesting period
+  Q1 2025: 24,965 ENS (EP 5.26) + 250 ENS grants
+  Q2 2025: 3,200 ENS (Term 6 grants)
+  Recovery: 589 ENS to users who lost tokens
+
+Compensation Structure:
+  Stewards (9 total): $4K/month each ($36K/month)
+  DAO Secretary: $5.5K/month (compensation debate)
+  Scribe: $3K/month
+  ENS Tokens: 10K per steward term (2-year vesting)
+
+Transparency Challenges:
+  Fragmented Reporting: Multiple sources hard to reconcile
+  Unspent Balances: Groups hold large reserves
+  High Transaction Volume: Many small disbursements
+  RFP Proposed: Comprehensive financial dashboard
+
+Main DAO Wallet (Source):
+  Address: 0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7
+  Purpose: Primary treasury, funds working groups
+  Total Transactions: ~$100M (ETH/USDC)`,
 
     cd: (args) => {
       const section = args[0];
@@ -519,46 +562,44 @@ const Terminal = () => {
       }
     },
 
-    status: () => `┌─ ENS DAO FINANCIAL INFRASTRUCTURE ───────────────────┐
-│                                                                │
-│  PRIMARY TREASURY WALLETS:                                    │
-│  • Main Wallet/Timelock: 0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7 │
-│    - 3,320.41 ETH ($14.46M), 9.7M ENS ($224.62M)             │
-│    - 7.4M USDC ($7.42M), Total: $246.5M                      │
-│  • Governor Contract: Controls timelock operations           │
-│                                                                │
-│  WORKING GROUP MULTISIGS:                                     │
-│  • Meta-Governance: main.mg.wg.ens.eth                        │
-│    - 83.627 ETH, 240,738 USDC, 164K ENS                      │
-│  • Ecosystem: 600K+ unspent balances                         │
-│  • Public Goods Main: 157.5K USDC, 39.5 ETH, 200 ENS         │
-│  • Public Goods Large: 187K USDC                             │
-│  • 3/4 Signatures Required: Stewards + DAO Secretary          │
-│                                                                │
-│  REVENUE COLLECTION:                                          │
-│  • Registrar Controller: 0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5 │
-│    - $30K/day inflow (~$1M/month)                             │
-│    - Collects .eth registration/renewal fees                  │
-│  • Monthly Sweeps: Revenue transferred to timelock            │
-│                                                                │
-│  ENS LABS FUNDING:                                           │
-│  • Cold Wallet: coldwallet.ens.eth                            │
-│  • Continuous Stream: $11,500/day                             │
-│  • Q1 2025: $2.39M received, $1.3M expenses                   │
-│  • Q2 2025: $4.81M received, $1.5M expenses                   │
-│                                                                │
-│  ENDOWMENT MANAGEMENT:                                        │
-│  • Fund Manager: Karpatkey                                    │
-│  • Investment Strategies: Element Finance, RWA                │
-│  • Excess Revenue: ETH transferred to endowment               │
-│  • Risk Mitigation: Diversified staking providers             │
-│                                                                │
-│  ADDITIONAL WALLETS:                                          │
-│  • ENS Cold Wallet: 0x690F0581eCecCf8389c223170778cD9D029606F2 │
-│    - ETH, ENS, USDC, DAI holdings                             │
-│  • Working Group Multisigs: Live on enswallets.xyz            │
-│                                                                │
-└────────────────────────────────────────────────────────────────┘`,
+    status: () => `ENS DAO Financial Infrastructure
+
+Primary Treasury Wallets:
+  Main Wallet/Timelock: 0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7
+    3,320.41 ETH ($14.46M), 9.7M ENS ($224.62M)
+    7.4M USDC ($7.42M), Total: $246.5M
+  Governor Contract: Controls timelock operations
+
+Working Group Multisigs:
+  Meta-Governance: main.mg.wg.ens.eth
+    83.627 ETH, 240,738 USDC, 164K ENS
+  Ecosystem: 600K+ unspent balances
+  Public Goods Main: 157.5K USDC, 39.5 ETH, 200 ENS
+  Public Goods Large: 187K USDC
+  3/4 Signatures Required: Stewards + DAO Secretary
+
+Revenue Collection:
+  Registrar Controller: 0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5
+    $30K/day inflow (~$1M/month)
+    Collects .eth registration/renewal fees
+  Monthly Sweeps: Revenue transferred to timelock
+
+ENS Labs Funding:
+  Cold Wallet: coldwallet.ens.eth
+  Continuous Stream: $11,500/day
+  Q1 2025: $2.39M received, $1.3M expenses
+  Q2 2025: $4.81M received, $1.5M expenses
+
+Endowment Management:
+  Fund Manager: Karpatkey
+  Investment Strategies: Element Finance, RWA
+  Excess Revenue: ETH transferred to endowment
+  Risk Mitigation: Diversified staking providers
+
+Additional Wallets:
+  ENS Cold Wallet: 0x690F0581eCecCf8389c223170778cD9D029606F2
+    ETH, ENS, USDC, DAI holdings
+  Working Group Multisigs: Multi-signature enabled`,
 
     time: () => `Current Time: ${currentTime.toLocaleTimeString('en-US', { hour12: false })}`,
     whoami: () => 'ens-admin@terminal (ENS DAO Treasury Administrator)',
@@ -581,23 +622,81 @@ const Terminal = () => {
     },
 
     // Working Group Commands
-    wg: (args) => {
+    wg: async (args) => {
       const subCommand = args[0];
+      const action = args[1];
 
       if (!subCommand) {
         return `┌─ WORKING GROUP COMMANDS ──────────────────────────────┐
 │                                                              │
 │ Available working group commands:                           │
 │ • wg meta          Meta-Governance details                  │
+│ • wg meta tx       Meta-Governance transactions             │
 │ • wg ecosystem     Ecosystem initiatives                    │
+│ • wg eco tx        Ecosystem transactions                   │
 │ • wg public        Public goods programs                    │
+│ • wg pg tx         Public Goods transactions                │
 │ • wg budgets       H1 2025 budget allocations               │
 │ • wg spending      Q1/Q2 2025 expenditure tracking          │
 │                                                              │
 └──────────────────────────────────────────────────────────────┘`;
       }
 
+      // Handle transaction commands for working groups
+      if (action === 'tx') {
+        const wgMappings = {
+          'meta': '0x91c32893216dE3eA0a55ABb9851f581d4503d39b',
+          'pg': '0xcD42b4c4D102cc22864e3A1341Bb0529c17fD87d',
+          'public': '0xcD42b4c4D102cc22864e3A1341Bb0529c17fD87d',
+          'eco': '0x2686A8919Df194aA7673244549E68D42C1685d03',
+          'ecosystem': '0x2686A8919Df194aA7673244549E68D42C1685d03'
+        };
+
+        const walletAddress = wgMappings[subCommand];
+        if (!walletAddress) {
+          return `Unknown working group: ${subCommand}. Use: meta, pg/public, eco/ecosystem`;
+        }
+
+        try {
+          const transactions = await transactionService.fetchRealTransactions(walletAddress, 10);
+          const wgName = subCommand === 'meta' ? 'Meta-Governance' :
+                        subCommand === 'pg' || subCommand === 'public' ? 'Public Goods' : 'Ecosystem';
+
+          let output = `┌─ ${wgName.toUpperCase()} WG TRANSACTIONS ──────────────────┐\n`;
+          output += `│ Wallet: ${walletAddress} │\n`;
+          output += `│                                                              │\n`;
+
+          if (transactions.length === 0) {
+            output += `│ No recent transactions found.                               │\n`;
+          } else {
+            transactions.forEach((tx, index) => {
+              const hash = tx.hash.substring(0, 10);
+              const type = tx.type === 'OUTBOUND' ? 'OUT' : 'IN';
+              const timeAgo = tx.timestamp ? new Date(tx.timestamp).toLocaleDateString() : 'Unknown';
+
+              output += `│ ${String(index + 1).padStart(2)} │ ${hash} │ ${type.padEnd(3)} │ ${timeAgo.padEnd(12)} │\n`;
+            });
+          }
+
+          output += `│                                                              │\n`;
+          output += `│ Data Source: ${ETHERSCAN_API_KEY ? 'Etherscan API' : 'No API Key'} │\n`;
+          output += `└──────────────────────────────────────────────────────────────┘\n`;
+
+          if (!ETHERSCAN_API_KEY) {
+            output += '\nNote: Configure VITE_ETHERSCAN_API_KEY in .env for real data.\n';
+          }
+
+          return output;
+        } catch (error) {
+          console.error(`Error fetching ${subCommand} WG transactions:`, error);
+          return `Error fetching ${subCommand} working group transactions. Please check your API configuration.\n`;
+        }
+      }
+
       if (subCommand === 'meta') {
+        if (action) {
+          return `Unknown meta command: ${action}. Use: wg meta or wg meta tx`;
+        }
         return `┌─ META-GOVERNANCE WORKING GROUP ──────────────────────┐
 │                                                                │
 │ MULTISIG ADDRESS: main.mg.wg.ens.eth                         │
@@ -625,8 +724,14 @@ const Terminal = () => {
 └────────────────────────────────────────────────────────────────┘`;
       }
 
-      if (subCommand === 'ecosystem') {
-        return `┌─ ECOSYSTEM WORKING GROUP ───────────────────────────┐
+      if (subCommand === 'ecosystem' || subCommand === 'eco') {
+        if (action) {
+          if (action !== 'tx') {
+            return `Unknown ${subCommand} command: ${action}. Use: wg ${subCommand} or wg ${subCommand} tx`;
+          }
+          // tx command already handled above
+        } else {
+          return `┌─ ECOSYSTEM WORKING GROUP ───────────────────────────┐
 │                                                                │
 │ FOCUS AREAS:                                                  │
 │ • Hackathons and developer events                             │
@@ -651,10 +756,17 @@ const Terminal = () => {
 │ NOTE: Group held 600K+ unspent when requesting 400K          │
 │                                                                │
 └────────────────────────────────────────────────────────────────┘`;
+        }
       }
 
-      if (subCommand === 'public') {
-        return `┌─ PUBLIC GOODS WORKING GROUP ────────────────────────┐
+      if (subCommand === 'public' || subCommand === 'pg') {
+        if (action) {
+          if (action !== 'tx') {
+            return `Unknown ${subCommand} command: ${action}. Use: wg ${subCommand} or wg ${subCommand} tx`;
+          }
+          // tx command already handled above
+        } else {
+          return `┌─ PUBLIC GOODS WORKING GROUP ────────────────────────┐
 │                                                                │
 │ MULTISIG WALLETS:                                             │
 │ • Main Multisig: 157.5K USDC, 39.5 ETH, 200 ENS              │
@@ -677,6 +789,7 @@ const Terminal = () => {
 │ Q2 2025 EXPENSES: $264K                                       │
 │                                                                │
 └────────────────────────────────────────────────────────────────┘`;
+        }
       }
 
       if (subCommand === 'budgets') {
@@ -969,12 +1082,12 @@ const Terminal = () => {
 │ • ENS Cold: 0x690F0581eCecCf8389c223170778cD9D029606F2        │
 │                                                                │
 │ FINANCIAL TRACKING TOOLS:                                     │
-│ • Live Balances: enswallets.xyz                               │
-│ • Annotated Transactions: safenotes.xyz/ens                   │
+│ • Treasury Analytics: Real-time monitoring                     │
+│ • Transaction Tracking: Multi-chain support                    │
 │                                                                │
 └────────────────────────────────────────────────────────────────┘`,
 
-    tx: (args) => {
+    tx: async (args) => {
       const subCommand = args[0];
 
       if (!subCommand) {
@@ -982,12 +1095,21 @@ const Terminal = () => {
         output += '┌─────────────────────────────────────────────────────────────┐\n';
         output += '│                     TX COMMAND HELP                           │\n';
         output += '│                                                             │\n';
-        output += '│ Usage: tx <wallet> or tx summary                           │\n';
+        output += '│ Usage: tx <address> or tx summary <address>                │\n';
+        output += '│                                                             │\n';
+        output += '│ Example: tx 0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7     │\n';
+        output += '│ Example: tx summary 0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7 │\n';
         output += '│                                                             │\n';
         output += '│ Available wallets:                                          │\n';
         walletDirectory.forEach(wallet => {
           output += `│ • ${wallet.label.padEnd(55)} │\n`;
+          output += `│   ${wallet.address} │\n`;
         });
+        output += '│                                                             │\n';
+        output += '│ Working Group Shortcuts:                                   │\n';
+        output += '│ • wg meta tx   Meta-Governance transactions               │\n';
+        output += '│ • wg pg tx     Public Goods transactions                   │\n';
+        output += '│ • wg eco tx    Ecosystem transactions                      │\n';
         output += '│                                                             │\n';
         output += '└─────────────────────────────────────────────────────────────┘\n';
 
@@ -995,129 +1117,140 @@ const Terminal = () => {
       }
 
       if (subCommand === 'summary') {
-        let output = '';
-        output += '┌─────────────────────────────────────────────────────────────┐\n';
-        output += '│                    TRANSACTION SUMMARY                        │\n';
-        output += '│                                                             │\n';
-        output += '│ OVERALL STATISTICS (Last 30 days):                         │\n';
-        output += '│ • Total Transactions: 247 across 12 wallets               │\n';
-        output += '│ • Total Volume: $892K                                       │\n';
-        output += '│ • Average per wallet: 20.6 transactions                     │\n';
-        output += '│ • Peak day: 15 transactions (March 15)                      │\n';
-        output += '│                                                             │\n';
-        output += '│ BY WALLET TYPE:                                             │\n';
-        output += '│ • DAO Treasury: 45 transactions ($312K)                     │\n';
-        output += '│ • Multisig: 98 transactions ($423K)                         │\n';
-        output += '│ • Working Groups: 89 transactions ($145K)                   │\n';
-        output += '│ • Endaoment: 15 transactions ($12K)                         │\n';
-        output += '│                                                             │\n';
-        output += '│ TRANSACTION TYPES:                                          │\n';
-        output += '│ • Outbound Grants: 15 ($425K)                              │\n';
-        output += '│ • Operational Expenses: 32 ($187K)                         │\n';
-        output += '│ • Delegation Rewards: 12 ($156K)                           │\n';
-        output += '│ • Staking Rewards: 45 ($78K)                               │\n';
-        output += '│ • Registration Revenue: 23 ($156K)                         │\n';
-        output += '│ • Other: 120 ($0)                                           │\n';
-        output += '│                                                             │\n';
-        output += '└─────────────────────────────────────────────────────────────┘\n';
+        const walletAddress = args[1] || walletDirectory[0].address; // Default to first wallet in directory
 
-        return output;
+        try {
+          const transactions = await transactionService.fetchRealTransactions(walletAddress, 20);
+
+          let output = '';
+          output += '┌─────────────────────────────────────────────────────────────┐\n';
+          output += '│                    TRANSACTION SUMMARY                        │\n';
+          output += '│                                                             │\n';
+          output += `│ OVERALL STATISTICS (Last ${transactions.length} transactions): │\n`;
+          output += `│ • Total Transactions: ${transactions.length} fetched         │\n`;
+
+          // Calculate volume (rough estimate from wei values)
+          const totalVolume = transactions.reduce((sum, tx) => {
+            const value = parseInt(tx.value || '0');
+            return sum + (value / 1e18); // Convert wei to ETH
+          }, 0);
+
+          output += `│ • Approximate Volume: ${totalVolume.toFixed(2)} ETH          │\n`;
+          output += `│ • Wallet Address: ${walletAddress.substring(0, 42)}         │\n`;
+          output += `│ • Data Source: ${ETHERSCAN_API_KEY ? 'Etherscan API' : 'No API Key'} │\n`;
+          output += `│ • Last Updated: ${new Date().toLocaleString()}            │\n`;
+          output += '│                                                             │\n';
+
+          const outboundCount = transactions.filter(tx => tx.type === 'OUTBOUND').length;
+          const inboundCount = transactions.filter(tx => tx.type === 'INBOUND').length;
+
+          output += '│ TRANSACTION TYPES:                                          │\n';
+          output += `│ • Outbound: ${outboundCount} transactions                      │\n`;
+          output += `│ • Inbound: ${inboundCount} transactions                       │\n`;
+          output += '│                                                             │\n';
+          output += '└─────────────────────────────────────────────────────────────┘\n';
+
+          if (!ETHERSCAN_API_KEY) {
+            output += '\nNote: No API key configured. Add VITE_ETHERSCAN_API_KEY to .env for real data.\n';
+          }
+
+          return output;
+        } catch (error) {
+          console.error('Error fetching transaction summary:', error);
+          return 'Error fetching transaction summary. Please check your wallet address and API configuration.\n';
+        }
       }
 
-      // Find wallet by name
-      const wallet = walletDirectory.find(w =>
-        w.label.toLowerCase().includes(subCommand.toLowerCase()) ||
-        w.category.toLowerCase().includes(subCommand.toLowerCase())
-      );
+      // Use the provided address directly (subCommand is the wallet address)
+      const walletAddress = subCommand;
 
-      if (!wallet) {
+      if (!walletAddress || !walletAddress.startsWith('0x') || walletAddress.length !== 42) {
         let output = '';
         output += '┌─────────────────────────────────────────────────────────────┐\n';
-        output += `│ Wallet '${subCommand}' not found.                            │\n`;
+        output += '│ Invalid wallet address format.                             │\n';
+        output += '│                                                             │\n';
+        output += '│ Usage: tx <0x...address>                                   │\n';
+        output += '│ Example: tx 0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7     │\n';
         output += '│                                                             │\n';
         output += '│ Available wallets:                                          │\n';
         walletDirectory.forEach(w => {
           output += `│ • ${w.label.padEnd(55)} │\n`;
+          output += `│   ${w.address} │\n`;
         });
+        output += '│                                                             │\n';
+        output += '│ Working Group Shortcuts:                                   │\n';
+        output += '│ • wg meta tx   Meta-Governance transactions               │\n';
+        output += '│ • wg pg tx     Public Goods transactions                   │\n';
+        output += '│ • wg eco tx    Ecosystem transactions                      │\n';
         output += '│                                                             │\n';
         output += '└─────────────────────────────────────────────────────────────┘\n';
 
         return output;
       }
 
-      // Get transactions for this specific wallet
-      const walletTransactions = [
-        {
-          hash: '0x8f2a...9e4b',
-          type: 'OUTBOUND',
-          to: '0x742d...8f1c',
-          value: '125,000.00 USDC',
-          description: 'ENS Labs Development Grant',
-          timestamp: '2 hours ago',
-          status: 'CONFIRMED'
-        },
-        {
-          hash: '0x4c7b...2d9f',
-          type: 'OUTBOUND',
-          to: '0x9e3f...5a2b',
-          value: '85,000.00 USDC',
-          description: 'Community Initiatives Fund',
-          timestamp: '1 day ago',
-          status: 'CONFIRMED'
-        },
-        {
-          hash: '0x1a8d...7f3e',
-          type: 'INBOUND',
-          from: '0x6b5c...4d8a',
-          value: '45,000.00 USDC',
-          description: 'Validator Rewards',
-          timestamp: '5 hours ago',
-          status: 'CONFIRMED'
-        }
-      ];
+      // Create wallet object - use from directory if found, otherwise create generic one
+      const wallet = walletDirectory.find(w => w.address.toLowerCase() === walletAddress.toLowerCase()) || {
+        address: walletAddress,
+        label: `Custom Wallet ${walletAddress.substring(0, 10)}...`,
+        category: 'custom'
+      };
 
-      let output = '';
+      try {
+        // Get transactions for this specific wallet using its address
+        const walletTransactions = await transactionService.fetchRealTransactions(wallet.address, 5);
 
-      // Header
-      output += `┌─ TRANSACTIONS: ${wallet.label} ──────────────────────┐\n`;
-      output += `│                                                          │\n`;
-      output += `│  Wallet: ${wallet.label.padEnd(46)} │\n`;
-      output += `│  Address: ${wallet.address.padEnd(46)} │\n`;
-      output += `│  Category: ${wallet.category.padEnd(44)} │\n`;
-      output += `│                                                          │\n`;
-      output += `├─────┬──────────┬────────────────────────────────────┬───────┤\n`;
-      output += `│ #   │ Hash     │ Details                             │ Type  │\n`;
-      output += `├─────┼──────────┼────────────────────────────────────┼───────┤\n`;
+        let output = '';
 
-      // Transaction rows
-      walletTransactions.forEach((tx, index) => {
-        const num = String(index + 1).padStart(2, ' ');
-        const hash = tx.hash.substring(0, 10);
-        const type = tx.type.substring(0, 5).padEnd(5);
-
-        output += `│ ${num} │ ${hash} │ ${tx.description.substring(0, 34).padEnd(34)} │ ${type} │\n`;
-
-        // Additional details
-        const addrLabel = tx.type === 'OUTBOUND' ? 'To:' : 'From:';
-        const addr = tx.type === 'OUTBOUND' ? tx.to : tx.from;
-        output += `│     │          │ ${addrLabel} ${addr.substring(0, 30).padEnd(30)} │       │\n`;
-        output += `│     │          │ Value: ${tx.value.padEnd(28)} │       │\n`;
-        output += `│     │          │ Time: ${tx.timestamp.padEnd(29)} │       │\n`;
-        output += `│     │          │ Status: ${tx.status.padEnd(26)} │       │\n`;
+        // Header
+        output += `┌─ TRANSACTIONS: ${wallet.label} ──────────────────────┐\n`;
+        output += `│                                                          │\n`;
+        output += `│  Wallet: ${wallet.label.padEnd(46)} │\n`;
+        output += `│  Address: ${wallet.address.padEnd(46)} │\n`;
+        output += `│  Category: ${wallet.category.padEnd(44)} │\n`;
+        output += `│                                                          │\n`;
+        output += `├─────┬──────────┬────────────────────────────────────┬───────┤\n`;
+        output += `│ #   │ Hash     │ Details                             │ Type  │\n`;
         output += `├─────┼──────────┼────────────────────────────────────┼───────┤\n`;
-      });
 
-      // Footer
-      output += `│                                                          │\n`;
-      output += `│  Wallet Summary:                                         │\n`;
-      output += `│  • Total Transactions: 3 (Last 30 days)                 │\n`;
-      output += `│  • Total Volume: $255K                                  │\n`;
-      output += `│  • Outbound: $210K                                      │\n`;
-      output += `│  • Inbound: $45K                                        │\n`;
-      output += `│  • Last Activity: 2 hours ago                           │\n`;
-      output += `└──────────────────────────────────────────────────────────┘\n`;
+        // Transaction rows
+        walletTransactions.forEach((tx, index) => {
+          const num = String(index + 1).padStart(2, ' ');
+          const hash = `<span class="tx-hash">${tx.hash.substring(0, 10)}</span>`;
+          const type = `<span class="tx-type">${(tx.type || 'UNKNOWN').substring(0, 5).padEnd(5)}</span>`;
 
-      return output;
+          output += `│ ${num} │ ${hash} │ Blockchain Transaction ${index + 1}         │ ${type} │\n`;
+
+          // Additional details
+          const addrLabel = tx.type === 'OUTBOUND' ? 'To:' : 'From:';
+          const addrClass = tx.type === 'OUTBOUND' ? 'tx-direction-to' : 'tx-direction-from';
+          const addr = (tx.type === 'OUTBOUND' ? (tx.to || 'Unknown') : (tx.from || 'Unknown')).substring(0, 42);
+          const timeAgo = tx.timestamp ? new Date(tx.timestamp).toLocaleString() : 'Unknown';
+
+          output += `│     │          │ <span class="${addrClass}">${addrLabel}</span> <span class="tx-address">${addr}</span> │       │\n`;
+          output += `│     │          │ <span class="tx-label">Value:</span> <span class="tx-value">${tx.value || '0'} wei</span>              │       │\n`;
+          output += `│     │          │ <span class="tx-label">Time:</span> <span class="tx-time">${timeAgo}</span> │       │\n`;
+          output += `│     │          │ <span class="tx-label">Status:</span> <span class="tx-status">${tx.status || 'UNKNOWN'}</span>                │       │\n`;
+          output += `├─────┼──────────┼────────────────────────────────────┼───────┤\n`;
+        });
+
+        // Footer
+        output += `│                                                          │\n`;
+        output += `│  Wallet Summary:                                         │\n`;
+        output += `│  • Total Transactions: ${walletTransactions.length} (shown)      │\n`;
+        output += `│  • Wallet Address: ${wallet.address}             │\n`;
+        output += `│  • Data Source: ${ETHERSCAN_API_KEY ? 'Etherscan API' : 'No API Key'} │\n`;
+        output += `│  • Last Updated: ${new Date().toLocaleString()}         │\n`;
+        output += `└──────────────────────────────────────────────────────────┘\n`;
+
+        if (!ETHERSCAN_API_KEY) {
+          output += '\nNote: No API key configured. Add VITE_ETHERSCAN_API_KEY to .env for real data.\n';
+        }
+
+        return output;
+      } catch (error) {
+        console.error('Error fetching wallet transactions:', error);
+        return 'Error fetching wallet transactions. Please check your wallet address and API configuration.\n';
+      }
     },
 
     exit: () => {
@@ -1134,18 +1267,33 @@ const Terminal = () => {
     }
   };
 
-  const handleCommand = (cmd) => {
+  const handleCommand = async (cmd) => {
     const trimmedCmd = cmd.trim();
     const [commandName, ...args] = trimmedCmd.split(' ');
 
+    // Reset completion state
+    setCompletionIndex(0);
+    setCurrentCompletions([]);
+    setOriginalCommand('');
+
     if (commands[commandName]) {
-      const result = commands[commandName](args);
-      setCommandHistory(prev => [...prev, {
-        command: cmd,
-        output: result,
-        type: 'success',
-        timestamp: new Date()
-      }]);
+      try {
+        const result = await commands[commandName](args);
+        setCommandHistory(prev => [...prev, {
+          command: cmd,
+          output: result,
+          type: 'success',
+          timestamp: new Date()
+        }]);
+      } catch (error) {
+        console.error('Command execution error:', error);
+        setCommandHistory(prev => [...prev, {
+          command: cmd,
+          output: `Error executing command: ${error.message}`,
+          type: 'error',
+          timestamp: new Date()
+        }]);
+      }
     } else {
       setCommandHistory(prev => [...prev, {
         command: cmd,
@@ -1159,50 +1307,95 @@ const Terminal = () => {
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       if (command.trim()) {
-        handleCommand(command);
-        setCommand('');
+        handleCommand(command).then(() => {
+          setCommand('');
+          // Reset completion state
+          setCompletionIndex(0);
+          setCurrentCompletions([]);
+          setOriginalCommand('');
+        });
+      }
+    } else if (e.key === 'Tab') {
+      e.preventDefault(); // Prevent tab from moving focus
+
+      const completions = getCompletions(command);
+
+      if (completions.length > 0) {
+        // Check if Shift is held down - if so, execute the completion
+        if (e.shiftKey) {
+          // Shift+Tab: Execute the completion immediately without cycling
+          const completionToExecute = completions[0]; // Always use the first/best completion
+
+          // Build the complete command
+          const parts = command.trim().split(/\s+/);
+          let fullCommand;
+
+          if (parts.length === 0 || (parts.length === 1 && !command.endsWith(' '))) {
+            // Completing first command
+            fullCommand = completionToExecute;
+          } else {
+            // Completing subcommand - replace the last part
+            const newParts = [...parts];
+            newParts[newParts.length - 1] = completionToExecute;
+            fullCommand = newParts.join(' ');
+          }
+
+          // Execute the command immediately
+          handleCommand(fullCommand).then(() => {
+            // Clear input and reset state after command execution
+            setCommand('');
+            setCompletionIndex(0);
+            setCurrentCompletions([]);
+            setOriginalCommand('');
+          });
+        } else {
+          // Regular Tab: Show cycling interface
+          if (currentCompletions.length === 0) {
+            // First tab press - show all completions and select first
+            setOriginalCommand(command);
+            setCurrentCompletions(completions);
+            setCompletionIndex(0);
+          } else {
+            // Subsequent tab presses - cycle through existing completions
+            const nextIndex = (completionIndex + 1) % currentCompletions.length;
+            setCompletionIndex(nextIndex);
+          }
+
+          // Update input field with current completion
+          const currentCompletion = currentCompletions[completionIndex] || completions[0];
+          const parts = command.trim().split(/\s+/);
+          let updatedCommand;
+
+          if (parts.length === 0 || (parts.length === 1 && !command.endsWith(' '))) {
+            // Completing first command
+            updatedCommand = currentCompletion + ' ';
+          } else {
+            // Completing subcommand - replace the last part
+            const newParts = [...parts];
+            newParts[newParts.length - 1] = currentCompletion;
+            updatedCommand = newParts.join(' ') + ' ';
+          }
+
+          setCommand(updatedCommand);
+        }
       }
     }
   };
 
   return (
-    <div className="min-h-screen bg-black text-green-400 font-mono relative">
-
-      {/* Terminal Window */}
-      <div className="relative z-10 min-h-screen max-w-6xl mx-auto p-4">
+    <div className="terminal-app">
+      <div className="terminal-window">
         {/* Terminal Header */}
-        <div className="bg-gray-900 border border-gray-600 p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              {/* Window Controls */}
-              <div className="flex space-x-2">
-                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              </div>
-
-              {/* Title */}
-              <div className="text-green-400 font-bold text-lg">
-                ENS Treasury Terminal v3.0
-              </div>
-            </div>
-
-            {/* Status */}
-            <div className="flex items-center space-x-4 text-sm">
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                <span className="text-green-300">CONNECTED</span>
-              </div>
-              <div className="text-green-400 font-mono">
-                {currentTime.toLocaleTimeString('en-US', { hour12: false })}
-              </div>
-            </div>
+        <div className="terminal-header">
+          <div className="terminal-title">ENS Treasury Terminal v3.0</div>
+          <div className="terminal-status">
+            CONNECTED • {currentTime.toLocaleTimeString('en-US', { hour12: false })}
           </div>
         </div>
 
-        {/* Navigation Bar */}
-        <div className="bg-gray-800 border-x border-gray-600 px-4 py-3">
-          <div className="flex flex-wrap gap-3">
+        {/* Navigation */}
+        <div className="terminal-nav">
+          <div className="terminal-nav-content">
             {[
               { id: 'overview', name: 'OVERVIEW', icon: '[OV]' },
               { id: 'assets', name: 'ASSETS', icon: '[AS]' },
@@ -1213,51 +1406,71 @@ const Terminal = () => {
               <button
                 key={section.id}
                 onClick={() => document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth' })}
-                className="px-3 py-2 bg-gray-700 border border-gray-500 text-green-300 hover:bg-gray-600 hover:border-gray-400"
+                className="nav-button"
               >
-                <span className="mr-2 text-sm font-mono">{section.icon}</span>
-                {section.name}
+                <span className="nav-icon">{section.icon}</span>
+                <span className="nav-text">{section.name}</span>
               </button>
             ))}
           </div>
         </div>
 
-        {/* Command Interface */}
-        <div className="bg-black border-x border-gray-600 px-4 py-6 min-h-[300px]">
-          {/* Command Prompt */}
-          <div className="flex items-center space-x-2 mb-4">
-            <div className="text-green-400 font-bold">
-              ens-admin@terminal:~$
-            </div>
+        {/* Terminal Interface */}
+        <div className="terminal-interface">
+          {/* Command Input */}
+          <div className="command-input-container">
+            <span className="command-prompt">ens-admin@terminal:~$</span>
             <input
               type="text"
               value={command}
-              onChange={(e) => setCommand(e.target.value)}
+              onChange={(e) => {
+                setCommand(e.target.value);
+                // Reset completion state when user types
+                setCompletionIndex(0);
+                setCurrentCompletions([]);
+                setOriginalCommand('');
+              }}
               onKeyPress={handleKeyPress}
-              className="flex-1 bg-black text-green-400 outline-none border-none font-mono caret-green-400"
+              className="command-input"
               placeholder="Type 'help' for commands..."
               autoFocus
               spellCheck={false}
             />
-            <div className="w-2 h-4 bg-green-400"></div>
+            <div className="cursor"></div>
           </div>
 
+          {/* Tab Completion Suggestions */}
+          {currentCompletions.length > 0 && (
+            <div className="completion-suggestions">
+              <div className="completion-list">
+                {currentCompletions.map((completion, index) => (
+                  <span
+                    key={completion}
+                    className={`completion-item ${index === completionIndex ? 'completion-active' : ''}`}
+                  >
+                    {completion}
+                  </span>
+                ))}
+              </div>
+              <div className="completion-hint">
+                Tab: cycle • Shift+Tab: execute now • Enter: select • {currentCompletions.length} suggestion{currentCompletions.length !== 1 ? 's' : ''}
+              </div>
+            </div>
+          )}
+
+
           {/* Command History */}
-          <div className="space-y-2 max-h-96 overflow-y-auto">
-            {commandHistory.map((entry, index) => (
-              <div key={index} className="border-l-2 border-green-500 pl-4 py-1">
-                <div className="flex items-center space-x-2 text-gray-400 mb-1">
-                  <span className="text-green-400 font-bold">$</span>
-                  <span className="text-green-300">{entry.command}</span>
-                  <span className="text-gray-600 text-xs ml-auto">
+          <div className="command-history">
+            {[...commandHistory].reverse().map((entry, index) => (
+              <div key={`cmd-${commandHistory.length - 1 - index}`} className={`command-entry command-entry--${entry.type}`}>
+                <div className="command-meta">
+                  <span className="command-symbol">$</span>
+                  <span className="command-text">{entry.command}</span>
+                  <span className="command-timestamp">
                     {entry.timestamp.toLocaleTimeString('en-US', { hour12: false })}
                   </span>
                 </div>
-                <div className={`font-mono text-sm whitespace-pre-wrap ${
-                  entry.type === 'error' ? 'text-red-400' :
-                  entry.type === 'success' ? 'text-green-400' :
-                  'text-green-400'
-                }`}>
+                <div className={`command-output command-output--${entry.type}`}>
                   {entry.output}
                 </div>
               </div>
@@ -1265,91 +1478,38 @@ const Terminal = () => {
           </div>
         </div>
 
-        {/* Status Bar */}
-        <div className="bg-gray-800 border border-gray-600 border-t-0 px-4 py-3">
-          <div className="flex justify-between items-center text-sm">
-            <div className="flex items-center space-x-6">
-              <span className="text-green-400">
-                <span className="font-bold">Active:</span>
-                <span className="text-green-300 ml-2">overview</span>
-              </span>
-              <span className="text-green-400">
-                <span className="font-bold">Directory:</span>
-                <span className="text-green-300 ml-2">~</span>
-              </span>
-              <span className="text-green-400">
-                <span className="font-bold">Sections:</span>
-                <span className="text-green-300 ml-2">5</span>
-              </span>
-            </div>
-            <div className="flex items-center space-x-6">
-              <span className="text-green-400">
-                <span className="font-bold">Network:</span>
-                <span className="text-green-300 ml-2">CONNECTED</span>
-              </span>
-              <span className="text-green-400">
-                <span className="font-bold">Uptime:</span>
-                <span className="text-green-300 ml-2">00:00:00</span>
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Content Sections */}
-        <div className="mt-8 space-y-8">
-          {/* Overview Section */}
-          <div id="overview" className="bg-gray-900 border border-gray-600 p-6">
-            <h2 className="text-green-400 font-bold text-xl mb-4">[OV] PORTFOLIO OVERVIEW</h2>
-            <div className="grid grid-cols-4 gap-4">
-              <div className="bg-gray-800 border border-gray-500 p-4">
-                <div className="text-sm text-green-300 uppercase mb-2 font-bold">TOTAL AUM</div>
-                <div className="text-2xl text-green-400 font-mono font-bold mb-1">$926.8M</div>
-                <div className="text-sm text-green-300">+2.5% MTD</div>
+        {/* Simple Content Sections */}
+        <div style={{ marginTop: '20px' }}>
+          <div id="overview" style={{ marginBottom: '20px', padding: '20px', background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)' }}>
+            <h3 style={{ color: '#2563eb', marginBottom: '10px' }}>[OV] PORTFOLIO OVERVIEW</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
+              <div style={{ padding: '10px', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '4px' }}>
+                <div style={{ fontSize: '12px', color: '#64748b', textTransform: 'uppercase' }}>TOTAL AUM</div>
+                <div style={{ fontSize: '20px', color: '#334155', fontFamily: 'monospace' }}>$926.8M</div>
+                <div style={{ fontSize: '12px', color: '#059669' }}>+2.5% MTD</div>
               </div>
-              <div className="bg-gray-800 border border-gray-500 p-4">
-                <div className="text-sm text-green-300 uppercase mb-2 font-bold">LIQUID ASSETS</div>
-                <div className="text-2xl text-green-400 font-mono font-bold mb-1">$840.2M</div>
-                <div className="text-sm text-green-300">+1.8% MTD</div>
+              <div style={{ padding: '10px', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '4px' }}>
+                <div style={{ fontSize: '12px', color: '#64748b', textTransform: 'uppercase' }}>LIQUID ASSETS</div>
+                <div style={{ fontSize: '20px', color: '#334155', fontFamily: 'monospace' }}>$840.2M</div>
+                <div style={{ fontSize: '12px', color: '#059669' }}>+1.8% MTD</div>
               </div>
-              <div className="bg-gray-800 border border-gray-500 p-4">
-                <div className="text-sm text-green-300 uppercase mb-2 font-bold">MONTHLY OUTFLOW</div>
-                <div className="text-2xl text-green-400 font-mono font-bold mb-1">$642K</div>
-                <div className="text-sm text-green-300">+12.3% vs Prior</div>
+              <div style={{ padding: '10px', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '4px' }}>
+                <div style={{ fontSize: '12px', color: '#64748b', textTransform: 'uppercase' }}>MONTHLY OUTFLOW</div>
+                <div style={{ fontSize: '20px', color: '#334155', fontFamily: 'monospace' }}>$642K</div>
+                <div style={{ fontSize: '12px', color: '#dc2626' }}>+12.3% vs Prior</div>
               </div>
-              <div className="bg-gray-800 border border-gray-500 p-4">
-                <div className="text-sm text-green-300 uppercase mb-2 font-bold">CUSTODY ACCOUNTS</div>
-                <div className="text-2xl text-green-400 font-mono font-bold mb-1">12</div>
-                <div className="text-sm text-green-300">No Change</div>
+              <div style={{ padding: '10px', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '4px' }}>
+                <div style={{ fontSize: '12px', color: '#64748b', textTransform: 'uppercase' }}>CUSTODY ACCOUNTS</div>
+                <div style={{ fontSize: '20px', color: '#334155', fontFamily: 'monospace' }}>12</div>
+                <div style={{ fontSize: '12px', color: '#94a3b8' }}>No Change</div>
               </div>
             </div>
-          </div>
-
-          {/* Other sections */}
-          <div id="assets" className="bg-gray-900 border border-gray-600 p-6">
-            <h2 className="text-green-400 font-bold text-xl mb-4">[AS] ASSET MANAGEMENT</h2>
-            <p className="text-green-300">Asset allocation and performance tracking system</p>
-          </div>
-
-          <div id="analytics" className="bg-gray-900 border border-gray-600 p-6">
-            <h2 className="text-green-400 font-bold text-xl mb-4">[AN] RISK ANALYTICS</h2>
-            <p className="text-green-300">Portfolio risk assessment and analytics dashboard</p>
-          </div>
-
-          <div id="transactions" className="bg-gray-900 border border-gray-600 p-6">
-            <h2 className="text-green-400 font-bold text-xl mb-4">[TX] TRANSACTION HISTORY</h2>
-            <p className="text-green-300">Multi-chain transaction data and analysis tools</p>
-          </div>
-
-          <div id="wallets" className="bg-gray-900 border border-gray-600 p-6">
-            <h2 className="text-green-400 font-bold text-xl mb-4">[WL] WALLET ADMINISTRATION</h2>
-            <p className="text-green-300">Wallet portfolio and access control management</p>
           </div>
         </div>
       </div>
-
-
     </div>
   );
 };
 
 export default Terminal;
+

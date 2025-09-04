@@ -3,14 +3,14 @@ const API_BASE_URL = 'https://api.etherscan.io/api';
 const DUNE_API_URL = 'https://api.dune.com/api/v1';
 const ENS_API_URL = 'https://api.ens.domains';
 
-// Configuration with fallback values
+// Configuration - requires real API keys (no demo mode)
 const config = {
   etherscan: {
-    apiKey: import.meta.env.VITE_ETHERSCAN_API_KEY || 'demo',
+    apiKey: import.meta.env.VITE_ETHERSCAN_API_KEY,
     baseUrl: API_BASE_URL
   },
   dune: {
-    apiKey: import.meta.env.VITE_DUNE_API_KEY || 'demo',
+    apiKey: import.meta.env.VITE_DUNE_API_KEY,
     baseUrl: DUNE_API_URL
   },
   ens: {
@@ -114,14 +114,14 @@ const fetchWithTimeout = async (url, options = {}, timeout = 10000) => {
 export const etherscanAPI = {
   async getAccountBalance(address) {
     try {
-      // Check if we're in a development environment or API key is missing
-      if (config.etherscan.apiKey === 'demo' || !navigator.onLine) {
-        console.warn('Using mock data for account balance');
-        return {
-          address: formatAddress(address),
-          balance: (Math.random() * 100000).toFixed(2),
-          timestamp: new Date().toISOString()
-        };
+      // Check if API key is configured
+      if (!config.etherscan.apiKey) {
+        throw new Error('Etherscan API key not configured. Please add VITE_ETHERSCAN_API_KEY to your .env file.');
+      }
+
+      // Check if we're offline
+      if (!navigator.onLine) {
+        throw new Error('Network offline. Cannot fetch account balance.');
       }
 
       const response = await fetchWithTimeout(
@@ -140,23 +140,20 @@ export const etherscanAPI = {
       }
     } catch (error) {
       console.error('Error fetching account balance:', error);
-      
-      // Return mock data as fallback
-      return {
-        address: formatAddress(address),
-        balance: (Math.random() * 100000).toFixed(2),
-        timestamp: new Date().toISOString(),
-        isMocked: true
-      };
+      throw error; // No fallback - let the caller handle the error
     }
   },
 
   async getTransactionHistory(address, startBlock = 0, endBlock = 99999999) {
     try {
-      // Check if we're in a development environment or API key is missing
-      if (config.etherscan.apiKey === 'demo' || !navigator.onLine) {
-        console.warn('Using mock data for transaction history');
-        return mockTransactionData.transactions;
+      // Check if API key is configured
+      if (!config.etherscan.apiKey) {
+        throw new Error('Etherscan API key not configured. Please add VITE_ETHERSCAN_API_KEY to your .env file.');
+      }
+
+      // Check if we're offline
+      if (!navigator.onLine) {
+        throw new Error('Network offline. Cannot fetch transaction history.');
       }
 
       const response = await fetchWithTimeout(
@@ -182,21 +179,20 @@ export const etherscanAPI = {
       }
     } catch (error) {
       console.error('Error fetching transaction history:', error);
-      
-      // Return mock data as fallback
-      return mockTransactionData.transactions.map(tx => ({
-        ...tx,
-        isMocked: true
-      }));
+      throw error; // No fallback - let the caller handle the error
     }
   },
 
   async getTokenTransfers(address, contractAddress = null) {
     try {
-      // Check if we're in a development environment or API key is missing
-      if (config.etherscan.apiKey === 'demo' || !navigator.onLine) {
-        console.warn('Using mock data for token transfers');
-        return [];
+      // Check if API key is configured
+      if (!config.etherscan.apiKey) {
+        throw new Error('Etherscan API key not configured. Please add VITE_ETHERSCAN_API_KEY to your .env file.');
+      }
+
+      // Check if we're offline
+      if (!navigator.onLine) {
+        throw new Error('Network offline. Cannot fetch token transfers.');
       }
 
       let url = `${config.etherscan.baseUrl}?module=account&action=tokentx&address=${formatAddress(address)}&sort=desc&apikey=${config.etherscan.apiKey}`;
@@ -226,22 +222,20 @@ export const etherscanAPI = {
       }
     } catch (error) {
       console.error('Error fetching token transfers:', error);
-      return []; // Return empty array as fallback
+      throw error; // No fallback - let the caller handle the error
     }
   },
 
   async getGasPrice() {
     try {
-      // Check if we're in a development environment or API key is missing
-      if (config.etherscan.apiKey === 'demo' || !navigator.onLine) {
-        console.warn('Using mock data for gas price');
-        return {
-          safeLow: 15,
-          standard: 20,
-          fast: 25,
-          timestamp: new Date().toISOString(),
-          isMocked: true
-        };
+      // Check if API key is configured
+      if (!config.etherscan.apiKey) {
+        throw new Error('Etherscan API key not configured. Please add VITE_ETHERSCAN_API_KEY to your .env file.');
+      }
+
+      // Check if we're offline
+      if (!navigator.onLine) {
+        throw new Error('Network offline. Cannot fetch gas price.');
       }
 
       const response = await fetchWithTimeout(
@@ -261,15 +255,7 @@ export const etherscanAPI = {
       }
     } catch (error) {
       console.error('Error fetching gas price:', error);
-      
-      // Return mock data as fallback
-      return {
-        safeLow: 15 + Math.floor(Math.random() * 5),
-        standard: 20 + Math.floor(Math.random() * 5),
-        fast: 25 + Math.floor(Math.random() * 5),
-        timestamp: new Date().toISOString(),
-        isMocked: true
-      };
+      throw error; // No fallback - let the caller handle the error
     }
   }
 };
@@ -278,9 +264,12 @@ export const etherscanAPI = {
 export const duneAPI = {
   async executeQuery(queryId, parameters = {}) {
     try {
-      if (config.dune.apiKey === 'demo' || !navigator.onLine) {
-        console.warn('Dune API not available, using mock data');
-        return { execution_id: 'mock-execution-id' };
+      if (!config.dune.apiKey) {
+        throw new Error('Dune Analytics API key not configured. Please add VITE_DUNE_API_KEY to your .env file.');
+      }
+
+      if (!navigator.onLine) {
+        throw new Error('Network offline. Cannot execute Dune query.');
       }
 
       const response = await fetchWithTimeout(`${config.dune.baseUrl}/query/${queryId}/execute`, {
@@ -296,15 +285,18 @@ export const duneAPI = {
       return data;
     } catch (error) {
       console.error('Error executing Dune query:', error);
-      return { execution_id: 'mock-execution-id', isMocked: true };
+      throw error; // No fallback - let the caller handle the error
     }
   },
 
   async getQueryResults(executionId) {
     try {
-      if (config.dune.apiKey === 'demo' || !navigator.onLine) {
-        console.warn('Dune API not available, using mock data');
-        return { result: { rows: [] } };
+      if (!config.dune.apiKey) {
+        throw new Error('Dune Analytics API key not configured. Please add VITE_DUNE_API_KEY to your .env file.');
+      }
+
+      if (!navigator.onLine) {
+        throw new Error('Network offline. Cannot fetch Dune query results.');
       }
 
       const response = await fetchWithTimeout(`${config.dune.baseUrl}/execution/${executionId}/results`, {
@@ -317,7 +309,7 @@ export const duneAPI = {
       return data;
     } catch (error) {
       console.error('Error fetching Dune query results:', error);
-      return { result: { rows: [] }, isMocked: true };
+      throw error; // No fallback - let the caller handle the error
     }
   }
 };
@@ -327,8 +319,7 @@ export const ensAPI = {
   async getDomainInfo(domain) {
     try {
       if (!navigator.onLine) {
-        console.warn('ENS API not available, using mock data');
-        return { name: domain, isMocked: true };
+        throw new Error('Network offline. Cannot fetch ENS domain info.');
       }
 
       const response = await fetchWithTimeout(`${config.ens.baseUrl}/v1/domains/${domain}`);
@@ -336,15 +327,14 @@ export const ensAPI = {
       return data;
     } catch (error) {
       console.error('Error fetching ENS domain info:', error);
-      return { name: domain, isMocked: true };
+      throw error; // No fallback - let the caller handle the error
     }
   },
 
   async getReverseRecord(address) {
     try {
       if (!navigator.onLine) {
-        console.warn('ENS API not available, using mock data');
-        return { name: null, isMocked: true };
+        throw new Error('Network offline. Cannot fetch ENS reverse record.');
       }
 
       const response = await fetchWithTimeout(`${config.ens.baseUrl}/v1/reverse/${formatAddress(address)}`);
@@ -352,7 +342,7 @@ export const ensAPI = {
       return data;
     } catch (error) {
       console.error('Error fetching ENS reverse record:', error);
-      return { name: null, isMocked: true };
+      throw error; // No fallback - let the caller handle the error
     }
   }
 };
@@ -366,11 +356,11 @@ export const dataService = {
         .filter(w => w.category !== 'contract')
         .map(w => w.address);
 
-      // Always try to use local data first, then fallback to API
+      // Always try to use API data - no fallbacks
       try {
         const useAlchemy = !!(import.meta.env && import.meta.env.VITE_ALCHEMY_API_KEY && import.meta.env.VITE_ALCHEMY_API_KEY !== 'demo');
         let balances;
-        
+
         if (useAlchemy) {
           const { default: alchemyAPI } = await import('./alchemyAPI');
           const ethBalances = await alchemyAPI.getETHBalances(treasuryAddresses);
@@ -380,28 +370,44 @@ export const dataService = {
             timestamp: new Date().toISOString()
           }));
         } else {
-          // Use mock data to prevent network failures
-          balances = treasuryAddresses.map(address => ({
-            address: address.toLowerCase(),
-            balance: (Math.random() * 100000 + 10000).toFixed(2),
-            timestamp: new Date().toISOString(),
-            isMocked: true
-          }));
+          // Use Etherscan API directly
+          if (!config.etherscan.apiKey) {
+            throw new Error('Neither Alchemy nor Etherscan API key configured. Please add VITE_ALCHEMY_API_KEY or VITE_ETHERSCAN_API_KEY to your .env file.');
+          }
+
+          balances = [];
+          for (const address of treasuryAddresses) {
+            try {
+              const balance = await etherscanAPI.getAccountBalance(address);
+              balances.push({
+                address: address.toLowerCase(),
+                balance: balance.balance,
+                timestamp: balance.timestamp
+              });
+            } catch (error) {
+              console.error(`Failed to fetch balance for ${address}:`, error);
+              balances.push({
+                address: address.toLowerCase(),
+                balance: '0',
+                timestamp: new Date().toISOString(),
+                error: error.message
+              });
+            }
+          }
         }
-        
+
         return {
           timestamp: new Date().toISOString(),
           wallets: balances,
-          totalBalance: balances.reduce((sum, wallet) => sum + parseFloat(wallet.balance), 0),
-          isMocked: balances.some(b => b.isMocked)
+          totalBalance: balances.reduce((sum, wallet) => sum + parseFloat(wallet.balance), 0)
         };
       } catch (apiError) {
-        console.warn('API failed, using mock treasury data:', apiError);
-        return mockTreasuryData;
+        console.error('API failed:', apiError);
+        throw apiError; // No fallback - let the caller handle the error
       }
     } catch (error) {
       console.error('Error fetching ENS DAO treasury data:', error);
-      return mockTreasuryData;
+      throw error; // No fallback - let the caller handle the error
     }
   },
 
@@ -412,71 +418,83 @@ export const dataService = {
         .filter(w => w.category !== 'contract')
         .map(w => w.address);
 
-      // Always return mock data to prevent network failures
-      console.warn('Using mock transaction data to prevent network failures');
-      
-      const mockTransactions = Array.from({ length: Math.min(limit, 10) }, (_, i) => ({
-        hash: `0x${Math.random().toString(16).substr(2, 40)}`,
-        from: treasuryAddresses[Math.floor(Math.random() * treasuryAddresses.length)],
-        to: treasuryAddresses[Math.floor(Math.random() * treasuryAddresses.length)],
-        value: (Math.random() * 100000).toFixed(2),
-        gas: '21000',
-        gasPrice: (Math.random() * 50 + 10).toFixed(2),
-        timestamp: new Date(Date.now() - i * 3600000).toISOString(),
-        blockNumber: 18500000 - i,
-        confirmations: 10 + i,
-        isError: false,
-        isMocked: true
-      }));
+      // Always use real API data - no fallbacks
+      if (!config.etherscan.apiKey) {
+        throw new Error('Etherscan API key not configured. Please add VITE_ETHERSCAN_API_KEY to your .env file.');
+      }
+
+      if (!navigator.onLine) {
+        throw new Error('Network offline. Cannot fetch transactions.');
+      }
+
+      // Get transactions from a sample treasury address
+      const sampleAddress = treasuryAddresses[0];
+      const transactions = await etherscanAPI.getTransactionHistory(sampleAddress, 0, 99999999);
 
       return {
         timestamp: new Date().toISOString(),
-        transactions: mockTransactions,
-        count: mockTransactions.length,
-        isMocked: true
+        transactions: transactions.slice(0, limit),
+        count: Math.min(transactions.length, limit)
       };
     } catch (error) {
       console.error('Error fetching ENS DAO transactions:', error);
-      return mockTransactionData;
+      throw error; // No fallback - let the caller handle the error
     }
   },
 
   async getENSDAOTokenHoldings() {
     try {
-      // Always return mock data to prevent network failures
-      console.warn('Using mock token holdings data to prevent network failures');
-      
-      const mockHoldings = [
-        {
-          contractAddress: '0xa0b86a33e6441c8c4012f34a2e9a8bdf6b8a4b9e',
-          tokenName: 'Ethereum Name Service',
-          tokenSymbol: 'ENS',
-          tokenDecimal: 18,
-          totalValue: 12500000,
-          transfers: []
-        },
-        {
-          contractAddress: '0xa0b73e1ff0b80914ab6fe0444e65848c4c34450b',
-          tokenName: 'USD Coin',
-          tokenSymbol: 'USDC',
-          tokenDecimal: 6,
-          totalValue: 180200000,
-          transfers: []
+      // Always use real API data - no fallbacks
+      if (!config.etherscan.apiKey) {
+        throw new Error('Etherscan API key not configured. Please add VITE_ETHERSCAN_API_KEY to your .env file.');
+      }
+
+      if (!navigator.onLine) {
+        throw new Error('Network offline. Cannot fetch token holdings.');
+      }
+
+      const { walletDirectory } = await import('../data/walletDirectory');
+      const treasuryAddresses = walletDirectory
+        .filter(w => w.category !== 'contract')
+        .map(w => w.address);
+
+      // Get token transfers for treasury addresses
+      const allTokenTransfers = [];
+      for (const address of treasuryAddresses.slice(0, 3)) { // Limit to first 3 addresses for performance
+        try {
+          const transfers = await etherscanAPI.getTokenTransfers(address);
+          allTokenTransfers.push(...transfers);
+        } catch (error) {
+          console.warn(`Failed to fetch token transfers for ${address}:`, error);
         }
-      ];
+      }
+
+      // Group by token contract
+      const tokenGroups = {};
+      allTokenTransfers.forEach(transfer => {
+        const key = transfer.contractAddress;
+        if (!tokenGroups[key]) {
+          tokenGroups[key] = {
+            contractAddress: transfer.contractAddress,
+            tokenName: transfer.tokenName,
+            tokenSymbol: transfer.tokenSymbol,
+            tokenDecimal: transfer.tokenDecimal,
+            totalValue: 0,
+            transfers: []
+          };
+        }
+        tokenGroups[key].transfers.push(transfer);
+        // Simple calculation - in real implementation you'd track balances properly
+        tokenGroups[key].totalValue += parseFloat(transfer.value);
+      });
 
       return {
         timestamp: new Date().toISOString(),
-        holdings: mockHoldings,
-        isMocked: true
+        holdings: Object.values(tokenGroups)
       };
     } catch (error) {
       console.error('Error fetching ENS DAO token holdings:', error);
-      return {
-        timestamp: new Date().toISOString(),
-        holdings: [],
-        isMocked: true
-      };
+      throw error; // No fallback - let the caller handle the error
     }
   }
 };

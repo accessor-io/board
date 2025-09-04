@@ -17,7 +17,7 @@ import KarpatkeyReports from './KarpatkeyReports';
 import MilestoneTracker from './MilestoneTracker';
 import ProjectTracker from './ProjectTracker';
 import RealTimeData from './RealTimeData';
-// import TreasuryVisualization3D from './TreasuryVisualization3D';
+import ENSLookerDashboard from './ENSLookerDashboard';
 
 
 const Dashboard = () => {
@@ -39,14 +39,13 @@ const Dashboard = () => {
     { id: 'wallets', name: 'Wallet Administration' },
     { id: 'service-providers', name: 'Service Providers' },
     { id: 'address-diagram', name: '🔗 Address Network' },
+    { id: 'looker-studio', name: '📊 Looker Analytics' },
   ];
 
   const renderTabContent = () => {
     switch (activeTab) {
       case 'overview':
         return <OverviewContent expandedSections={expandedSections} toggleSection={toggleSection} />;
-      case '3d-visual':
-        return <TreasuryVisualization3D />;
       case 'assets':
         return <AssetManagementContent expandedSections={expandedSections} toggleSection={toggleSection} />;
       case 'analytics':
@@ -59,13 +58,15 @@ const Dashboard = () => {
         return <ServiceProviderDashboard expandedSections={expandedSections} toggleSection={toggleSection} />;
       case 'address-diagram':
         return <AddressConnectionDiagram />;
+      case 'looker-studio':
+        return <ENSLookerDashboard />;
       default:
         return <OverviewContent expandedSections={expandedSections} toggleSection={toggleSection} />;
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+    <div className="min-h-screen bg-white text-gray-800 font-mono">
       {/* Executive Summary Bar */}
       <div className="glass border-b border-gray-200">
         <div className="px-4 py-3">
@@ -75,14 +76,14 @@ const Dashboard = () => {
                 TOTAL AUM
               </div>
               <div className="text-xl font-light text-gray-900">$926.8M</div>
-              <div className="text-sm text-green-600">+2.5% MTD</div>
+              <div className="text-sm text-gray-600">+2.5% MTD</div>
             </div>
             <div className="border-r border-gray-200 pr-4">
               <div className="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-1">
                 LIQUID ASSETS
               </div>
               <div className="text-xl font-light text-gray-900">$840.2M</div>
-              <div className="text-sm text-green-600">+1.8% MTD</div>
+              <div className="text-sm text-gray-600">+1.8% MTD</div>
             </div>
             <div className="border-r border-gray-200 pr-4">
               <div className="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-1">
@@ -434,8 +435,8 @@ const OverviewContent = ({ expandedSections, toggleSection }) => {
                     <div className="text-xs text-blue-700">H1 2025 Budget</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-xl font-bold text-green-600">$160K</div>
-                    <div className="text-xs text-green-700">Strategic Grants</div>
+                    <div className="text-xl font-bold text-gray-800">$160K</div>
+                    <div className="text-xs text-gray-600">Strategic Grants</div>
                   </div>
                   <div className="text-center">
                     <div className="text-xl font-bold text-purple-600">4</div>
@@ -453,28 +454,28 @@ const OverviewContent = ({ expandedSections, toggleSection }) => {
                     <div className="bg-white border border-blue-200 rounded p-3">
                       <div className="flex items-center justify-between mb-2">
                         <h5 className="font-semibold text-slate-900">Builder Grants</h5>
-                        <span className="text-sm font-medium text-green-600">$80K + 23 ETH</span>
+                        <span className="text-sm font-medium text-gray-700">$80K + 23 ETH</span>
                       </div>
                       <p className="text-xs text-slate-600">Platform funding with new USDC flow development</p>
                     </div>
                     <div className="bg-white border border-blue-200 rounded p-3">
                       <div className="flex items-center justify-between mb-2">
                         <h5 className="font-semibold text-slate-900">Giveth Round</h5>
-                        <span className="text-sm font-medium text-green-600">$50K</span>
+                        <span className="text-sm font-medium text-gray-700">$50K</span>
                       </div>
                       <p className="text-xs text-slate-600">Partnership with Octant (total pool: $80K)</p>
                     </div>
                     <div className="bg-white border border-blue-200 rounded p-3">
                       <div className="flex items-center justify-between mb-2">
                         <h5 className="font-semibold text-slate-900">Events</h5>
-                        <span className="text-sm font-medium text-green-600">$22K</span>
+                        <span className="text-sm font-medium text-gray-700">$22K</span>
                       </div>
                       <p className="text-xs text-slate-600">ETHDenver and other hackathons</p>
                     </div>
                     <div className="bg-white border border-blue-200 rounded p-3">
                       <div className="flex items-center justify-between mb-2">
                         <h5 className="font-semibold text-slate-900">Discretionary</h5>
-                        <span className="text-sm font-medium text-green-600">$31K</span>
+                        <span className="text-sm font-medium text-gray-700">$31K</span>
                       </div>
                       <p className="text-xs text-slate-600">Additional opportunities and expenses</p>
                     </div>
@@ -485,28 +486,28 @@ const OverviewContent = ({ expandedSections, toggleSection }) => {
                     <div className="bg-white border border-blue-200 rounded p-3">
                       <div className="flex items-center justify-between mb-2">
                         <h5 className="font-semibold text-slate-900">Vyper</h5>
-                        <span className="text-sm font-medium text-green-600">$50,000</span>
+                        <span className="text-sm font-medium text-gray-700">$50,000</span>
                       </div>
                       <p className="text-xs text-slate-600">Powers $4.7 billion in DeFi protocols with EF matching</p>
                     </div>
                     <div className="bg-white border border-blue-200 rounded p-3">
                       <div className="flex items-center justify-between mb-2">
                         <h5 className="font-semibold text-slate-900">Remix Labs</h5>
-                        <span className="text-sm font-medium text-green-600">$50,000</span>
+                        <span className="text-sm font-medium text-gray-700">$50,000</span>
                       </div>
                       <p className="text-xs text-slate-600">IDE continuity for Ethereum developer onboarding</p>
                     </div>
                     <div className="bg-white border border-blue-200 rounded p-3">
                       <div className="flex items-center justify-between mb-2">
                         <h5 className="font-semibold text-slate-900">Fabric</h5>
-                        <span className="text-sm font-medium text-green-600">$50,000</span>
+                        <span className="text-sm font-medium text-gray-700">$50,000</span>
                       </div>
                       <p className="text-xs text-slate-600">Based rollup standards with 20+ team support</p>
                     </div>
                     <div className="bg-white border border-blue-200 rounded p-3">
                       <div className="flex items-center justify-between mb-2">
                         <h5 className="font-semibold text-slate-900">Decentralization Research Center</h5>
-                        <span className="text-sm font-medium text-green-600">$150,000</span>
+                        <span className="text-sm font-medium text-gray-700">$150,000</span>
                       </div>
                       <p className="text-xs text-slate-600">Policy research with EF matching</p>
                     </div>
@@ -1560,7 +1561,7 @@ const TransactionHistoryContent = ({ expandedSections, toggleSection }) => {
                     <td className="py-2 px-2">
                       <span className={`text-xs px-2 py-1 rounded-full ${
                         tx.direction === 'incoming' 
-                          ? 'bg-green-100 text-green-800' 
+                          ? 'bg-gray-100 text-gray-800' 
                           : 'bg-red-100 text-red-800'
                       }`}>
                         {tx.direction}

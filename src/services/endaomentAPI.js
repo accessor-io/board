@@ -390,17 +390,23 @@ export const endaomentAPI = {
 
   extractEndaomentData(data, month, year, currency) {
     // Try to extract meaningful data from various response formats
-    const extracted = {
-      fundId: data.fundId || data.id || "ENS-Endaoment-2023",
-      walletAddress: data.walletAddress || data.address || "0x4F2083f5fBede34C2714aFfb3105539775f7FE64",
-      totalContributions: data.totalContributions || data.contributions || data.total || 52000000,
-      disbursedAmount: data.disbursedAmount || data.disbursed || data.spent || 10000000,
-      availableBalance: data.availableBalance || data.balance || data.remaining || 42000000,
-      currency: currency,
+    const extracted = Object.assign({
+      fundId: "ENS-Endaoment-2023",
+      walletAddress: "0x4F2083f5fBede34C2714aFfb3105539775f7FE64", 
+      totalContributions: 52000000,
+      disbursedAmount: 10000000,
+      availableBalance: 42000000,
       recipients: [],
-      month: month,
-      year: year
-    };
+      currency,
+      month,
+      year
+    }, {
+      fundId: data.fundId || data.id,
+      walletAddress: data.walletAddress || data.address,
+      totalContributions: data.totalContributions || data.contributions || data.total,
+      disbursedAmount: data.disbursedAmount || data.disbursed || data.spent,
+      availableBalance: data.availableBalance || data.balance || data.remaining
+    });
 
     // Try to extract recipients from various possible locations
     if (data.recipients && Array.isArray(data.recipients)) {

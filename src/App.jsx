@@ -21,7 +21,7 @@ function App() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-black flex items-center justify-center overflow-hidden">
+      <div className="min-h-screen bg-white flex items-center justify-center overflow-hidden">
         {/* Loading Animation */}
         <div className="relative">
           {/* Background Glow */}
@@ -54,7 +54,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 relative overflow-hidden">
+    <div className="min-h-screen bg-white text-gray-800 relative overflow-hidden">
       {/* Ambient Background Effects */}
       <div
         className="fixed inset-0 pointer-events-none opacity-30"
@@ -80,7 +80,7 @@ function App() {
       </div>
 
       {/* Executive Header */}
-      <div className="bg-white/80 backdrop-blur-xl border-b border-slate-200/50 relative">
+      <div className="bg-white border-b border-gray-300 relative">
         {/* Animated Border */}
         <div className="absolute bottom-0 left-0 h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent w-full animate-pulse" />
 
@@ -107,7 +107,7 @@ function App() {
               </div>
 
               {/* Enhanced Status Indicator */}
-              <div className="flex items-center gap-3 px-6 py-3 bg-white/60 backdrop-blur-md rounded-xl border border-slate-200/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-white/80 group">
+              <div className="flex items-center gap-3 px-6 py-3 bg-white border border-gray-300 shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-gray-50 group">
                 <div className="relative">
                   <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse" />
                   <div className="absolute inset-0 w-3 h-3 bg-emerald-400 rounded-full animate-ping" />

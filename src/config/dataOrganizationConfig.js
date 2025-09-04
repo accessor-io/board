@@ -51,23 +51,6 @@ export const DATA_ORGANIZATION_CONFIG = {
         }
       ]
     },
-    '3d-visual': {
-      name: '🎯 3D Treasury',
-      description: 'Interactive 3D visualization of treasury structure',
-      icon: '🎯',
-      sections: [
-        {
-          id: 'treasury-3d-visualization',
-          title: '3D Treasury Visualization',
-          subtitle: 'Interactive 3D representation of treasury assets',
-          component: 'TreasuryVisualization3D',
-          dataSources: ['treasury3DData', 'assetPositions'],
-          priority: 1,
-          refreshInterval: 600000, // 10 minutes
-          cacheDuration: 1200000 // 20 minutes
-        }
-      ]
-    },
     assets: {
       name: 'Asset Management',
       description: 'Detailed asset tracking and management',
@@ -363,8 +346,7 @@ export const DATA_ORGANIZATION_CONFIG = {
     WalletPermissions: 'WalletPermissionsContent',
     WalletActivity: 'WalletActivityContent',
     ServiceProviderDashboard: 'ServiceProviderDashboard',
-    AddressConnectionDiagram: 'AddressConnectionDiagram',
-    TreasuryVisualization3D: 'TreasuryVisualization3D'
+    AddressConnectionDiagram: 'AddressConnectionDiagram'
   },
 
   // Cache configuration

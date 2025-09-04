@@ -77,7 +77,7 @@ const AnalyticsOverview = () => {
               </div>
             </div>
             <div className="mt-4">
-              <span className="text-green-600 text-sm font-medium">+2.5% from last month</span>
+              <span className="text-gray-600 text-sm font-medium">+2.5% from last month</span>
             </div>
         </div>
 
@@ -85,7 +85,7 @@ const AnalyticsOverview = () => {
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <div className="w-8 h-8 bg-green-900 rounded-lg flex items-center justify-center">
-                <span className="text-green-400 text-lg">📈</span>
+                <span className="text-gray-600 text-lg">📈</span>
               </div>
             </div>
                           <div className="ml-4">

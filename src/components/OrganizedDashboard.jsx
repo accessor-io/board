@@ -23,7 +23,6 @@ import KarpatkeyReports from './KarpatkeyReports';
 import MilestoneTracker from './MilestoneTracker';
 import ProjectTracker from './ProjectTracker';
 import RealTimeData from './RealTimeData';
-import TreasuryVisualization3D from './TreasuryVisualization3D';
 
 const OrganizedDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -107,8 +106,6 @@ const OrganizedDashboard = () => {
           toggleSection={toggleSection}
           refreshSection={refreshSection}
         />;
-      case '3d-visual':
-        return <TreasuryVisualization3D />;
       case 'assets':
         return <AssetManagementContent 
           tabData={currentTabData}
@@ -295,7 +292,7 @@ const CollapsibleSection = ({
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wide">{title}</h3>
               {dataStatus && (
                 <span className={`ml-2 px-2 py-1 text-xs rounded-full ${
-                  dataStatus === 'live' ? 'bg-green-100 text-green-800' :
+                  dataStatus === 'live' ? 'bg-gray-100 text-gray-800' :
                   dataStatus === 'cached' ? 'bg-yellow-100 text-yellow-800' :
                   'bg-gray-100 text-gray-800'
                 }`}>

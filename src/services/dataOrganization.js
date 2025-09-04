@@ -58,20 +58,6 @@ export const TAB_ORGANIZATION = {
       }
     ]
   },
-  '3d-visual': {
-    name: '🎯 3D Treasury',
-    description: 'Interactive 3D visualization of treasury structure',
-    sections: [
-      {
-        id: 'treasury-3d-visualization',
-        title: '3D Treasury Visualization',
-        subtitle: 'Interactive 3D representation of treasury assets',
-        category: DATA_CATEGORIES.TREASURY,
-        priority: 1,
-        dataSources: ['treasury3DData', 'assetPositions']
-      }
-    ]
-  },
   assets: {
     name: 'Asset Management',
     description: 'Detailed asset tracking and management',

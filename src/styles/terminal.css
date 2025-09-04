@@ -1,0 +1,410 @@
+/* Medium Terminal Styles */
+.terminal-app {
+  min-height: 100vh;
+  background: #f1f5f9;
+  color: #334155;
+  font-family: 'JetBrains Mono', 'Fira Code', Monaco, Consolas, monospace;
+  padding: 20px;
+}
+
+.terminal-window {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Terminal Header */
+.terminal-header {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  padding: 16px;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.terminal-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #334155;
+}
+
+.terminal-status {
+  font-size: 14px;
+  color: #64748b;
+}
+
+/* Navigation */
+.terminal-nav {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-top: none;
+  padding: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.terminal-nav-content {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.nav-button {
+  padding: 8px 12px;
+  background: #e2e8f0;
+  border: 1px solid #94a3b8;
+  color: #475569;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.2s;
+}
+
+.nav-button:hover {
+  background: #cbd5e1;
+  color: #334155;
+}
+
+.nav-icon {
+  font-family: 'JetBrains Mono', monospace;
+  margin-right: 4px;
+}
+
+/* Terminal Interface */
+.terminal-interface {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-top: none;
+  padding: 20px;
+  min-height: 400px;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.command-input-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.command-prompt {
+  color: #2563eb;
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.command-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #334155;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  caret-color: #2563eb;
+}
+
+.command-input::placeholder {
+  color: #94a3b8;
+}
+
+.cursor {
+  width: 8px;
+  height: 16px;
+  background: #334155;
+  animation: blink 1s infinite;
+}
+
+/* Command History */
+.command-history {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.command-entry {
+  margin-bottom: 12px;
+  padding-left: 20px;
+  border-left: 3px solid #cbd5e1;
+  position: relative;
+}
+
+.command-entry:last-child {
+  margin-bottom: 0;
+}
+
+.command-entry--error {
+  border-left-color: #dc2626;
+}
+
+.command-entry--success {
+  border-left-color: #059669;
+}
+
+.command-entry--info {
+  border-left-color: #2563eb;
+}
+
+.command-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.command-symbol {
+  color: #334155;
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.command-text {
+  color: #475569;
+  font-family: inherit;
+}
+
+.command-timestamp {
+  color: #64748b;
+}
+
+.command-output {
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  margin-top: 4px;
+}
+
+.command-output--error {
+  color: #dc2626;
+}
+
+.command-output--success {
+  color: #059669;
+}
+
+.command-output--info {
+  color: #2563eb;
+}
+
+/* Enhanced Output Color Coding */
+.command-output {
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  margin-top: 4px;
+}
+
+/* Transaction Direction Labels */
+.tx-direction-to {
+  color: #dc2626; /* Red for outgoing */
+  font-weight: bold;
+}
+
+.tx-direction-from {
+  color: #059669; /* Green for incoming */
+  font-weight: bold;
+}
+
+.tx-direction {
+  color: #7c3aed; /* Purple for general direction */
+  font-weight: bold;
+}
+
+/* Value and Amount Styling */
+.tx-value {
+  color: #ea580c; /* Orange for monetary values */
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+}
+
+.tx-address {
+  color: #0891b2; /* Cyan for addresses */
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+}
+
+.tx-hash {
+  color: #7c2d12; /* Brown for transaction hashes */
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+}
+
+/* Time and Status */
+.tx-time {
+  color: #6b7280; /* Gray for timestamps */
+  font-style: italic;
+}
+
+.tx-status {
+  color: #059669; /* Green for confirmed status */
+  font-weight: 500;
+}
+
+.tx-status.pending {
+  color: #d97706; /* Amber for pending */
+}
+
+.tx-status.failed {
+  color: #dc2626; /* Red for failed */
+}
+
+/* Labels and Metadata */
+.tx-label {
+  color: #4b5563; /* Dark gray for labels */
+  font-weight: 500;
+}
+
+.tx-type {
+  color: #7c3aed; /* Purple for transaction types */
+  font-weight: 500;
+}
+
+.tx-wallet {
+  color: #2563eb; /* Blue for wallet names */
+  font-weight: 600;
+}
+
+/* Summary Statistics */
+.summary-stat {
+  color: #1f2937; /* Darkest gray for important stats */
+  font-weight: 600;
+}
+
+.summary-label {
+  color: #6b7280; /* Medium gray for labels */
+}
+
+.summary-value {
+  color: #059669; /* Green for values */
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+}
+
+/* Section Headers */
+.section-header {
+  color: #1e40af; /* Dark blue for headers */
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.section-border {
+  color: #9ca3af; /* Light gray for borders */
+}
+
+/* Warning and Info Messages */
+.info-message {
+  color: #0891b2; /* Cyan for informational messages */
+  font-style: italic;
+}
+
+.warning-message {
+  color: #d97706; /* Amber for warnings */
+  font-weight: 500;
+}
+
+.error-message {
+  color: #dc2626; /* Red for errors */
+  font-weight: 500;
+}
+
+/* Highlighted Text */
+.highlight {
+  color: #7c3aed; /* Purple for highlights */
+  font-weight: bold;
+}
+
+.accent {
+  color: #ea580c; /* Orange for accents */
+  font-weight: 500;
+}
+
+/* Animations */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* Tab Completion Suggestions */
+.completion-suggestions {
+  margin-bottom: 16px;
+  padding: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  border-top: 2px solid #2563eb;
+}
+
+.completion-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.completion-item {
+  padding: 4px 8px;
+  background: #e2e8f0;
+  color: #475569;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.completion-item.completion-active {
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.completion-hint {
+  font-size: 10px;
+  color: #64748b;
+  text-align: center;
+  font-style: italic;
+  line-height: 1.4;
+  margin-top: 6px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .terminal-app {
+    padding: 10px;
+  }
+
+  .terminal-header {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .terminal-nav-content {
+    flex-direction: column;
+  }
+
+  .nav-button {
+    text-align: center;
+  }
+
+  .command-input-container {
+    flex-wrap: wrap;
+  }
+
+  .completion-list {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .completion-item {
+    text-align: center;
+  }
+
+  .completion-hint {
+    font-size: 9px;
+    line-height: 1.3;
+  }
+}
