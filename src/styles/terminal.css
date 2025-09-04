@@ -15,7 +15,6 @@
 /* Terminal Header */
 .terminal-header {
   background: #ffffff;
-  border: 1px solid #cbd5e1;
   padding: 16px;
   border-radius: 8px 8px 0 0;
   display: flex;
@@ -38,8 +37,6 @@
 /* Navigation */
 .terminal-nav {
   background: #ffffff;
-  border: 1px solid #cbd5e1;
-  border-top: none;
   padding: 12px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
@@ -74,8 +71,6 @@
 /* Terminal Interface */
 .terminal-interface {
   background: #ffffff;
-  border: 1px solid #cbd5e1;
-  border-top: none;
   padding: 20px;
   min-height: 400px;
   border-radius: 0 0 8px 8px;
@@ -125,7 +120,6 @@
 .command-entry {
   margin-bottom: 12px;
   padding-left: 20px;
-  border-left: 3px solid #cbd5e1;
   position: relative;
 }
 
@@ -333,9 +327,7 @@
   margin-bottom: 16px;
   padding: 12px;
   background: #f8fafc;
-  border: 1px solid #e2e8f0;
   border-radius: 6px;
-  border-top: 2px solid #2563eb;
 }
 
 .completion-list {
