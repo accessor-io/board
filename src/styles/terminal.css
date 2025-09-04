@@ -2,7 +2,7 @@
 .terminal-app {
   min-height: 100vh;
   background: #f1f5f9;
-  color: #334155;
+  color: #1e293b;
   font-family: 'JetBrains Mono', 'Fira Code', Monaco, Consolas, monospace;
   padding: 20px;
 }
@@ -27,12 +27,12 @@
 .terminal-title {
   font-size: 18px;
   font-weight: bold;
-  color: #334155;
+  color: #0f172a;
 }
 
 .terminal-status {
   font-size: 14px;
-  color: #64748b;
+  color: #1e293b;
 }
 
 /* Navigation */
@@ -155,13 +155,13 @@
 }
 
 .command-symbol {
-  color: #334155;
+  color: #0f172a;
   font-weight: bold;
   margin-right: 8px;
 }
 
 .command-text {
-  color: #475569;
+  color: #0f172a;
   font-family: inherit;
 }
 
@@ -254,28 +254,28 @@
 
 /* Labels and Metadata */
 .tx-label {
-  color: #4b5563; /* Dark gray for labels */
+  color: #0f172a; /* Black for labels */
   font-weight: 500;
 }
 
 .tx-type {
-  color: #7c3aed; /* Purple for transaction types */
+  color: #1e293b; /* Dark gray for transaction types */
   font-weight: 500;
 }
 
 .tx-wallet {
-  color: #2563eb; /* Blue for wallet names */
+  color: #0f172a; /* Black for wallet names */
   font-weight: 600;
 }
 
 /* Summary Statistics */
 .summary-stat {
-  color: #1f2937; /* Darkest gray for important stats */
+  color: #0f172a; /* Black for important stats */
   font-weight: 600;
 }
 
 .summary-label {
-  color: #6b7280; /* Medium gray for labels */
+  color: #0f172a; /* Black for labels */
 }
 
 .summary-value {
@@ -286,7 +286,7 @@
 
 /* Section Headers */
 .section-header {
-  color: #1e40af; /* Dark blue for headers */
+  color: #0f172a; /* Black for headers */
   font-weight: bold;
   font-size: 15px;
 }
@@ -313,12 +313,12 @@
 
 /* Highlighted Text */
 .highlight {
-  color: #7c3aed; /* Purple for highlights */
+  color: #0f172a; /* Black for highlights */
   font-weight: bold;
 }
 
 .accent {
-  color: #ea580c; /* Orange for accents */
+  color: #1e293b; /* Dark gray for accents */
   font-weight: 500;
 }
 
