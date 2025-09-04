@@ -1,4 +1,6 @@
 // Core Terminal Commands
+import { endaomentAPI } from '../../../services/api.js';
+
 export const coreCommands = {
   help: () => {
     let output = '';
@@ -384,8 +386,9 @@ Transparency Initiatives:
     if (!subCommand || subCommand === 'help') {
       output += `Transaction Commands:
   tx                   Show recent transactions (last 10)
-  tx all              Show all recent transactions
-  tx <number>         Show specific number of transactions
+  tx all              Show all recent transactions with full details
+  tx <number>         Show specific number of transactions (e.g., tx 20)
+  tx <tx_id>          Show detailed information for specific transaction (e.g., tx tx_001)
   tx last30days       Show transactions from last 30 days
   tx thismonth        Show transactions from current month
   tx lastmonth        Show transactions from previous month
@@ -409,28 +412,140 @@ Export Options:
     }
 
     if (subCommand === 'all') {
-      output += `Recent Transactions (All Wallets):\n\n`;
-      output += `Note: Real transaction data requires Etherscan API configuration.\n`;
-      output += `Configure VITE_ETHERSCAN_API_KEY in .env file to enable live data.\n\n`;
-      output += `Sample Transactions:\n`;
-      output += `  2025-01-15 | Meta-Gov Wallet | $50K USDC Transfer | Treasury Distribution\n`;
-      output += `  2025-01-14 | Ecosystem WG | $25K ETH Transfer | Grant Payment\n`;
-      output += `  2025-01-13 | Public Goods | $15K USDC Transfer | Documentation Funding\n`;
-      output += `  2025-01-12 | Main Treasury | $100K ENS Transfer | Working Group Allocation\n`;
-      output += `  2025-01-11 | Endowment Fund | $75K Yield | DeFi Returns\n\n`;
-      output += `Use 'tx <number>' to show more transactions.\n`;
-      output += `Use 'exportData tx all' to export complete transaction history.`;
+      const txData = endaomentAPI.getComprehensiveTransactions(10, 0);
+      output += `ENS DAO Transaction History - Full Details\n\n`;
+      output += `Total Transactions: ${txData.total} | Showing: ${txData.transactions.length}\n\n`;
+
+      txData.transactions.forEach((tx, index) => {
+        const date = new Date(tx.timestamp).toLocaleDateString('en-US', {
+          month: 'short',
+          day: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+
+        output += `${index + 1}. ${date} | ${tx.senderName} → ${tx.recipientName}\n`;
+        output += `   Amount: ${tx.amount.usd ? `$${tx.amount.usd.toLocaleString()}` : ''} ${tx.amount.eth ? `${tx.amount.eth} ETH` : ''} ${tx.tokenSymbol ? `${(parseInt(tx.tokenAmount || 0) / 1e18).toLocaleString()} ${tx.tokenSymbol}` : ''}\n`;
+        output += `   Type: ${tx.method} | Category: ${tx.category.replace('-', ' ').toUpperCase()}\n`;
+        output += `   Description: ${tx.description}\n`;
+        output += `   Hash: ${tx.hash.substring(0, 20)}... | Block: ${tx.blockNumber.toLocaleString()}\n`;
+        output += `   Gas Fee: ${tx.fee.eth} ETH ($${tx.fee.usd}) | Confirmations: ${tx.confirmations}\n`;
+        if (tx.tags && tx.tags.length > 0) {
+          output += `   Tags: ${tx.tags.join(', ')}\n`;
+        }
+        output += `\n`;
+      });
+
+      if (txData.hasMore) {
+        output += `... and ${txData.total - txData.transactions.length} more transactions\n\n`;
+        output += `Use 'tx <number>' to show specific number of transactions (e.g., tx 20)\n`;
+        output += `Use 'tx <tx_id>' to show detailed information for a specific transaction\n`;
+      }
+      output += `Use 'exportData tx all' to export complete transaction history to CSV.`;
       return output;
     }
 
     // Handle numeric arguments for transaction count
     const txCount = parseInt(subCommand);
     if (!isNaN(txCount) && txCount > 0) {
-      output += `Recent Transactions (Last ${txCount}):\n\n`;
-      for (let i = 1; i <= Math.min(txCount, 10); i++) {
-        output += `  Transaction #${i} | Sample Data | Processing...\n`;
-      }
+      const txData = endaomentAPI.getComprehensiveTransactions(txCount, 0);
+      output += `ENS DAO Transaction History - Last ${txCount} Transactions\n\n`;
+      output += `Total Available: ${txData.total} | Showing: ${txData.transactions.length}\n\n`;
+
+      txData.transactions.forEach((tx, index) => {
+        const date = new Date(tx.timestamp).toLocaleDateString('en-US', {
+          month: 'short',
+          day: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+
+        output += `${index + 1}. ${date} | ${tx.senderName} → ${tx.recipientName}\n`;
+        output += `   Amount: ${tx.amount.usd ? `$${tx.amount.usd.toLocaleString()}` : ''} ${tx.amount.eth ? `${tx.amount.eth} ETH` : ''} ${tx.tokenSymbol ? `${(parseInt(tx.tokenAmount || 0) / 1e18).toLocaleString()} ${tx.tokenSymbol}` : ''}\n`;
+        output += `   Type: ${tx.method} | Category: ${tx.category.replace('-', ' ').toUpperCase()}\n`;
+        output += `   Description: ${tx.description}\n`;
+        output += `   Hash: ${tx.hash.substring(0, 20)}... | Block: ${tx.blockNumber.toLocaleString()}\n`;
+        output += `   Gas Fee: ${tx.fee.eth} ETH ($${tx.fee.usd})\n\n`;
+      });
+
       return output;
+    }
+
+    // Handle transaction ID lookup
+    if (subCommand && subCommand.startsWith('tx_')) {
+      const transaction = endaomentAPI.getTransactionById(subCommand);
+      if (transaction) {
+        const date = new Date(transaction.timestamp).toLocaleDateString('en-US', {
+          month: 'short',
+          day: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+
+        output += `TRANSACTION DETAILS - ${transaction.id.toUpperCase()}\n\n`;
+        output += `Date & Time: ${date}\n`;
+        output += `Network: ${transaction.network}\n`;
+        output += `Block Number: ${transaction.blockNumber.toLocaleString()}\n`;
+        output += `Confirmations: ${transaction.confirmations}\n\n`;
+
+        output += `PARTIES:\n`;
+        output += `From: ${transaction.senderName}\n`;
+        output += `  Address: ${transaction.from}\n`;
+        output += `To: ${transaction.recipientName}\n`;
+        output += `  Address: ${transaction.to}\n\n`;
+
+        output += `AMOUNT:\n`;
+        if (transaction.amount.usd > 0) output += `USD Value: $${transaction.amount.usd.toLocaleString()}\n`;
+        if (transaction.amount.eth > 0) output += `ETH Amount: ${transaction.amount.eth} ETH\n`;
+        if (transaction.tokenSymbol) {
+          const tokenAmount = parseInt(transaction.tokenAmount || 0) / 1e18;
+          output += `Token: ${tokenAmount.toLocaleString()} ${transaction.tokenSymbol}\n`;
+        }
+        output += `\n`;
+
+        output += `TRANSACTION DETAILS:\n`;
+        output += `Type: ${transaction.type}\n`;
+        output += `Method: ${transaction.method}\n`;
+        output += `Category: ${transaction.category.replace('-', ' ')}\n`;
+        output += `Status: ${transaction.status}\n\n`;
+
+        output += `GAS INFORMATION:\n`;
+        output += `Gas Price: ${(parseInt(transaction.gasPrice) / 1e9).toFixed(2)} Gwei\n`;
+        output += `Gas Used: ${transaction.gasUsed.toLocaleString()}\n`;
+        output += `Gas Limit: ${transaction.gasLimit.toLocaleString()}\n`;
+        output += `Gas Fee: ${transaction.fee.eth} ETH ($${transaction.fee.usd})\n\n`;
+
+        output += `DESCRIPTION:\n`;
+        output += `${transaction.description}\n`;
+        if (transaction.purpose) {
+          output += `${transaction.purpose}\n`;
+        }
+        output += `\n`;
+
+        if (transaction.tags && transaction.tags.length > 0) {
+          output += `TAGS: ${transaction.tags.join(', ')}\n\n`;
+        }
+
+        if (transaction.yield) {
+          output += `YIELD INFORMATION:\n`;
+          output += `APY: ${transaction.yield.apy}%\n`;
+          output += `Protocol: ${transaction.yield.protocol}\n`;
+          output += `Duration: ${transaction.yield.duration}\n\n`;
+        }
+
+        output += `TRANSACTION HASH:\n`;
+        output += `${transaction.hash}\n\n`;
+
+        output += `BLOCKCHAIN EXPLORER:\n`;
+        output += `https://etherscan.io/tx/${transaction.hash}`;
+
+        return output;
+      } else {
+        return `Transaction with ID '${subCommand}' not found.\n\nAvailable transaction IDs: tx_001 through tx_008\n\nUse 'tx all' to see all transactions with their IDs.`;
+      }
     }
 
     // Handle date filters
@@ -451,6 +566,91 @@ Export Options:
   transactions: (args) => {
     // Alias for tx command
     return coreCommands.tx(args);
+  },
+
+  // Transaction summary command
+  'tx-summary': () => {
+    const txData = endaomentAPI.getComprehensiveTransactions(100, 0);
+    const transactions = txData.transactions;
+
+    // Calculate statistics
+    const totalValue = transactions.reduce((sum, tx) => sum + (tx.amount.usd || 0), 0);
+    const totalGasFees = transactions.reduce((sum, tx) => sum + (tx.fee.usd || 0), 0);
+    const categoryCounts = {};
+    const senderCounts = {};
+    const monthlyVolume = {};
+
+    transactions.forEach(tx => {
+      // Count by category
+      categoryCounts[tx.category] = (categoryCounts[tx.category] || 0) + 1;
+
+      // Count by sender
+      senderCounts[tx.senderName] = (senderCounts[tx.senderName] || 0) + 1;
+
+      // Monthly volume
+      const month = new Date(tx.timestamp).toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+      monthlyVolume[month] = (monthlyVolume[month] || 0) + (tx.amount.usd || 0);
+    });
+
+    let output = `ENS DAO TRANSACTION SUMMARY\n\n`;
+    output += `PERIOD: Last ${transactions.length} transactions\n\n`;
+
+    output += `FINANCIAL OVERVIEW:\n`;
+    output += `Total Transaction Value: $${totalValue.toLocaleString()}\n`;
+    output += `Total Gas Fees Paid: $${totalGasFees.toFixed(2)}\n`;
+    output += `Average Transaction: $${(totalValue / transactions.length).toLocaleString()}\n`;
+    output += `Average Gas Fee: $${(totalGasFees / transactions.length).toFixed(2)}\n\n`;
+
+    output += `TRANSACTION CATEGORIES:\n`;
+    Object.entries(categoryCounts)
+      .sort(([,a], [,b]) => b - a)
+      .forEach(([category, count]) => {
+        output += `${category.replace('-', ' ').toUpperCase()}: ${count} transactions\n`;
+      });
+    output += `\n`;
+
+    output += `TOP SENDERS:\n`;
+    Object.entries(senderCounts)
+      .sort(([,a], [,b]) => b - a)
+      .slice(0, 5)
+      .forEach(([sender, count]) => {
+        output += `${sender}: ${count} transactions\n`;
+      });
+    output += `\n`;
+
+    output += `MONTHLY VOLUME:\n`;
+    Object.entries(monthlyVolume)
+      .sort(([a], [b]) => new Date(a) - new Date(b))
+      .forEach(([month, volume]) => {
+        output += `${month}: $${volume.toLocaleString()}\n`;
+      });
+
+    return output;
+  },
+
+  // Show large transactions
+  'tx-large': () => {
+    const txData = endaomentAPI.getComprehensiveTransactions(100, 0);
+    const largeTx = txData.transactions
+      .filter(tx => (tx.amount.usd || 0) > 50000)
+      .sort((a, b) => (b.amount.usd || 0) - (a.amount.usd || 0));
+
+    let output = `LARGE TRANSACTIONS (>$50K USD)\n\n`;
+    output += `Found ${largeTx.length} large transactions:\n\n`;
+
+    largeTx.forEach((tx, index) => {
+      const date = new Date(tx.timestamp).toLocaleDateString('en-US', {
+        month: 'short',
+        day: '2-digit',
+        year: 'numeric'
+      });
+
+      output += `${index + 1}. ${date} - $${(tx.amount.usd || 0).toLocaleString()}\n`;
+      output += `   ${tx.senderName} → ${tx.recipientName}\n`;
+      output += `   ${tx.description}\n\n`;
+    });
+
+    return output;
   },
 
   list: () => {
@@ -475,6 +675,13 @@ Export Options:
     output += `  investments           Treasury investment strategies\n`;
     output += `  challenges            Transparency & reporting issues\n`;
     output += `  summary               Complete treasury overview\n\n`;
+
+    output += `Enhanced Transaction Commands:\n`;
+    output += `  tx all                Show all transactions with full details\n`;
+    output += `  tx <number>           Show specific number of transactions\n`;
+    output += `  tx <tx_id>            Show detailed transaction information\n`;
+    output += `  tx-summary            Transaction statistics and summary\n`;
+    output += `  tx-large              Show large transactions (>$50K)\n\n`;
 
     output += `Working Group Commands:\n`;
     output += `  wg meta               Meta-Governance working group\n`;

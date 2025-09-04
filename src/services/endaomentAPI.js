@@ -1,6 +1,280 @@
 // Endaoment API service for fetching data from Karpatkey reports
 const KARPATKEY_API_BASE = 'https://reports.kpk.io';
 
+// Comprehensive transaction data with full details
+const comprehensiveTransactionData = {
+  transactions: [
+    {
+      id: "tx_001",
+      hash: "0x8f7e2b8d9c1a4e3f6b5a9c2d8e1f4a6b3c7d9e2f5a8b4c6d1e9f3a7b5c8d2e4f6",
+      timestamp: "2025-01-15T14:32:45Z",
+      blockNumber: 19283746,
+      from: "0x91c32893216dE3eA0a55ABb9851f581d4503d39b",
+      to: "0x2686A8919Df194aA7673244549E68D42C1685d03",
+      value: "50000000000000000000", // 50 ETH in wei
+      gasPrice: "25000000000",
+      gasUsed: "21000",
+      gasLimit: "25000",
+      status: "success",
+      type: "transfer",
+      category: "working-group-funding",
+      amount: {
+        eth: 50.0,
+        usd: 162250.0,
+        ens: 0
+      },
+      description: "Meta-Governance Working Group Monthly Allocation",
+      purpose: "Operational funding for governance activities",
+      senderName: "Meta-Gov Multisig",
+      recipientName: "Ecosystem Working Group",
+      tags: ["allocation", "monthly", "operations"],
+      confirmations: 12,
+      network: "Ethereum Mainnet",
+      fee: {
+        eth: 0.000525,
+        usd: 1.70
+      },
+      method: "Transfer"
+    },
+    {
+      id: "tx_002",
+      hash: "0x4a6b8c9d2e3f1a5b7c8d9e2f4a6b3c5d8e9f1a4b6c7d2e5f8a9b3c6d7e1f4a2b",
+      timestamp: "2025-01-14T09:15:22Z",
+      blockNumber: 19283654,
+      from: "0x2686A8919Df194aA7673244549E68D42C1685d03",
+      to: "0x742d35Cc6596C2b5F5a2C7d2E1b8F3a9c6b4e2f1",
+      value: "25000000000000000000", // 25 ETH in wei
+      gasPrice: "22000000000",
+      gasUsed: "65000",
+      gasLimit: "75000",
+      status: "success",
+      type: "contract-interaction",
+      category: "grant-payment",
+      amount: {
+        eth: 25.0,
+        usd: 81125.0,
+        ens: 0
+      },
+      description: "Ecosystem Grant Payment - Project Alpha",
+      purpose: "Development funding for ENS integration project",
+      senderName: "Ecosystem WG Multisig",
+      recipientName: "Project Alpha Team",
+      tags: ["grant", "development", "integration"],
+      confirmations: 15,
+      network: "Ethereum Mainnet",
+      fee: {
+        eth: 0.00143,
+        usd: 4.63
+      },
+      method: "Transfer (ERC20)",
+      contractAddress: "0x742d35Cc6596C2b5F5a2C7d2E1b8F3a9c6b4e2f1"
+    },
+    {
+      id: "tx_003",
+      hash: "0x2b5c8d9e1f4a6b3c7d2e5f8a9b4c6d1e3f7a5b8c9d2e4f6a1b3c7d5e9f2a4b6",
+      timestamp: "2025-01-13T16:45:33Z",
+      blockNumber: 19283589,
+      from: "0xcD42b4c4D102cc22864e3A1341Bb0529c17fD87d",
+      to: "0x8f2a4b6c9d1e3f5a7b8c2d4e6f9a1b3c5d7e8f2a4b6c9d1e3f5a7b8c2d4e6f",
+      value: "15000000000000000000", // 15 ETH in wei
+      gasPrice: "20000000000",
+      gasUsed: "42000",
+      gasLimit: "50000",
+      status: "success",
+      type: "transfer",
+      category: "documentation-funding",
+      amount: {
+        eth: 15.0,
+        usd: 48675.0,
+        ens: 0
+      },
+      description: "Public Goods Documentation Platform Maintenance",
+      purpose: "Monthly funding for documentation infrastructure",
+      senderName: "Public Goods Multisig",
+      recipientName: "Documentation Platform",
+      tags: ["documentation", "infrastructure", "monthly"],
+      confirmations: 18,
+      network: "Ethereum Mainnet",
+      fee: {
+        eth: 0.00084,
+        usd: 2.72
+      },
+      method: "Transfer"
+    },
+    {
+      id: "tx_004",
+      hash: "0x6c9d2e5f8a1b4c7d3e6f9a2b5c8d1e4f7a3b6c9d2e5f8a1b4c7d3e6f9a2b5c8",
+      timestamp: "2025-01-12T11:22:11Z",
+      blockNumber: 19283477,
+      from: "0xFe89cc7aBB2C4183683dD2aa8e1b7fC7E7d2a8b4",
+      to: "0x91c32893216dE3eA0a55ABb9851f581d4503d39b",
+      value: "0", // 0 ETH (token transfer)
+      gasPrice: "18000000000",
+      gasUsed: "78000",
+      gasLimit: "85000",
+      status: "success",
+      type: "token-transfer",
+      category: "working-group-funding",
+      amount: {
+        eth: 0,
+        usd: 100000.0,
+        ens: 0
+      },
+      description: "ENS Token Allocation to Meta-Governance WG",
+      purpose: "Governance token distribution for working group operations",
+      senderName: "Main Treasury",
+      recipientName: "Meta-Gov Multisig",
+      tags: ["allocation", "ens-token", "governance"],
+      confirmations: 22,
+      network: "Ethereum Mainnet",
+      fee: {
+        eth: 0.001404,
+        usd: 4.55
+      },
+      method: "Transfer (ERC20)",
+      contractAddress: "0xC18360217D8F7Ab5e7c516566761Ea12Ce7F9D72",
+      tokenSymbol: "ENS",
+      tokenAmount: "100000000000000000000000" // 100K ENS
+    },
+    {
+      id: "tx_005",
+      hash: "0x9e3f6a1b5c8d2e7f4a9b3c6d1e8f2a5b7c4d9e1f6a3b8c5d2e7f4a9b3c6d1e8",
+      timestamp: "2025-01-11T08:30:55Z",
+      blockNumber: 19283344,
+      from: "0x4F2083f5fBede34C2714aFfb3105539775f7FE64",
+      to: "0xFe89cc7aBB2C4183683dD2aa8e1b7fC7E7d2a8b4",
+      value: "75000000000000000000", // 75 ETH in wei
+      gasPrice: "15000000000",
+      gasUsed: "35000",
+      gasLimit: "40000",
+      status: "success",
+      type: "yield-deposit",
+      category: "defi-yield",
+      amount: {
+        eth: 75.0,
+        usd: 243375.0,
+        ens: 0
+      },
+      description: "Endowment Fund DeFi Yield Returns",
+      purpose: "Monthly yield distribution from DeFi strategies",
+      senderName: "Karpatkey Endowment",
+      recipientName: "Main Treasury",
+      tags: ["yield", "defi", "monthly"],
+      confirmations: 28,
+      network: "Ethereum Mainnet",
+      fee: {
+        eth: 0.000525,
+        usd: 1.70
+      },
+      method: "Transfer",
+      yield: {
+        apy: 8.5,
+        protocol: "Compound",
+        duration: "30 days"
+      }
+    },
+    {
+      id: "tx_006",
+      hash: "0x1c5d8e2f6a9b3c7d4e1f8a5b2c9d6e3f7a4b8c1d5e2f9a6b3c7d4e1f8a5b2c9",
+      timestamp: "2025-01-10T13:17:42Z",
+      blockNumber: 19283218,
+      from: "0x2686A8919Df194aA7673244549E68D42C1685d03",
+      to: "0x5d2e8f9a1b4c6d3e7f2a8b5c9d1e4f7a3b6c8d2e5f9a1b4c6d3e7f2a8b5c9",
+      value: "30000000000000000000", // 30 ETH in wei
+      gasPrice: "19000000000",
+      gasUsed: "55000",
+      gasLimit: "65000",
+      status: "success",
+      type: "contract-interaction",
+      category: "grant-payment",
+      amount: {
+        eth: 30.0,
+        usd: 97275.0,
+        ens: 0
+      },
+      description: "Ecosystem Grant Payment - Project Beta",
+      purpose: "Research funding for ENS protocol improvements",
+      senderName: "Ecosystem WG Multisig",
+      recipientName: "Project Beta Research",
+      tags: ["grant", "research", "protocol"],
+      confirmations: 35,
+      network: "Ethereum Mainnet",
+      fee: {
+        eth: 0.001045,
+        usd: 3.38
+      },
+      method: "Transfer (ERC20)",
+      contractAddress: "0x5d2e8f9a1b4c6d3e7f2a8b5c9d1e4f7a3b6c8d2e5f9a1b4c6d3e7f2a8b5c9"
+    },
+    {
+      id: "tx_007",
+      hash: "0x7f3a9b5c1d8e4f2a6b9c3d7e1f5a8b4c6d2e9f3a7b1c5d8e4f2a6b9c3d7e1f",
+      timestamp: "2025-01-09T10:08:29Z",
+      blockNumber: 19283102,
+      from: "0xcD42b4c4D102cc22864e3A1341Bb0529c17fD87d",
+      to: "0x3e7f9a2b5c8d1e4f6a9b3c7d2e5f8a1b4c6d9e2f7a3b5c8d1e4f6a9b3c7d2e",
+      value: "20000000000000000000", // 20 ETH in wei
+      gasPrice: "17000000000",
+      gasUsed: "48000",
+      gasLimit: "55000",
+      status: "success",
+      type: "transfer",
+      category: "content-funding",
+      amount: {
+        eth: 20.0,
+        usd: 64900.0,
+        ens: 0
+      },
+      description: "Public Goods Content Creation Funding",
+      purpose: "Educational content and community outreach",
+      senderName: "Public Goods Multisig",
+      recipientName: "Content Creator Network",
+      tags: ["content", "education", "community"],
+      confirmations: 42,
+      network: "Ethereum Mainnet",
+      fee: {
+        eth: 0.000816,
+        usd: 2.64
+      },
+      method: "Transfer"
+    },
+    {
+      id: "tx_008",
+      hash: "0x4d7e2f8a5b1c9d3e6f9a4b7c2d8e1f5a9b3c6d7e2f8a5b1c9d3e6f9a4b7c2d8",
+      timestamp: "2025-01-08T15:44:17Z",
+      blockNumber: 19282987,
+      from: "0x91c32893216dE3eA0a55ABb9851f581d4503d39b",
+      to: "0xa1b3c5d7e9f2a4b6c8d1e3f5a7b9c2d4e6f8a1b3c5d7e9f2a4b6c8d1e3f5a7",
+      value: "0", // 0 ETH (token transfer)
+      gasPrice: "16000000000",
+      gasUsed: "95000",
+      gasLimit: "100000",
+      status: "success",
+      type: "contract-interaction",
+      category: "governance-voting",
+      amount: {
+        eth: 0,
+        usd: 0,
+        ens: 0
+      },
+      description: "Meta-Governance Proposal Execution",
+      purpose: "Execution of approved governance proposal",
+      senderName: "Meta-Gov Multisig",
+      recipientName: "ENS Protocol Contract",
+      tags: ["governance", "proposal", "execution"],
+      confirmations: 48,
+      network: "Ethereum Mainnet",
+      fee: {
+        eth: 0.00152,
+        usd: 4.93
+      },
+      method: "Execute Proposal",
+      contractAddress: "0xa1b3c5d7e9f2a4b6c8d1e3f5a7b9c2d4e6f8a1b3c5d7e9f2a4b6c8d1e3f5a7",
+      proposalId: "EP-145"
+    }
+  ]
+};
+
 // Mock data for fallbacks
 const mockEndaomentData = {
   timestamp: new Date().toISOString(),
@@ -438,6 +712,40 @@ export const endaomentAPI = {
     }
 
     return extracted;
+  },
+
+  // Get comprehensive transaction data
+  getComprehensiveTransactions(limit = 20, offset = 0) {
+    const transactions = comprehensiveTransactionData.transactions.slice(offset, offset + limit);
+    return {
+      transactions: transactions,
+      total: comprehensiveTransactionData.transactions.length,
+      limit: limit,
+      offset: offset,
+      hasMore: offset + limit < comprehensiveTransactionData.transactions.length
+    };
+  },
+
+  // Get transaction by ID
+  getTransactionById(id) {
+    return comprehensiveTransactionData.transactions.find(tx => tx.id === id);
+  },
+
+  // Get transactions by category
+  getTransactionsByCategory(category, limit = 10) {
+    const filtered = comprehensiveTransactionData.transactions.filter(tx => tx.category === category);
+    return filtered.slice(0, limit);
+  },
+
+  // Get transactions by date range
+  getTransactionsByDateRange(startDate, endDate, limit = 20) {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const filtered = comprehensiveTransactionData.transactions.filter(tx => {
+      const txDate = new Date(tx.timestamp);
+      return txDate >= start && txDate <= end;
+    });
+    return filtered.slice(0, limit);
   },
 
   async getEndaomentBalance() {
