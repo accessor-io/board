@@ -205,20 +205,23 @@ const Terminal = () => {
   };
 
   const fetchWalletTransactions = async (walletAddress, limit = 10) => {
+    console.log('Terminal: fetchWalletTransactions called with:', { walletAddress, limit });
+
     // Check cache first
     const cached = getCachedTransactions(walletAddress);
     if (cached) {
-      console.log(`Using cached transactions for ${walletAddress}`);
+      console.log(`Terminal: Using cached transactions for ${walletAddress}, count: ${cached.length}`);
       return cached;
     }
 
     try {
-      console.log(`Fetching fresh transactions for ${walletAddress}`);
+      console.log(`Terminal: Fetching fresh transactions for ${walletAddress}`);
       const transactions = await transactionService.fetchRealTransactions(walletAddress, limit);
+      console.log(`Terminal: Fetched ${transactions.length} transactions`);
       setCachedTransactions(walletAddress, transactions);
       return transactions;
     } catch (error) {
-      console.error(`Error fetching transactions for ${walletAddress}:`, error);
+      console.error(`Terminal: Error fetching transactions for ${walletAddress}:`, error);
       return [];
     }
   };

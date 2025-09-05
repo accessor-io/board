@@ -43,6 +43,8 @@ export const transactionService = {
       return [];
     }
 
+    console.log('Transaction service called with:', { walletAddress, limit, apiKey: ETHERSCAN_API_KEY ? 'Present' : 'Missing' });
+
     // If no API key, return mock data
     if (!ETHERSCAN_API_KEY) {
       console.log('No API key configured, using mock data');
@@ -50,13 +52,17 @@ export const transactionService = {
     }
 
     try {
+      console.log('Making API call to Etherscan...');
       const response = await fetch(
         `https://api.etherscan.io/api?module=account&action=txlist&address=${walletAddress}&startblock=0&endblock=99999999&page=1&offset=${limit}&sort=desc&apikey=${ETHERSCAN_API_KEY}`
       );
 
+      console.log('API response status:', response.status);
       const data = await response.json();
+      console.log('API response data:', { status: data.status, message: data.message, resultCount: data.result?.length || 0 });
 
       if (data.status === '1' && data.result) {
+        console.log('Successfully fetched transactions:', data.result.length);
         return data.result.map(tx => ({
           hash: tx.hash,
           from: tx.from,
@@ -75,7 +81,7 @@ export const transactionService = {
       }
 
       // If API fails, fall back to mock data
-      console.log('API call failed, using mock data');
+      console.log('API call failed or returned no results, using mock data');
       return mockTransactions.slice(0, limit);
     } catch (error) {
       console.error('Error fetching transactions:', error);
