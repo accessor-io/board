@@ -1,50 +1,135 @@
 // Financial Analysis Commands
 export const financialCommands = {
-  overview: () => `ENS DAO FUNDING MECHANISMS OVERVIEW
+  overview: () => `<div class="output-container">
+  <header class="section-header">ENS DAO Funding Mechanisms Overview</header>
+  <div class="section-border">═══════════════════════════════════════════════════════════════</div>
 
-PRIMARY REVENUE STREAMS:
-• Domain Registration Fees: $40M+ annually from .eth domains
-• Premium Auctions: High-value domain auctions (Vitalik.eth, etc.)
-• Treasury Management: DeFi yield from treasury assets
-• Ecosystem Grants: Revenue sharing from ecosystem projects
+  <section class="financial-section">
+    <h3 class="section-subtitle">Primary Revenue Streams:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <span class="command-description">Domain Registration Fees:</span> <span class="tx-value">$40M+ annually from .eth domains</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Premium Auctions:</span> <span class="status-success">High-value domain auctions (Vitalik.eth, etc.)</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Treasury Management:</span> <span class="status-success">DeFi yield from treasury assets</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Ecosystem Grants:</span> <span class="status-success">Revenue sharing from ecosystem projects</span>
+      </div>
+    </div>
 
-CURRENT TREASURY COMPOSITION:
-• Main Treasury: ~$246M in stablecoins and ETH
-• Endowment Fund: ~$12M managed by Karpatkey
-• Working Group Reserves: ~$2-5M per group for operations
-• Emergency Reserves: ~$10M in stablecoins
+    <h3 class="section-subtitle">Current Treasury Composition:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <span class="command-description">Main Treasury:</span> <span class="tx-value">~$246M in stablecoins and ETH</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Endowment Fund:</span> <span class="tx-value">~$12M managed by Karpatkey</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Working Group Reserves:</span> <span class="tx-value">~$2-5M per group for operations</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Emergency Reserves:</span> <span class="tx-value">~$10M in stablecoins</span>
+      </div>
+    </div>
 
-FUNDING ALLOCATION PRIORITIES:
-• 40% Ecosystem Development: Grants and bounties
-• 30% Working Group Operations: Meta-Gov, Ecosystem, Public Goods
-• 20% Treasury Management: DeFi yield generation
-• 10% Emergency Reserves: Protocol security and recovery
+    <h3 class="section-subtitle">Funding Allocation Priorities:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <span class="command-description">40% Ecosystem Development:</span> <span class="status-info">Grants and bounties</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">30% Working Group Operations:</span> <span class="status-info">Meta-Gov, Ecosystem, Public Goods</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">20% Treasury Management:</span> <span class="status-info">DeFi yield generation</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">10% Emergency Reserves:</span> <span class="status-info">Protocol security and recovery</span>
+      </div>
+    </div>
 
-GOVERNANCE MECHANISMS:
-• ENS Token: $ENS governance token for protocol decisions
-• Working Groups: Specialized governance for different areas
-• Treasury Council: Multi-sig control over large expenditures
-• Community Proposals: Snapshot voting for smaller decisions`,
+    <h3 class="section-subtitle">Governance Mechanisms:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <span class="command-description">ENS Token:</span> <span class="status-success">$ENS governance token for protocol decisions</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Working Groups:</span> <span class="status-success">Specialized governance for different areas</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Treasury Council:</span> <span class="status-success">Multi-sig control over large expenditures</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Community Proposals:</span> <span class="status-success">Snapshot voting for smaller decisions</span>
+      </div>
+    </div>
+  </section>
+</div>`,
 
-  revenue: () => `REVENUE GENERATION & COLLECTION
-PRIMARY REVENUE SOURCES:
-• Registration Fees: ETH for .eth domains
-  - 3-char: $640/year, 4-char: $160/year, 5+: $5/year
-  - Accrual basis: Recognized over service period
-• Premium Fees: Temporary auctions (21 days)
-  - High starting prices ($100M+), decrease to $0
-  - Recognized at transaction time
-• Endowment DeFi Results: Karpatkey-managed yield
-  - Monthly recognition basis
+  revenue: () => `<div class="output-container">
+  <header class="section-header">Revenue Generation & Collection</header>
+  <div class="section-border">═══════════════════════════════════════════════════════════════</div>
 
-REVENUE INFLOW MECHANISM:
-• Registrar Controller: 0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5
-  - $30K/day average inflow (~$1M/month)
-  - Collects all .eth registration/renewal fees
-• Monthly Revenue Sweeps:
-  - Funds transferred to DAO timelock
-  - Portion converted to stablecoins (USDC/DAI)
-  - Excess ETH sent to endowment fund`,
+  <section class="financial-section">
+    <h3 class="section-subtitle">Primary Revenue Sources:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <span class="command-description">Registration Fees:</span> <span class="status-info">ETH for .eth domains</span>
+        <div class="command-subitem">
+          <span class="tx-value">3-char: $640/year, 4-char: $160/year, 5+: $5/year</span>
+        </div>
+        <div class="command-subitem">
+          <span class="status-success">Accrual basis: Recognized over service period</span>
+        </div>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Premium Fees:</span> <span class="status-info">Temporary auctions (21 days)</span>
+        <div class="command-subitem">
+          <span class="tx-value">High starting prices ($100M+), decrease to $0</span>
+        </div>
+        <div class="command-subitem">
+          <span class="status-success">Recognized at transaction time</span>
+        </div>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Endowment DeFi Results:</span> <span class="status-info">Karpatkey-managed yield</span>
+        <div class="command-subitem">
+          <span class="status-success">Monthly recognition basis</span>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="section-subtitle">Revenue Inflow Mechanism:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <span class="command-description">Registrar Controller:</span> <span class="wallet-address">0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5</span>
+        <div class="command-subitem">
+          <span class="tx-value">$30K/day average inflow (~$1M/month)</span>
+        </div>
+        <div class="command-subitem">
+          <span class="status-success">Collects all .eth registration/renewal fees</span>
+        </div>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Monthly Revenue Sweeps:</span>
+        <div class="command-subitem">
+          <span class="status-success">Funds transferred to DAO timelock</span>
+        </div>
+        <div class="command-subitem">
+          <span class="status-success">Portion converted to stablecoins (USDC/DAI)</span>
+        </div>
+        <div class="command-subitem">
+          <span class="status-success">Excess ETH sent to endowment fund</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>`,
 
   compensation: () => `STEWARD & OFFICER COMPENSATION
 SERVICE PROVIDER COMPENSATION:

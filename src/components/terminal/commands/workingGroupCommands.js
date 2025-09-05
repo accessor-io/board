@@ -5,110 +5,347 @@ export const workingGroupCommands = {
     const subCommand = args[0];
     switch (subCommand) {
       case 'info':
-        return `META-GOVERNANCE WORKING GROUP
+        return `<div class="output-container">
+  <header class="section-header">Meta-Governance Working Group</header>
+  <div class="section-border">═══════════════════════════════════════════════════════════════</div>
 
-OVERVIEW:
-The Meta-Governance working group manages ENS DAO's governance infrastructure,
-smart contract upgrades, and protocol-level decision making.
+  <section class="wg-section">
+    <h3 class="section-subtitle">Overview:</h3>
+    <div class="command-description">The Meta-Governance working group manages ENS DAO's governance infrastructure, smart contract upgrades, and protocol-level decision making.</div>
 
-KEY RESPONSIBILITIES:
-• Smart contract development and security audits
-• Governance proposal creation and execution
-• Treasury management and fund allocation
-• Cross-working group coordination
-• Risk assessment and mitigation
+    <h3 class="section-subtitle">Key Responsibilities:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <span class="status-success">Smart contract development and security audits</span>
+      </div>
+      <div class="command-item">
+        <span class="status-success">Governance proposal creation and execution</span>
+      </div>
+      <div class="command-item">
+        <span class="status-success">Treasury management and fund allocation</span>
+      </div>
+      <div class="command-item">
+        <span class="status-success">Cross-working group coordination</span>
+      </div>
+      <div class="command-item">
+        <span class="status-success">Risk assessment and mitigation</span>
+      </div>
+    </div>
 
-CURRENT PROJECTS:
-• Governance framework improvements
-• Multi-sig security enhancements
-• Treasury diversification strategies
-• Protocol upgrade planning
+    <h3 class="section-subtitle">Current Projects:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <span class="status-info">Governance framework improvements</span>
+      </div>
+      <div class="command-item">
+        <span class="status-info">Multi-sig security enhancements</span>
+      </div>
+      <div class="command-item">
+        <span class="status-info">Treasury diversification strategies</span>
+      </div>
+      <div class="command-item">
+        <span class="status-info">Protocol upgrade planning</span>
+      </div>
+    </div>
 
-TEAM COMPOSITION:
-• Technical Stewards: 3-4 active members
-• Governance Specialists: Domain experts
-• Security Researchers: External auditors
-• Community Liaisons: Cross-group coordination
+    <h3 class="section-subtitle">Team Composition:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <span class="command-description">Technical Stewards:</span> <span class="status-success">3-4 active members</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Governance Specialists:</span> <span class="status-success">Domain experts</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Security Researchers:</span> <span class="status-success">External auditors</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Community Liaisons:</span> <span class="status-success">Cross-group coordination</span>
+      </div>
+    </div>
 
-BUDGET ALLOCATION:
-• Monthly Budget: $25K-40K
-• Contract Audits: $15K-25K per audit
-• Development Tools: $5K-10K monthly
-• Conference Attendance: $2K-5K quarterly`;
+    <h3 class="section-subtitle">Budget Allocation:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <span class="command-description">Monthly Budget:</span> <span class="tx-value">$25K-40K</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Contract Audits:</span> <span class="tx-value">$15K-25K per audit</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Development Tools:</span> <span class="tx-value">$5K-10K monthly</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Conference Attendance:</span> <span class="tx-value">$2K-5K quarterly</span>
+      </div>
+    </div>
+  </section>
+</div>`;
 
       case 'budget':
-        return `META-GOVERNANCE BUDGET ALLOCATION
+        return `<div class="output-container">
+  <header class="section-header">Meta-Governance Budget Allocation</header>
+  <div class="section-border">═══════════════════════════════════════════════════════════════</div>
 
-MONTHLY OPERATING BUDGET: $35,000
+  <section class="wg-section">
+    <h3 class="section-subtitle">Monthly Operating Budget:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <span class="tx-value">$35,000</span>
+      </div>
+    </div>
 
-BREAKDOWN BY CATEGORY:
-• Technical Development: $15,000
-  - Smart contract development
-  - Protocol upgrades and maintenance
-• Security & Audits: $12,000
-  - External security audits
-  - Bug bounty programs
-  - Security monitoring tools
-• Governance Operations: $5,000
-  - Proposal creation and management
-  - Community outreach
-  - Documentation updates
-• Tools & Infrastructure: $3,000
-  - Development environments
-  - Testing frameworks
-  - Deployment automation
+    <h3 class="section-subtitle">Breakdown by Category:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <span class="command-description">Technical Development:</span> <span class="tx-value">$15,000</span>
+        <div class="command-subitem">
+          <span class="status-info">Smart contract development</span>
+        </div>
+        <div class="command-subitem">
+          <span class="status-info">Protocol upgrades and maintenance</span>
+        </div>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Security & Audits:</span> <span class="tx-value">$12,000</span>
+        <div class="command-subitem">
+          <span class="status-info">External security audits</span>
+        </div>
+        <div class="command-subitem">
+          <span class="status-info">Bug bounty programs</span>
+        </div>
+        <div class="command-subitem">
+          <span class="status-info">Security monitoring tools</span>
+        </div>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Governance Operations:</span> <span class="tx-value">$5,000</span>
+        <div class="command-subitem">
+          <span class="status-info">Proposal creation and management</span>
+        </div>
+        <div class="command-subitem">
+          <span class="status-info">Community outreach</span>
+        </div>
+        <div class="command-subitem">
+          <span class="status-info">Documentation updates</span>
+        </div>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Tools & Infrastructure:</span> <span class="tx-value">$3,000</span>
+        <div class="command-subitem">
+          <span class="status-info">Development environments</span>
+        </div>
+        <div class="command-subitem">
+          <span class="status-info">Testing frameworks</span>
+        </div>
+        <div class="command-subitem">
+          <span class="status-info">Deployment automation</span>
+        </div>
+      </div>
+    </div>
 
-QUARTERLY ALLOCATIONS:
-• Conference & Event Attendance: $8,000
-• Training & Education: $3,000
-• Emergency Fund: $5,000
+    <h3 class="section-subtitle">Quarterly Allocations:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <span class="command-description">Conference & Event Attendance:</span> <span class="tx-value">$8,000</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Training & Education:</span> <span class="tx-value">$3,000</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Emergency Fund:</span> <span class="tx-value">$5,000</span>
+      </div>
+    </div>
 
-FISCAL YEAR TOTALS:
-• Total Budget: $420,000
-• Projected Utilization: 95%
-• Carry-forward: $21,000`;
+    <h3 class="section-subtitle">Fiscal Year Totals:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <span class="command-description">Total Budget:</span> <span class="tx-value">$420,000</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Projected Utilization:</span> <span class="status-success">95%</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Carry-forward:</span> <span class="status-info">$21,000</span>
+      </div>
+    </div>
+  </section>
+</div>`;
 
       case 'funding':
-        return `META-GOVERNANCE FUNDING SOURCES
+        return `<div class="output-container">
+  <header class="section-header">Meta-Governance Funding Sources</header>
+  <div class="section-border">═══════════════════════════════════════════════════════════════</div>
 
-PRIMARY FUNDING MECHANISMS:
-• Direct Treasury Allocation: Monthly distribution from main treasury
-• Working Group Reserve: Dedicated 15M $ENS allocation
-• Performance Bonuses: Milestone-based additional funding
-• Grant Program Access: Ecosystem development grants
+  <section class="wg-section">
+    <h3 class="section-subtitle">Primary Funding Mechanisms:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <span class="command-description">Direct Treasury Allocation:</span> <span class="status-info">Monthly distribution from main treasury</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Working Group Reserve:</span> <span class="status-info">Dedicated 15M $ENS allocation</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Performance Bonuses:</span> <span class="status-info">Milestone-based additional funding</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Grant Program Access:</span> <span class="status-info">Ecosystem development grants</span>
+      </div>
+    </div>
 
-FUNDING TRANSPARENCY:
-• Monthly Budget Reports: Detailed expenditure tracking
-• Milestone Deliverables: Performance-based funding release
-• Audit Requirements: Third-party financial verification
-• Community Oversight: Public budget review and approval
+    <h3 class="section-subtitle">Funding Transparency:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <span class="command-description">Monthly Budget Reports:</span> <span class="status-success">Detailed expenditure tracking</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Milestone Deliverables:</span> <span class="status-success">Performance-based funding release</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Audit Requirements:</span> <span class="status-success">Third-party financial verification</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Community Oversight:</span> <span class="status-success">Public budget review and approval</span>
+      </div>
+    </div>
 
-CURRENT FUNDING STATUS:
-• Monthly Allocation: $35,000 approved
-• Reserve Balance: $125,000 available
-• Pending Milestones: 3 active deliverables
-• Next Review Cycle: End of quarter`;
+    <h3 class="section-subtitle">Current Funding Status:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <span class="command-description">Monthly Allocation:</span> <span class="tx-value">$35,000 approved</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Reserve Balance:</span> <span class="tx-value">$125,000 available</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Pending Milestones:</span> <span class="status-warning">3 active deliverables</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Next Review Cycle:</span> <span class="status-info">End of quarter</span>
+      </div>
+    </div>
+  </section>
+</div>`;
 
       case 'tx':
-        return `META-GOVERNANCE TRANSACTION HISTORY
+        return `<div class="output-container">
+  <header class="section-header">Meta-Governance Transaction History</header>
+  <div class="section-border">═══════════════════════════════════════════════════════════════</div>
 
-RECENT TRANSACTIONS:
-• 2025-01-15 | Meta-Gov Wallet A | $45K USDC | Security Audit Payment
-• 2025-01-14 | Meta-Gov Wallet B | $12K ETH | Smart Contract Development
-• 2025-01-13 | Meta-Gov Multisig | $8K USDC | Governance Tool Maintenance
-• 2025-01-12 | Meta-Gov Reserve | $25K ENS | Working Group Allocation
-• 2025-01-11 | Meta-Gov Wallet A | $15K USDC | Protocol Upgrade Costs
+  <section class="wg-section">
+    <h3 class="section-subtitle">Recent Transactions:</h3>
+    <table class="transaction-table" role="table" aria-label="Meta-Governance Recent Transactions">
+      <thead>
+        <tr>
+          <th scope="col" class="table-header table-header-date">Date</th>
+          <th scope="col" class="table-header table-header-wallet">Wallet</th>
+          <th scope="col" class="table-header table-header-value">Value</th>
+          <th scope="col" class="table-header table-header-description">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="transaction-row" role="row">
+          <td class="table-cell table-cell-date" role="gridcell">
+            <span class="text">2025-01-15</span>
+          </td>
+          <td class="table-cell table-cell-wallet" role="gridcell">
+            <span class="text">Meta-Gov Wallet A</span>
+          </td>
+          <td class="table-cell table-cell-value" role="gridcell">
+            <span class="text">$45K USDC</span>
+          </td>
+          <td class="table-cell table-cell-description" role="gridcell">
+            <span class="text">Security Audit Payment</span>
+          </td>
+        </tr>
+        <tr class="transaction-row" role="row">
+          <td class="table-cell table-cell-date" role="gridcell">
+            <span class="text">2025-01-14</span>
+          </td>
+          <td class="table-cell table-cell-wallet" role="gridcell">
+            <span class="text">Meta-Gov Wallet B</span>
+          </td>
+          <td class="table-cell table-cell-value" role="gridcell">
+            <span class="text">$12K ETH</span>
+          </td>
+          <td class="table-cell table-cell-description" role="gridcell">
+            <span class="text">Smart Contract Development</span>
+          </td>
+        </tr>
+        <tr class="transaction-row" role="row">
+          <td class="table-cell table-cell-date" role="gridcell">
+            <span class="text">2025-01-13</span>
+          </td>
+          <td class="table-cell table-cell-wallet" role="gridcell">
+            <span class="text">Meta-Gov Multisig</span>
+          </td>
+          <td class="table-cell table-cell-value" role="gridcell">
+            <span class="text">$8K USDC</span>
+          </td>
+          <td class="table-cell table-cell-description" role="gridcell">
+            <span class="text">Governance Tool Maintenance</span>
+          </td>
+        </tr>
+        <tr class="transaction-row" role="row">
+          <td class="table-cell table-cell-date" role="gridcell">
+            <span class="text">2025-01-12</span>
+          </td>
+          <td class="table-cell table-cell-wallet" role="gridcell">
+            <span class="text">Meta-Gov Reserve</span>
+          </td>
+          <td class="table-cell table-cell-value" role="gridcell">
+            <span class="text">$25K ENS</span>
+          </td>
+          <td class="table-cell table-cell-description" role="gridcell">
+            <span class="text">Working Group Allocation</span>
+          </td>
+        </tr>
+        <tr class="transaction-row" role="row">
+          <td class="table-cell table-cell-date" role="gridcell">
+            <span class="text">2025-01-11</span>
+          </td>
+          <td class="table-cell table-cell-wallet" role="gridcell">
+            <span class="text">Meta-Gov Wallet A</span>
+          </td>
+          <td class="table-cell table-cell-value" role="gridcell">
+            <span class="text">$15K USDC</span>
+          </td>
+          <td class="table-cell table-cell-description" role="gridcell">
+            <span class="text">Protocol Upgrade Costs</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
-TRANSACTION FILTERS:
-• wg meta tx all        Show all Meta-Gov transactions
-• wg meta tx <number>   Show specific number of transactions
-• wg meta tx <date>     Filter by date (e.g., wg meta tx last30days)
+    <h3 class="section-subtitle">Transaction Filters:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <code class="command-name">wg meta tx all</code> <span class="command-description">Show all Meta-Gov transactions</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">wg meta tx &lt;number&gt;</code> <span class="command-description">Show specific number of transactions</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">wg meta tx &lt;date&gt;</code> <span class="command-description">Filter by date (e.g., wg meta tx last30days)</span>
+      </div>
+    </div>
 
-EXPORT OPTIONS:
-• exportData tx wg meta         Export Meta-Gov transactions to CSV
-• exportData tx wg meta last30days  Export filtered transactions
+    <h3 class="section-subtitle">Export Options:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <code class="command-name">exportData tx wg meta</code> <span class="command-description">Export Meta-Gov transactions to CSV</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">exportData tx wg meta last30days</code> <span class="command-description">Export filtered transactions</span>
+      </div>
+    </div>
 
-Note: Real transaction data requires Etherscan API configuration.`;
+    <div class="command-description">
+      <span class="status-info">Note: Real transaction data requires Etherscan API configuration.</span>
+    </div>
+  </section>
+</div>`;
 
       case 'help':
         return `META-GOVERNANCE WORKING GROUP COMMANDS:
