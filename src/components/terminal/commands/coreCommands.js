@@ -1,5 +1,5 @@
 // Core Terminal Commands
-import { endaomentAPI } from '../../../services/api.js';
+import { endaomentAPI } from '../../../services/endaomentAPI.js';
 
 export const coreCommands = {
   help: () => {

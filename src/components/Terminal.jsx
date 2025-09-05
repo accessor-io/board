@@ -6,32 +6,162 @@ import '../styles/terminal.css';
 // Import environment variables
 const ETHERSCAN_API_KEY = import.meta.env.VITE_ETHERSCAN_API_KEY || 'demo';
 
-// Wallet directory - dynamically configurable
+// Utility function to detect and format URLs as clickable links
+const formatOutputWithLinks = (text) => {
+  // URL regex pattern
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+  // Split text by URLs and format
+  const parts = text.split(urlRegex);
+
+  return parts.map((part, index) => {
+    if (urlRegex.test(part)) {
+      return `<a href="${part}" target="_blank" rel="noopener noreferrer" class="terminal-link">${part}</a>`;
+    }
+    return part;
+  }).join('');
+};
+
+// Utility function to resolve ENS names from addresses
+const resolveENSName = async (address) => {
+  if (!address || !address.startsWith('0x')) {
+    return address;
+  }
+
+  try {
+    // Use Etherscan API for ENS resolution (if available)
+    if (ETHERSCAN_API_KEY && ETHERSCAN_API_KEY !== 'demo') {
+      const response = await fetch(`https://api.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=1&sort=asc&apikey=${ETHERSCAN_API_KEY}`);
+      // For now, just return the shortened address
+      // In a real implementation, you'd use the ENS API or Ethers.js
+    }
+
+    // Fallback: Check if we have a known ENS mapping
+    const knownENSMappings = {
+      '0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7': 'ens.eth',
+      '0xCF60916b6CB4753f58533808fA610FcbD4098Ec0': 'gnosis-safe.eth',
+      '0x911143d946bA5d467BfC476491fdb235fEf4D667': 'multisig.eth',
+      '0x2686A8919Df194aA7673244549E68D42C1685d03': 'ecosystem.eth',
+      '0x536013c57DAF01D78e8a70cAd1B1abAda9411819': 'ecosystem-irl.eth',
+      '0xcD42b4c4D102cc22864e3A1341Bb0529c17fD87d': 'public-goods.eth',
+      '0xebA76C907F02BA13064EDAD7876Fe51D9d856F62': 'public-goods-2.eth'
+    };
+
+    if (knownENSMappings[address]) {
+      return knownENSMappings[address];
+    }
+
+    // Return shortened address if no ENS found
+    return address.substring(0, 12);
+  } catch (error) {
+    console.warn('ENS resolution failed:', error);
+    return address.substring(0, 12);
+  }
+};
+
+// Complete ENS DAO wallet directory
 const walletDirectory = [
   {
     address: '0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7',
-    label: 'ENS DAO Main Treasury',
-    category: 'dao-treasury'
+    label: 'ENS DAO Wallet',
+    category: 'dao-treasury',
+    description: 'Main ENS DAO treasury wallet'
   },
   {
-    address: '0x91c32893216dE3eA0a55ABb9851f581d4503d39b',
-    label: 'Meta-Governance WG Multisig',
-    category: 'working-group-meta'
+    address: '0xCF60916b6CB4753f58533808fA610FcbD4098Ec0',
+    label: 'ENS Gnosis Safe',
+    category: 'multisig',
+    description: 'Primary multisig wallet'
   },
   {
-    address: '0xcD42b4c4D102cc22864e3A1341Bb0529c17fD87d',
-    label: 'Public Goods WG Main Multisig',
-    category: 'working-group-public'
+    address: '0x911143d946bA5d467BfC476491fdb235fEf4D667',
+    label: 'ENS Multisig',
+    category: 'multisig',
+    description: 'General purpose multisig'
   },
   {
-    address: '0xebA76C907F02BA13064EDAD7876Fe51D9d856F62',
-    label: 'Public Goods WG Large Grants',
-    category: 'working-group-public'
+    address: '0x4F2083f5fBede34C2714aFfb3105539775f7FE64',
+    label: 'ENS EnDAOment',
+    category: 'endaoment',
+    description: 'Endowment fund wallet'
+  },
+  {
+    address: '0xC18360217D8F7Ab5e7c516566761Ea12Ce7F9D72',
+    label: 'ENS Token',
+    category: 'contract',
+    description: 'ENS token contract'
   },
   {
     address: '0x2686A8919Df194aA7673244549E68D42C1685d03',
-    label: 'Ecosystem WG Main Multisig',
-    category: 'working-group-ecosystem'
+    label: 'ENS DAO Multisig, Eco Main',
+    category: 'working-group-ecosystem',
+    description: 'Ecosystem WG main multisig'
+  },
+  {
+    address: '0x536013c57DAF01D78e8a70cAd1B1abAda9411819',
+    label: 'ENS DAO Multisig, Eco IRL',
+    category: 'working-group-ecosystem',
+    description: 'Ecosystem WG IRL multisig'
+  },
+  {
+    address: '0x9B9c249Be04dd433c7e8FbBF5E61E6741b89966D',
+    label: 'ENS DAO Multisig, Hackathons',
+    category: 'working-group-ecosystem',
+    description: 'Hackathon funding multisig'
+  },
+  {
+    address: '0x13aEe52C1C688d3554a15556c5353cb0c3696ea2',
+    label: 'ENS DAO Multisig, Newsletters',
+    category: 'working-group-meta',
+    description: 'Newsletter and communications'
+  },
+  {
+    address: '0x91c32893216dE3eA0a55ABb9851f581d4503d39b',
+    label: 'ENS DAO Multisig, Metagov Main',
+    category: 'working-group-meta',
+    description: 'Meta-Governance main multisig'
+  },
+  {
+    address: '0xB162Bf7A7fD64eF32b787719335d06B2780e31D1',
+    label: 'ENS DAO Multisig, Metgov Stream',
+    category: 'working-group-meta',
+    description: 'Meta-Governance streaming payments'
+  },
+  {
+    address: '0xcD42b4c4D102cc22864e3A1341Bb0529c17fD87d',
+    label: 'ENS DAO Multisig, Public Goods Main',
+    category: 'working-group-public',
+    description: 'Public Goods main multisig'
+  },
+  {
+    address: '0xebA76C907F02BA13064EDAD7876Fe51D9d856F62',
+    label: 'ENS DAO Multisig, Public Goods Large Grants',
+    category: 'working-group-public',
+    description: 'Large grants multisig'
+  },
+  {
+    address: '0xF0AD5cAd05e10572EfcEB849f6Ff0c68f9700455',
+    label: 'ETHRegistrarController 1',
+    category: 'registrar',
+    description: 'Domain registration controller 1'
+  },
+  {
+    address: '0xB22c1C159d12461EA124b0deb4b5b93020E6Ad16',
+    label: 'ETHRegistrarController 2',
+    category: 'registrar',
+    description: 'Domain registration controller 2'
+  },
+  {
+    address: '0x283Af0B28c62C092C9727F1Ee09c02CA627EB7F5',
+    label: 'ETHRegistrarController 3',
+    category: 'registrar',
+    description: 'Domain registration controller 3'
+  },
+  {
+    address: '0x253553366Da8546fC250F225fe3d25d0C782303b',
+    label: 'ETHRegistrarController 4',
+    category: 'registrar',
+    description: 'Domain registration controller 4'
   }
 ];
 
@@ -51,6 +181,47 @@ const Terminal = () => {
   const [completionIndex, setCompletionIndex] = useState(0);
   const [currentCompletions, setCurrentCompletions] = useState([]);
   const [originalCommand, setOriginalCommand] = useState('');
+
+  // Transaction cache state
+  const [transactionCache, setTransactionCache] = useState(new Map());
+  const [cacheTimestamps, setCacheTimestamps] = useState(new Map());
+
+  // Cache management functions
+  const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
+  const getCachedTransactions = (address) => {
+    const cached = transactionCache.get(address);
+    const timestamp = cacheTimestamps.get(address);
+
+    if (cached && timestamp && (Date.now() - timestamp) < CACHE_DURATION) {
+      return cached;
+    }
+    return null;
+  };
+
+  const setCachedTransactions = (address, transactions) => {
+    setTransactionCache(prev => new Map(prev.set(address, transactions)));
+    setCacheTimestamps(prev => new Map(prev.set(address, Date.now())));
+  };
+
+  const fetchWalletTransactions = async (walletAddress, limit = 10) => {
+    // Check cache first
+    const cached = getCachedTransactions(walletAddress);
+    if (cached) {
+      console.log(`Using cached transactions for ${walletAddress}`);
+      return cached;
+    }
+
+    try {
+      console.log(`Fetching fresh transactions for ${walletAddress}`);
+      const transactions = await transactionService.fetchRealTransactions(walletAddress, limit);
+      setCachedTransactions(walletAddress, transactions);
+      return transactions;
+    } catch (error) {
+      console.error(`Error fetching transactions for ${walletAddress}:`, error);
+      return [];
+    }
+  };
 
   // Update time every second
   useEffect(() => {
@@ -77,7 +248,7 @@ const Terminal = () => {
     // Available main commands
     const mainCommands = [
       'help', 'commands', 'clear', 'ls', 'status', 'time', 'date', 'history', 'uptime', 'whoami', 'exit',
-      'overview', 'assets', 'analytics', 'tx', 'transactions', 'wallets', 'revenue', 'compensation',
+      'overview', 'assets', 'analytics', 'tx', 'transactions', 'wallets', 'select', 'revenue', 'compensation',
       'governance', 'investments', 'challenges', 'summary', 'wg', 'spp', 'exportData', 'cd'
     ];
 
@@ -179,12 +350,24 @@ const Terminal = () => {
 
       case 'wallets':
         if (parts.length === 2) {
-          const walletCommands = ['all', 'wg', 'dao', 'treasury'];
+          const walletCommands = ['list', 'select'];
           return walletCommands.filter(cmd => cmd.startsWith(lastPart));
         }
-        if (parts.length === 3 && parts[1] === 'wg') {
-          const wgTypes = ['meta', 'ecosystem', 'eco', 'public'];
-          return wgTypes.filter(cmd => cmd.startsWith(lastPart));
+        if (parts.length === 3 && parts[1] === 'select') {
+          // Return wallet numbers as completion options
+          const walletNumbers = Array.from({length: walletDirectory.length}, (_, i) => (i + 1).toString());
+          return walletNumbers.filter(num => num.startsWith(lastPart));
+        }
+        break;
+
+      case 'select':
+        if (parts.length === 2) {
+          return ['wallet'].filter(cmd => cmd.startsWith(lastPart));
+        }
+        if (parts.length === 3 && parts[1] === 'wallet') {
+          // Return wallet numbers as completion options
+          const walletNumbers = Array.from({length: walletDirectory.length}, (_, i) => (i + 1).toString());
+          return walletNumbers.filter(num => num.startsWith(lastPart));
         }
         break;
 
@@ -270,7 +453,8 @@ const Terminal = () => {
       output += '  analytics       Accounting & transparency analysis\n';
       output += '  transactions    Transaction history (transactions <address>)\n';
       output += '  tx              Transaction details (tx <address>)\n';
-      output += '  wallets         Working group multisig wallets\n';
+      output += '  wallets         Wallet selection (wallets list/select)\n';
+      output += '  select          Select wallet by number (select wallet <num>)\n';
       output += '  status          Current financial infrastructure\n\n';
       output += 'Working Group Commands:\n';
       output += '  wg meta          Meta-Governance details & compensation\n';
@@ -451,11 +635,11 @@ Governance Incentives:
           return output;
         }
 
-        // Transaction rows
-        transactions.forEach((tx, index) => {
-          const num = String(index + 1);
-          const hash = tx.hash.substring(0, 10);
-          const addrLabel = tx.type === 'OUTBOUND' ? 'To:' : 'From:';
+      // Transaction rows
+      transactions.forEach((tx, index) => {
+        const num = String(index + 1);
+        const hash = tx.hash.substring(0, 10);
+        const addrLabel = tx.type === 'OUTBOUND' ? 'To:' : 'From:';
           const addrClass = tx.type === 'OUTBOUND' ? 'tx-direction-to' : 'tx-direction-from';
           const addr = (tx.type === 'OUTBOUND' ? tx.to : tx.from).substring(0, 42);
 
@@ -468,10 +652,10 @@ Governance Incentives:
           output += `   <span class="tx-label">Type:</span> <span class="tx-type">${tx.type || 'UNKNOWN'}</span>\n`;
           output += `   <span class="tx-label">Time:</span> <span class="tx-time">${timeAgo}</span>\n`;
           output += `   <span class="tx-label">Status:</span> <span class="tx-status">${tx.status || 'PENDING'}</span>\n\n`;
-        });
+      });
 
-        // Summary
-        output += 'Transaction Summary:\n';
+      // Summary
+      output += 'Transaction Summary:\n';
         output += `  Total Transactions: ${transactions.length} (shown)\n`;
         output += `  Wallet Address: ${walletAddress}\n`;
         output += `  Data Source: ${ETHERSCAN_API_KEY ? 'Etherscan API' : 'No API Key'}\n`;
@@ -481,70 +665,400 @@ Governance Incentives:
           output += 'Note: No API key configured. Add VITE_ETHERSCAN_API_KEY to .env for real data.\n';
         }
 
-        return output;
+      return output;
       } catch (error) {
         console.error('Error fetching transactions:', error);
         return 'Error fetching transactions. Please check your wallet address and API configuration.\n';
       }
     },
 
-    wallets: () => `Working Group Multisig Wallets
+    wallets: async (args) => {
+      const subCommand = args[0];
 
-Wallet Control Structure:
-  3 Working Groups: Meta-Gov, Ecosystem, Public Goods
-  4 Keyholders per wallet: 3 Stewards + 1 DAO Secretary
-  Signatures Required: 3 of 4 for disbursements
-  Multi-Signature Security: Enabled
-  Transaction Monitoring: Active
+      if (!subCommand) {
+        return `ENS DAO Wallet Directory
 
-Funding Process:
-  Collective Proposals during Funding Windows
-  Windows: January, April, July, October
-  Social Proposal → Executable Proposal
-  Urgent Situations: Bypass regular windows
+Available Commands:
+  wallets list          Show all wallets with numbers
+  wallets select <num>  Select wallet by number to view transactions
+  wallets <number>      Quick select and view transactions
 
-Meta-Governance Multisig (main.mg.wg.ens.eth):
-  Holdings: 83.627 ETH, 240,738 USDC, 164K ENS
-  Purpose: Steward comp, DAO tooling, audits, governance
-  Budget H1 2025: $544K + 5 ETH
-  Q1 2025 Expenses: $210K
-  Q2 2025 Expenses: $217K
+Total Wallets: ${walletDirectory.length}
 
-Ecosystem Working Group:
-  Budget H1 2025: $832K + 10 ETH
-  Q1 2025 Expenses: $269K
-  Q2 2025 Expenses: $194K + 5 ETH
-  Note: Held 600K+ unspent when requesting 400K
+Use 'wallets list' to see all available wallets.`;
+      }
 
-Public Goods Multisigs:
-  Main Multisig: 157.5K USDC, 39.5 ETH, 200 ENS
-  Large Grants: 187K USDC
-  Budget H1 2025: $343K + 23 ETH
-  Q1 2025 Expenses: $111K + 14.9 ETH
-  Q2 2025 Expenses: $264K
+      if (subCommand === 'list') {
+        let output = `<div class="output-container">
+  <header class="section-header">ENS DAO Wallet Directory</header>
+  <div class="section-border">═══════════════════════════════════════════════════════════════</div>
+  <p class="section-subtitle">Select a wallet by number to view its transactions:</p>
 
-Governance Distributions:
-  Via Hedgey Contracts: 2-year vesting period
-  Q1 2025: 24,965 ENS (EP 5.26) + 250 ENS grants
-  Q2 2025: 3,200 ENS (Term 6 grants)
-  Recovery: 589 ENS to users who lost tokens
+  <table class="wallet-table" role="table" aria-label="ENS DAO Wallet Directory">
+    <thead>
+      <tr>
+        <th scope="col" class="table-header table-header-index">#</th>
+        <th scope="col" class="table-header table-header-name">Wallet Name</th>
+        <th scope="col" class="table-header table-header-address">Address</th>
+        <th scope="col" class="table-header table-header-category">Category</th>
+        <th scope="col" class="table-header table-header-description">Description</th>
+      </tr>
+    </thead>
+    <tbody>`;
 
-Compensation Structure:
-  Stewards (9 total): $4K/month each ($36K/month)
-  DAO Secretary: $5.5K/month (compensation debate)
-  Scribe: $3K/month
-  ENS Tokens: 10K per steward term (2-year vesting)
+        walletDirectory.forEach((wallet, index) => {
+          const num = String(index + 1).padStart(2, ' ');
+          const type = wallet.category.split('-')[1] || wallet.category;
+          output += `<tr class="wallet-row" role="row">
+        <td class="table-cell table-cell-index" role="gridcell">
+          <span class="text">${num}.</span>
+        </td>
+        <td class="table-cell table-cell-name" role="gridcell">
+          <span class="text">${wallet.label}</span>
+        </td>
+        <td class="table-cell table-cell-address" role="gridcell">
+          <span class="text">${wallet.address}</span>
+        </td>
+        <td class="table-cell table-cell-category" role="gridcell">
+          <span class="text">${type}</span>
+        </td>
+        <td class="table-cell table-cell-description" role="gridcell">
+          <span class="text">${wallet.description}</span>
+        </td>
+      </tr>`;
+        });
 
-Transparency Challenges:
-  Fragmented Reporting: Multiple sources hard to reconcile
-  Unspent Balances: Groups hold large reserves
-  High Transaction Volume: Many small disbursements
-  RFP Proposed: Comprehensive financial dashboard
+        output += `    </tbody>
+  </table>
+</div>`;
 
-Main DAO Wallet (Source):
-  Address: 0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7
-  Purpose: Primary treasury, funds working groups
-  Total Transactions: ~$100M (ETH/USDC)`,
+        output += `<section class="usage-section">
+  <h3 class="section-subtitle">Usage:</h3>
+  <div class="command-list">
+    <div class="command-item">
+      <code class="command-name">wallets select</code> <var class="command-example">&lt;number&gt;</var> <span class="command-description">Select and view transactions</span>
+    </div>
+    <div class="command-item">
+      <code class="command-name">wallets</code> <var class="command-example">&lt;number&gt;</var> <span class="command-description">Quick select and view</span>
+    </div>
+    <div class="command-item">
+      <code class="command-name">select wallet</code> <var class="command-example">&lt;number&gt;</var> <span class="command-description">Alternative selection method</span>
+    </div>
+  </div>
+  <p class="summary-info">
+    <span class="summary-label">Total:</span> <span class="summary-total">${walletDirectory.length}</span> <span class="summary-label">wallets available</span>
+  </p>
+</section>`;
+
+        return output;
+      }
+
+      if (subCommand === 'select' || /^\d+$/.test(subCommand)) {
+        const walletIndex = subCommand === 'select' ? parseInt(args[1]) - 1 : parseInt(subCommand) - 1;
+
+        if (isNaN(walletIndex) || walletIndex < 0 || walletIndex >= walletDirectory.length) {
+          return `Invalid wallet number. Use 'wallets list' to see available wallets (1-${walletDirectory.length}).`;
+        }
+
+        const selectedWallet = walletDirectory[walletIndex];
+
+        try {
+          const transactions = await fetchWalletTransactions(selectedWallet.address, 15);
+
+          let output = `<div class="output-container">
+  <header class="section-header">${selectedWallet.label} Transactions</header>
+  <div class="section-border">═══════════════════════════════════════════════════════════════</div>
+
+  <table class="wallet-table" role="table" aria-label="Selected Wallet Information">
+    <thead>
+      <tr>
+        <th scope="col" class="table-header table-header-name">Wallet Name</th>
+        <th scope="col" class="table-header table-header-address">Address</th>
+        <th scope="col" class="table-header table-header-category">Category</th>
+        <th scope="col" class="table-header table-header-description">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="wallet-row" role="row">
+        <td class="table-cell table-cell-name" role="gridcell">
+          <span class="text">${selectedWallet.label}</span>
+        </td>
+        <td class="table-cell table-cell-address" role="gridcell">
+          <span class="text">${selectedWallet.address}</span>
+        </td>
+        <td class="table-cell table-cell-category" role="gridcell">
+          <span class="text">${selectedWallet.category}</span>
+        </td>
+        <td class="table-cell table-cell-description" role="gridcell">
+          <span class="text">${selectedWallet.description}</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>`;
+
+          if (transactions.length === 0) {
+            output += `<span class="status-warning">No recent transactions found for this wallet.</span>\n`;
+          } else {
+            output += `<h3 class="section-subtitle">Recent Transactions</h3>\n`;
+
+            output += `<table class="transaction-table" role="table" aria-label="Recent Wallet Transactions">
+  <thead>
+    <tr>
+      <th scope="col" class="table-header table-header-index">#</th>
+      <th scope="col" class="table-header table-header-hash">Transaction Hash</th>
+      <th scope="col" class="table-header table-header-to">To Address</th>
+      <th scope="col" class="table-header table-header-type">Type</th>
+      <th scope="col" class="table-header table-header-value">Value</th>
+      <th scope="col" class="table-header table-header-date">Date</th>
+    </tr>
+  </thead>
+  <tbody>`;
+
+            // Process transactions with ENS resolution
+            const transactionRows = await Promise.all(transactions.map(async (tx, index) => {
+              const num = index + 1;
+              const hash = tx.hash.substring(0, 12);
+              const toAddr = tx.to ? await resolveENSName(tx.to) : 'Unknown';
+              const type = tx.type || 'UNKNOWN';
+              const timeAgo = tx.timestamp ? new Date(tx.timestamp).toLocaleDateString() : 'Unknown';
+              const value = tx.value ? `${(parseInt(tx.value) / 1e18).toFixed(4)} ETH` : 'N/A';
+
+              return `<tr class="transaction-row" role="row">
+      <td class="table-cell table-cell-index" role="gridcell">
+        <span class="text">${num}</span>
+      </td>
+      <td class="table-cell table-cell-hash" role="gridcell">
+        <span class="text">${hash}</span>
+      </td>
+      <td class="table-cell table-cell-to" role="gridcell">
+        <span class="text">${toAddr}</span>
+      </td>
+      <td class="table-cell table-cell-type" role="gridcell">
+        <span class="text">${type}</span>
+      </td>
+      <td class="table-cell table-cell-value" role="gridcell">
+        <span class="text">${value}</span>
+      </td>
+      <td class="table-cell table-cell-date" role="gridcell">
+        <span class="text">${timeAgo}</span>
+      </td>
+    </tr>`;
+            }));
+
+            // Add all rows to output
+            output += transactionRows.join('');
+
+            output += `  </tbody>
+</table>
+`;
+          }
+
+          output += `<span class="section-subtitle">Summary:</span>\n`;
+          output += `<span class="section-border">────────</span>\n`;
+          output += `<span class="summary-label">Total Transactions:</span> <span class="summary-total">${transactions.length}</span> <span class="summary-label">(showing last 15)</span>\n`;
+          output += `<span class="summary-label">Data Source:</span> <span class="status-${ETHERSCAN_API_KEY ? 'success' : 'warning'}">${ETHERSCAN_API_KEY ? 'Etherscan API' : 'Demo Mode'}</span>\n`;
+          output += `<span class="summary-label">Cache Status:</span> <span class="status-${getCachedTransactions(selectedWallet.address) ? 'info' : 'success'}">${getCachedTransactions(selectedWallet.address) ? 'Cached' : 'Fresh'}</span>\n`;
+
+          if (!ETHERSCAN_API_KEY) {
+            output += `\n<span class="status-info">Note:</span> <span class="command-description">Configure VITE_ETHERSCAN_API_KEY in .env for real blockchain data.</span>\n`;
+          }
+
+          return output;
+        } catch (error) {
+          console.error('Error fetching wallet transactions:', error);
+          return `Error fetching transactions for wallet ${selectedWallet.label}. Please check your API configuration.\n`;
+        }
+      }
+
+      return `Unknown wallets command: ${subCommand}. Use 'wallets list' to see options.`;
+    },
+
+    select: async (args) => {
+      const subCommand = args[0];
+
+      if (!subCommand || subCommand === 'wallet') {
+        let output = `<div class="output-container">
+  <header class="section-header">Wallet Selection</header>
+  <div class="section-border">═══════════════════════════════════════════════════════════════</div>
+  <p class="section-subtitle">Choose a wallet by number to view its transactions:</p>
+
+  <table class="wallet-table" role="table" aria-label="ENS DAO Wallet Selection">
+    <thead>
+      <tr>
+        <th scope="col" class="table-header table-header-index">#</th>
+        <th scope="col" class="table-header table-header-name">Wallet Name</th>
+        <th scope="col" class="table-header table-header-address">Address</th>
+        <th scope="col" class="table-header table-header-category">Category</th>
+        <th scope="col" class="table-header table-header-description">Description</th>
+      </tr>
+    </thead>
+    <tbody>`;
+
+        walletDirectory.forEach((wallet, index) => {
+          const num = String(index + 1).padStart(2, ' ');
+          const type = wallet.category.split('-')[1] || wallet.category;
+          output += `<tr class="wallet-row" role="row">
+        <td class="table-cell table-cell-index" role="gridcell">
+          <span class="text">${num}.</span>
+        </td>
+        <td class="table-cell table-cell-name" role="gridcell">
+          <span class="text">${wallet.label}</span>
+        </td>
+        <td class="table-cell table-cell-address" role="gridcell">
+          <span class="text">${wallet.address}</span>
+        </td>
+        <td class="table-cell table-cell-category" role="gridcell">
+          <span class="text">${type}</span>
+        </td>
+        <td class="table-cell table-cell-description" role="gridcell">
+          <span class="text">${wallet.description}</span>
+        </td>
+      </tr>`;
+        });
+
+        output += `    </tbody>
+  </table>
+</div>`;
+
+        output += `<section class="usage-section">
+  <h3 class="section-subtitle">Usage:</h3>
+  <div class="command-list">
+    <div class="command-item">
+      <code class="command-name">select wallet</code> <var class="command-example">&lt;number&gt;</var> <span class="command-description">Select and view transactions</span>
+    </div>
+    <div class="command-example">Example: select wallet 1</div>
+  </div>
+  <p class="summary-info">
+    <span class="summary-label">Total:</span> <span class="summary-total">${walletDirectory.length}</span> <span class="summary-label">wallets available</span>
+  </p>
+</section>`;
+
+        return output;
+      }
+
+      if (subCommand === 'wallet' && args[1]) {
+        const walletIndex = parseInt(args[1]) - 1;
+
+        if (isNaN(walletIndex) || walletIndex < 0 || walletIndex >= walletDirectory.length) {
+          return `Invalid wallet number. Please select 1-${walletDirectory.length}.`;
+        }
+
+        const selectedWallet = walletDirectory[walletIndex];
+
+        try {
+          const transactions = await fetchWalletTransactions(selectedWallet.address, 15);
+
+          let output = `<div class="output-container">
+  <header class="section-header">${selectedWallet.label} Transactions</header>
+  <div class="section-border">═══════════════════════════════════════════════════════════════</div>
+
+  <table class="wallet-table" role="table" aria-label="Selected Wallet Information">
+    <thead>
+      <tr>
+        <th scope="col" class="table-header table-header-name">Wallet Name</th>
+        <th scope="col" class="table-header table-header-address">Address</th>
+        <th scope="col" class="table-header table-header-category">Category</th>
+        <th scope="col" class="table-header table-header-description">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="wallet-row" role="row">
+        <td class="table-cell table-cell-name" role="gridcell">
+          <span class="text">${selectedWallet.label}</span>
+        </td>
+        <td class="table-cell table-cell-address" role="gridcell">
+          <span class="text">${selectedWallet.address}</span>
+        </td>
+        <td class="table-cell table-cell-category" role="gridcell">
+          <span class="text">${selectedWallet.category}</span>
+        </td>
+        <td class="table-cell table-cell-description" role="gridcell">
+          <span class="text">${selectedWallet.description}</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>`;
+
+          if (transactions.length === 0) {
+            output += `<span class="status-warning">No recent transactions found for this wallet.</span>\n`;
+          } else {
+            output += `<h3 class="section-subtitle">Recent Transactions</h3>\n`;
+
+            output += `<table class="transaction-table" role="table" aria-label="Recent Wallet Transactions">
+  <thead>
+    <tr>
+      <th scope="col" class="table-header table-header-index">#</th>
+      <th scope="col" class="table-header table-header-hash">Transaction Hash</th>
+      <th scope="col" class="table-header table-header-to">To Address</th>
+      <th scope="col" class="table-header table-header-type">Type</th>
+      <th scope="col" class="table-header table-header-value">Value</th>
+      <th scope="col" class="table-header table-header-date">Date</th>
+    </tr>
+  </thead>
+  <tbody>`;
+
+            // Process transactions with ENS resolution
+            const transactionRows = await Promise.all(transactions.map(async (tx, index) => {
+              const num = index + 1;
+              const hash = tx.hash.substring(0, 12);
+              const toAddr = tx.to ? await resolveENSName(tx.to) : 'Unknown';
+              const type = tx.type || 'UNKNOWN';
+              const timeAgo = tx.timestamp ? new Date(tx.timestamp).toLocaleDateString() : 'Unknown';
+              const value = tx.value ? `${(parseInt(tx.value) / 1e18).toFixed(4)} ETH` : 'N/A';
+
+              return `<tr class="transaction-row" role="row">
+      <td class="table-cell table-cell-index" role="gridcell">
+        <span class="text">${num}</span>
+      </td>
+      <td class="table-cell table-cell-hash" role="gridcell">
+        <span class="text">${hash}</span>
+      </td>
+      <td class="table-cell table-cell-to" role="gridcell">
+        <span class="text">${toAddr}</span>
+      </td>
+      <td class="table-cell table-cell-type" role="gridcell">
+        <span class="text">${type}</span>
+      </td>
+      <td class="table-cell table-cell-value" role="gridcell">
+        <span class="text">${value}</span>
+      </td>
+      <td class="table-cell table-cell-date" role="gridcell">
+        <span class="text">${timeAgo}</span>
+      </td>
+    </tr>`;
+            }));
+
+            // Add all rows to output
+            output += transactionRows.join('');
+
+            output += `  </tbody>
+</table>
+`;
+          }
+
+          output += `<span class="section-subtitle">Summary:</span>\n`;
+          output += `<span class="section-border">────────</span>\n`;
+          output += `<span class="summary-label">Total Transactions:</span> <span class="summary-total">${transactions.length}</span> <span class="summary-label">(showing last 15)</span>\n`;
+          output += `<span class="summary-label">Data Source:</span> <span class="status-${ETHERSCAN_API_KEY ? 'success' : 'warning'}">${ETHERSCAN_API_KEY ? 'Etherscan API' : 'Demo Mode'}</span>\n`;
+          output += `<span class="summary-label">Cache Status:</span> <span class="status-${getCachedTransactions(selectedWallet.address) ? 'info' : 'success'}">${getCachedTransactions(selectedWallet.address) ? 'Cached' : 'Fresh'}</span>\n`;
+
+          if (!ETHERSCAN_API_KEY) {
+            output += `\n<span class="status-info">Note:</span> <span class="command-description">Configure VITE_ETHERSCAN_API_KEY in .env for real blockchain data.</span>\n`;
+          }
+
+          return output;
+        } catch (error) {
+          console.error('Error fetching wallet transactions:', error);
+          return `Error fetching transactions for wallet ${selectedWallet.label}. Please check your API configuration.\n`;
+        }
+      }
+
+      return `Unknown select command. Use 'select wallet <number>' to choose a wallet.`;
+    },
 
     cd: (args) => {
       const section = args[0];
@@ -731,7 +1245,7 @@ Additional Wallets:
           }
           // tx command already handled above
         } else {
-          return `┌─ ECOSYSTEM WORKING GROUP ───────────────────────────┐
+        return `┌─ ECOSYSTEM WORKING GROUP ───────────────────────────┐
 │                                                                │
 │ FOCUS AREAS:                                                  │
 │ • Hackathons and developer events                             │
@@ -766,7 +1280,7 @@ Additional Wallets:
           }
           // tx command already handled above
         } else {
-          return `┌─ PUBLIC GOODS WORKING GROUP ────────────────────────┐
+        return `┌─ PUBLIC GOODS WORKING GROUP ────────────────────────┐
 │                                                                │
 │ MULTISIG WALLETS:                                             │
 │ • Main Multisig: 157.5K USDC, 39.5 ETH, 200 ENS              │
@@ -1091,27 +1605,26 @@ Additional Wallets:
       const subCommand = args[0];
 
       if (!subCommand) {
-        let output = '';
-        output += '┌─────────────────────────────────────────────────────────────┐\n';
-        output += '│                     TX COMMAND HELP                           │\n';
-        output += '│                                                             │\n';
-        output += '│ Usage: tx <address> or tx summary <address>                │\n';
-        output += '│                                                             │\n';
-        output += '│ Example: tx 0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7     │\n';
-        output += '│ Example: tx summary 0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7 │\n';
-        output += '│                                                             │\n';
-        output += '│ Available wallets:                                          │\n';
+        let output = `<span class="section-header">TX Command Help</span>\n`;
+        output += `<span class="section-border">═══════════════════════════════════════════════════════════════</span>\n\n`;
+        output += `<span class="section-subtitle">Usage:</span> <span class="command-name">tx</span> <span class="command-example">&lt;address&gt;</span> <span class="command-description">or</span> <span class="command-name">tx summary</span> <span class="command-example">&lt;address&gt;</span>\n\n`;
+        output += `<span class="section-subtitle">Examples:</span>\n`;
+        output += `  <span class="command-example">tx 0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7</span>\n`;
+        output += `  <span class="command-example">tx summary 0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7</span>\n\n`;
+        output += `<span class="section-subtitle">Available Wallets:</span>\n`;
+        output += `<span class="section-border">──────────────────</span>\n\n`;
+
         walletDirectory.forEach(wallet => {
-          output += `│ • ${wallet.label.padEnd(55)} │\n`;
-          output += `│   ${wallet.address} │\n`;
+          output += `<span class="wallet-name">${wallet.label}</span>\n`;
+          output += `  <span class="wallet-address">${wallet.address}</span>\n`;
+          output += `  <span class="wallet-type">Type:</span> <span class="wallet-category">${wallet.category.split('-')[1] || wallet.category}</span>\n\n`;
         });
-        output += '│                                                             │\n';
-        output += '│ Working Group Shortcuts:                                   │\n';
-        output += '│ • wg meta tx   Meta-Governance transactions               │\n';
-        output += '│ • wg pg tx     Public Goods transactions                   │\n';
-        output += '│ • wg eco tx    Ecosystem transactions                      │\n';
-        output += '│                                                             │\n';
-        output += '└─────────────────────────────────────────────────────────────┘\n';
+
+        output += `<span class="section-subtitle">Working Group Shortcuts:</span>\n`;
+        output += `<span class="section-border">─────────────────────────</span>\n`;
+        output += `  <span class="command-name">wg meta tx</span>   <span class="command-description">Meta-Governance transactions</span>\n`;
+        output += `  <span class="command-name">wg pg tx</span>     <span class="command-description">Public Goods transactions</span>\n`;
+        output += `  <span class="command-name">wg eco tx</span>    <span class="command-description">Ecosystem transactions</span>\n\n`;
 
         return output;
       }
@@ -1122,10 +1635,10 @@ Additional Wallets:
         try {
           const transactions = await transactionService.fetchRealTransactions(walletAddress, 20);
 
-          let output = '';
-          output += '┌─────────────────────────────────────────────────────────────┐\n';
-          output += '│                    TRANSACTION SUMMARY                        │\n';
-          output += '│                                                             │\n';
+        let output = '';
+        output += '┌─────────────────────────────────────────────────────────────┐\n';
+        output += '│                    TRANSACTION SUMMARY                        │\n';
+        output += '│                                                             │\n';
           output += `│ OVERALL STATISTICS (Last ${transactions.length} transactions): │\n`;
           output += `│ • Total Transactions: ${transactions.length} fetched         │\n`;
 
@@ -1139,22 +1652,22 @@ Additional Wallets:
           output += `│ • Wallet Address: ${walletAddress.substring(0, 42)}         │\n`;
           output += `│ • Data Source: ${ETHERSCAN_API_KEY ? 'Etherscan API' : 'No API Key'} │\n`;
           output += `│ • Last Updated: ${new Date().toLocaleString()}            │\n`;
-          output += '│                                                             │\n';
+        output += '│                                                             │\n';
 
           const outboundCount = transactions.filter(tx => tx.type === 'OUTBOUND').length;
           const inboundCount = transactions.filter(tx => tx.type === 'INBOUND').length;
 
-          output += '│ TRANSACTION TYPES:                                          │\n';
+        output += '│ TRANSACTION TYPES:                                          │\n';
           output += `│ • Outbound: ${outboundCount} transactions                      │\n`;
           output += `│ • Inbound: ${inboundCount} transactions                       │\n`;
-          output += '│                                                             │\n';
-          output += '└─────────────────────────────────────────────────────────────┘\n';
+        output += '│                                                             │\n';
+        output += '└─────────────────────────────────────────────────────────────┘\n';
 
           if (!ETHERSCAN_API_KEY) {
             output += '\nNote: No API key configured. Add VITE_ETHERSCAN_API_KEY to .env for real data.\n';
           }
 
-          return output;
+        return output;
         } catch (error) {
           console.error('Error fetching transaction summary:', error);
           return 'Error fetching transaction summary. Please check your wallet address and API configuration.\n';
@@ -1165,25 +1678,24 @@ Additional Wallets:
       const walletAddress = subCommand;
 
       if (!walletAddress || !walletAddress.startsWith('0x') || walletAddress.length !== 42) {
-        let output = '';
-        output += '┌─────────────────────────────────────────────────────────────┐\n';
-        output += '│ Invalid wallet address format.                             │\n';
-        output += '│                                                             │\n';
-        output += '│ Usage: tx <0x...address>                                   │\n';
-        output += '│ Example: tx 0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7     │\n';
-        output += '│                                                             │\n';
-        output += '│ Available wallets:                                          │\n';
+        let output = `<span class="section-header">Invalid Wallet Address Format</span>\n`;
+        output += `<span class="section-border">═══════════════════════════════════════════════════════════════</span>\n\n`;
+        output += `<span class="section-subtitle">Usage:</span> <span class="command-name">tx</span> <span class="command-example">&lt;0x...address&gt;</span>\n\n`;
+        output += `<span class="section-subtitle">Example:</span>\n`;
+        output += `  <span class="command-example">tx 0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7</span>\n\n`;
+        output += `<span class="section-subtitle">Available Wallets:</span>\n`;
+        output += `<span class="section-border">──────────────────</span>\n\n`;
+
         walletDirectory.forEach(w => {
-          output += `│ • ${w.label.padEnd(55)} │\n`;
-          output += `│   ${w.address} │\n`;
+          output += `<span class="wallet-name">${w.label}</span>\n`;
+          output += `  <span class="wallet-address">${w.address}</span>\n\n`;
         });
-        output += '│                                                             │\n';
-        output += '│ Working Group Shortcuts:                                   │\n';
-        output += '│ • wg meta tx   Meta-Governance transactions               │\n';
-        output += '│ • wg pg tx     Public Goods transactions                   │\n';
-        output += '│ • wg eco tx    Ecosystem transactions                      │\n';
-        output += '│                                                             │\n';
-        output += '└─────────────────────────────────────────────────────────────┘\n';
+
+        output += `<span class="section-subtitle">Working Group Shortcuts:</span>\n`;
+        output += `<span class="section-border">─────────────────────────</span>\n`;
+        output += `  <span class="command-name">wg meta tx</span>   <span class="command-description">Meta-Governance transactions</span>\n`;
+        output += `  <span class="command-name">wg pg tx</span>     <span class="command-description">Public Goods transactions</span>\n`;
+        output += `  <span class="command-name">wg eco tx</span>    <span class="command-description">Ecosystem transactions</span>\n\n`;
 
         return output;
       }
@@ -1199,29 +1711,29 @@ Additional Wallets:
         // Get transactions for this specific wallet using its address
         const walletTransactions = await transactionService.fetchRealTransactions(wallet.address, 5);
 
-        let output = '';
+      let output = '';
 
-        // Header
-        output += `┌─ TRANSACTIONS: ${wallet.label} ──────────────────────┐\n`;
-        output += `│                                                          │\n`;
-        output += `│  Wallet: ${wallet.label.padEnd(46)} │\n`;
-        output += `│  Address: ${wallet.address.padEnd(46)} │\n`;
-        output += `│  Category: ${wallet.category.padEnd(44)} │\n`;
-        output += `│                                                          │\n`;
-        output += `├─────┬──────────┬────────────────────────────────────┬───────┤\n`;
-        output += `│ #   │ Hash     │ Details                             │ Type  │\n`;
-        output += `├─────┼──────────┼────────────────────────────────────┼───────┤\n`;
+      // Header
+      output += `┌─ TRANSACTIONS: ${wallet.label} ──────────────────────┐\n`;
+      output += `│                                                          │\n`;
+      output += `│  Wallet: ${wallet.label.padEnd(46)} │\n`;
+      output += `│  Address: ${wallet.address.padEnd(46)} │\n`;
+      output += `│  Category: ${wallet.category.padEnd(44)} │\n`;
+      output += `│                                                          │\n`;
+      output += `├─────┬──────────┬────────────────────────────────────┬───────┤\n`;
+      output += `│ #   │ Hash     │ Details                             │ Type  │\n`;
+      output += `├─────┼──────────┼────────────────────────────────────┼───────┤\n`;
 
-        // Transaction rows
-        walletTransactions.forEach((tx, index) => {
-          const num = String(index + 1).padStart(2, ' ');
+      // Transaction rows
+      walletTransactions.forEach((tx, index) => {
+        const num = String(index + 1).padStart(2, ' ');
           const hash = `<span class="tx-hash">${tx.hash.substring(0, 10)}</span>`;
           const type = `<span class="tx-type">${(tx.type || 'UNKNOWN').substring(0, 5).padEnd(5)}</span>`;
 
           output += `│ ${num} │ ${hash} │ Blockchain Transaction ${index + 1}         │ ${type} │\n`;
 
-          // Additional details
-          const addrLabel = tx.type === 'OUTBOUND' ? 'To:' : 'From:';
+        // Additional details
+        const addrLabel = tx.type === 'OUTBOUND' ? 'To:' : 'From:';
           const addrClass = tx.type === 'OUTBOUND' ? 'tx-direction-to' : 'tx-direction-from';
           const addr = (tx.type === 'OUTBOUND' ? (tx.to || 'Unknown') : (tx.from || 'Unknown')).substring(0, 42);
           const timeAgo = tx.timestamp ? new Date(tx.timestamp).toLocaleString() : 'Unknown';
@@ -1230,23 +1742,23 @@ Additional Wallets:
           output += `│     │          │ <span class="tx-label">Value:</span> <span class="tx-value">${tx.value || '0'} wei</span>              │       │\n`;
           output += `│     │          │ <span class="tx-label">Time:</span> <span class="tx-time">${timeAgo}</span> │       │\n`;
           output += `│     │          │ <span class="tx-label">Status:</span> <span class="tx-status">${tx.status || 'UNKNOWN'}</span>                │       │\n`;
-          output += `├─────┼──────────┼────────────────────────────────────┼───────┤\n`;
-        });
+        output += `├─────┼──────────┼────────────────────────────────────┼───────┤\n`;
+      });
 
-        // Footer
-        output += `│                                                          │\n`;
-        output += `│  Wallet Summary:                                         │\n`;
+      // Footer
+      output += `│                                                          │\n`;
+      output += `│  Wallet Summary:                                         │\n`;
         output += `│  • Total Transactions: ${walletTransactions.length} (shown)      │\n`;
         output += `│  • Wallet Address: ${wallet.address}             │\n`;
         output += `│  • Data Source: ${ETHERSCAN_API_KEY ? 'Etherscan API' : 'No API Key'} │\n`;
         output += `│  • Last Updated: ${new Date().toLocaleString()}         │\n`;
-        output += `└──────────────────────────────────────────────────────────┘\n`;
+      output += `└──────────────────────────────────────────────────────────┘\n`;
 
         if (!ETHERSCAN_API_KEY) {
           output += '\nNote: No API key configured. Add VITE_ETHERSCAN_API_KEY to .env for real data.\n';
         }
 
-        return output;
+      return output;
       } catch (error) {
         console.error('Error fetching wallet transactions:', error);
         return 'Error fetching wallet transactions. Please check your wallet address and API configuration.\n';
@@ -1279,17 +1791,20 @@ Additional Wallets:
     if (commands[commandName]) {
       try {
         const result = await commands[commandName](args);
-        setCommandHistory(prev => [...prev, {
-          command: cmd,
-          output: result,
-          type: 'success',
-          timestamp: new Date()
-        }]);
+        // Format URLs as clickable links
+        const formattedResult = typeof result === 'string' ? formatOutputWithLinks(result) : result;
+      setCommandHistory(prev => [...prev, {
+        command: cmd,
+          output: formattedResult,
+        type: 'success',
+        timestamp: new Date()
+      }]);
       } catch (error) {
         console.error('Command execution error:', error);
+        const errorMessage = `Error executing command: ${error.message}`;
         setCommandHistory(prev => [...prev, {
           command: cmd,
-          output: `Error executing command: ${error.message}`,
+          output: formatOutputWithLinks(errorMessage),
           type: 'error',
           timestamp: new Date()
         }]);
@@ -1297,7 +1812,7 @@ Additional Wallets:
     } else {
       setCommandHistory(prev => [...prev, {
         command: cmd,
-        output: `bash: ${commandName}: command not found`,
+        output: formatOutputWithLinks(`bash: ${commandName}: command not found`),
         type: 'error',
         timestamp: new Date()
       }]);
@@ -1308,7 +1823,7 @@ Additional Wallets:
     if (e.key === 'Enter') {
       if (command.trim()) {
         handleCommand(command).then(() => {
-          setCommand('');
+        setCommand('');
           // Reset completion state
           setCompletionIndex(0);
           setCurrentCompletions([]);
@@ -1393,27 +1908,6 @@ Additional Wallets:
           </div>
         </div>
 
-        {/* Navigation */}
-        <div className="terminal-nav">
-          <div className="terminal-nav-content">
-            {[
-              { id: 'overview', name: 'OVERVIEW', icon: '[OV]' },
-              { id: 'assets', name: 'ASSETS', icon: '[AS]' },
-              { id: 'analytics', name: 'ANALYTICS', icon: '[AN]' },
-              { id: 'transactions', name: 'TRANSACTIONS', icon: '[TX]' },
-              { id: 'wallets', name: 'WALLETS', icon: '[WL]' }
-            ].map((section) => (
-              <button
-                key={section.id}
-                onClick={() => document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth' })}
-                className="nav-button"
-              >
-                <span className="nav-icon">{section.icon}</span>
-                <span className="nav-text">{section.name}</span>
-              </button>
-            ))}
-          </div>
-        </div>
 
         {/* Terminal Interface */}
         <div className="terminal-interface">
@@ -1470,42 +1964,15 @@ Additional Wallets:
                     {entry.timestamp.toLocaleTimeString('en-US', { hour12: false })}
                   </span>
                 </div>
-                <div className={`command-output command-output--${entry.type}`}>
-                  {entry.output}
-                </div>
+                <div
+                  className={`command-output command-output--${entry.type}`}
+                  dangerouslySetInnerHTML={{ __html: entry.output }}
+                />
               </div>
             ))}
           </div>
         </div>
 
-        {/* Simple Content Sections */}
-        <div style={{ marginTop: '20px' }}>
-          <div id="overview" style={{ marginBottom: '20px', padding: '20px', background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)' }}>
-            <h3 style={{ color: '#2563eb', marginBottom: '10px' }}>[OV] PORTFOLIO OVERVIEW</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
-              <div style={{ padding: '10px', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '4px' }}>
-                <div style={{ fontSize: '12px', color: '#64748b', textTransform: 'uppercase' }}>TOTAL AUM</div>
-                <div style={{ fontSize: '20px', color: '#334155', fontFamily: 'monospace' }}>$926.8M</div>
-                <div style={{ fontSize: '12px', color: '#059669' }}>+2.5% MTD</div>
-              </div>
-              <div style={{ padding: '10px', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '4px' }}>
-                <div style={{ fontSize: '12px', color: '#64748b', textTransform: 'uppercase' }}>LIQUID ASSETS</div>
-                <div style={{ fontSize: '20px', color: '#334155', fontFamily: 'monospace' }}>$840.2M</div>
-                <div style={{ fontSize: '12px', color: '#059669' }}>+1.8% MTD</div>
-              </div>
-              <div style={{ padding: '10px', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '4px' }}>
-                <div style={{ fontSize: '12px', color: '#64748b', textTransform: 'uppercase' }}>MONTHLY OUTFLOW</div>
-                <div style={{ fontSize: '20px', color: '#334155', fontFamily: 'monospace' }}>$642K</div>
-                <div style={{ fontSize: '12px', color: '#dc2626' }}>+12.3% vs Prior</div>
-              </div>
-              <div style={{ padding: '10px', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '4px' }}>
-                <div style={{ fontSize: '12px', color: '#64748b', textTransform: 'uppercase' }}>CUSTODY ACCOUNTS</div>
-                <div style={{ fontSize: '20px', color: '#334155', fontFamily: 'monospace' }}>12</div>
-                <div style={{ fontSize: '12px', color: '#94a3b8' }}>No Change</div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

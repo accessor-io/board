@@ -8,7 +8,7 @@
 }
 
 .terminal-window {
-  max-width: 1200px;
+  max-width: 1600px; /* Increased width for better table alignment */
   margin: 0 auto;
 }
 
@@ -72,9 +72,12 @@
 .terminal-interface {
   background: #1e293b;
   padding: 20px;
-  min-height: 400px;
+  height: 100%;
+  min-height: 100vh;
   border-radius: 0 0 8px 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
 }
 
 .command-input-container {
@@ -113,8 +116,10 @@
 
 /* Command History */
 .command-history {
-  max-height: 500px;
+  flex: 1;
   overflow-y: auto;
+  min-height: 0; /* Allow flex item to shrink below content size */
+  padding-bottom: 10px;
 }
 
 .command-entry {
@@ -209,14 +214,9 @@
 }
 
 /* Value and Amount Styling */
-.tx-value {
-  color: #ea580c; /* Orange for monetary values */
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 600;
-}
 
 .tx-address {
-  color: #0891b2; /* Cyan for addresses */
+  color: #fbbf24; /* Yellow for addresses */
   font-family: 'JetBrains Mono', monospace;
   font-size: 13px;
 }
@@ -272,18 +272,8 @@
   color: #0f172a; /* Black for labels */
 }
 
-.summary-value {
-  color: #059669; /* Green for values */
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 600;
-}
 
 /* Section Headers */
-.section-header {
-  color: #0f172a; /* Black for headers */
-  font-weight: bold;
-  font-size: 15px;
-}
 
 .section-border {
   color: #9ca3af; /* Light gray for borders */
@@ -314,6 +304,496 @@
 .accent {
   color: #1e293b; /* Dark gray for accents */
   font-weight: 500;
+}
+
+/* Wallet Command Colors */
+.wallet-name {
+  color: #3b82f6; /* Blue for wallet names */
+  font-weight: 600;
+}
+
+.wallet-address {
+  color: #fbbf24; /* Yellow for addresses */
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  word-break: break-all;
+}
+
+.wallet-type {
+  color: #7c3aed; /* Purple for wallet types */
+  font-weight: 500;
+}
+
+.wallet-description {
+  color: #6b7280; /* Gray for descriptions */
+  font-style: italic;
+}
+
+.wallet-category {
+  color: #059669; /* Green for categories */
+  font-weight: 500;
+}
+
+/* Transaction Colors */
+.tx-hash {
+  color: #7c2d12; /* Brown for transaction hashes */
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+}
+
+.tx-type {
+  color: #dc2626; /* Red for transaction types */
+  font-weight: 600;
+}
+
+.tx-value {
+  color: #fbbf24; /* Yellow for monetary values */
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+}
+
+.tx-date {
+  color: #6b7280; /* Gray for dates */
+  font-style: italic;
+}
+
+.tx-number {
+  color: #fbbf24; /* Yellow for transaction numbers */
+  font-weight: 600;
+}
+
+/* Command Colors */
+.command-name {
+  color: #2563eb; /* Blue for command names */
+  font-weight: 600;
+}
+
+.command-example {
+  color: #0891b2; /* Cyan for examples */
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.command-description {
+  color: #6b7280; /* Gray for descriptions */
+}
+
+/* Header Colors */
+.section-header {
+  color: #60a5fa; /* Programmer light blue for headers */
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.section-border {
+  color: #64748b; /* Medium gray for borders */
+  font-weight: bold;
+}
+
+.section-subtitle {
+  color: #60a5fa; /* Programmer light blue for subtitles */
+  font-weight: 500;
+}
+
+/* Status Colors */
+.status-success {
+  color: #059669; /* Green for success */
+  font-weight: 500;
+}
+
+.status-warning {
+  color: #d97706; /* Amber for warnings */
+  font-weight: 500;
+}
+
+.status-error {
+  color: #dc2626; /* Red for errors */
+  font-weight: 500;
+}
+
+.status-info {
+  color: #0891b2; /* Cyan for info */
+  font-weight: 500;
+}
+
+/* Summary Colors */
+.summary-label {
+  color: #cbd5e1; /* Light gray for labels */
+  font-weight: 500;
+}
+
+.summary-value {
+  color: #fbbf24; /* Yellow for values */
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+}
+
+.summary-total {
+  color: #fbbf24; /* Yellow for totals */
+  font-weight: 600;
+}
+
+/* Clickable Links */
+.terminal-link {
+  color: #3b82f6; /* Blue for links */
+  text-decoration: underline;
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  transition: color 0.2s ease;
+}
+
+.terminal-link:hover {
+  color: #60a5fa; /* Lighter blue on hover */
+  text-decoration: none;
+}
+
+.terminal-link:visited {
+  color: #8b5cf6; /* Purple for visited links */
+}
+
+/* Semantic Table Elements */
+.output-container {
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1.4;
+}
+
+.wallet-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  table-layout: fixed; /* Fixed table layout for consistent alignment */
+}
+
+.wallet-table thead {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.table-header {
+  padding: 8px 12px;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 1px solid #64748b;
+  color: #60a5fa; /* Light blue for headers */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.table-header-index {
+  width: 50px;
+  text-align: center;
+}
+
+.table-header-name {
+  width: 220px;
+}
+
+.table-header-address {
+  width: 420px;
+}
+
+.table-header-category {
+  width: 140px;
+}
+
+.table-header-description {
+  width: 300px;
+}
+
+.wallet-row {
+  border-bottom: 1px solid rgba(100, 116, 139, 0.3);
+}
+
+.wallet-row:hover {
+  background: rgba(59, 130, 246, 0.05);
+}
+
+.table-cell {
+  padding: 6px 12px;
+  vertical-align: top;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.table-cell-index {
+  text-align: center;
+  width: 50px;
+}
+
+.table-cell-index .text {
+  color: #fbbf24; /* Yellow for numbers */
+  font-weight: 600;
+}
+
+.table-cell-name {
+  width: 220px;
+}
+
+.table-cell-name .text {
+  color: #3b82f6; /* Blue for wallet names */
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.table-cell-address {
+  width: 420px;
+}
+
+.table-cell-address .text {
+  color: #fbbf24; /* Yellow for addresses */
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.table-cell-category {
+  width: 140px;
+}
+
+.table-cell-category .text {
+  color: #059669; /* Green for categories */
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.table-cell-description {
+  width: 300px;
+}
+
+.table-cell-description .text {
+  color: #6b7280; /* Gray for descriptions */
+  font-style: italic;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Wallet Info Table (single row) */
+.wallet-info-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  table-layout: fixed;
+}
+
+.wallet-info-row {
+  background: rgba(59, 130, 246, 0.05);
+}
+
+.wallet-info-table .table-cell {
+  padding: 8px 12px;
+  border-right: 1px solid rgba(100, 116, 139, 0.3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wallet-info-table .table-cell:last-child {
+  border-right: none;
+}
+
+.wallet-info-table .table-cell-name {
+  width: 220px;
+}
+
+.wallet-info-table .table-cell-address {
+  width: 420px;
+}
+
+.wallet-info-table .table-cell-category {
+  width: 140px;
+}
+
+.wallet-info-table .table-cell-description {
+  width: 300px;
+}
+
+/* Transaction Table Styles */
+.transaction-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  table-layout: fixed;
+}
+
+.transaction-table thead {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.transaction-table .table-header {
+  padding: 8px 12px;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 1px solid #64748b;
+  color: #60a5fa;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.transaction-table .table-header-index {
+  width: 50px;
+  text-align: center;
+}
+
+.transaction-table .table-header-hash {
+  width: 100px;
+}
+
+.transaction-table .table-header-to {
+  width: 100px;
+}
+
+.transaction-table .table-header-type {
+  width: 80px;
+}
+
+.transaction-table .table-header-value {
+  width: 100px;
+}
+
+.transaction-table .table-header-date {
+  width: 100px;
+}
+
+.transaction-row {
+  border-bottom: 1px solid rgba(100, 116, 139, 0.3);
+}
+
+.transaction-row:hover {
+  background: rgba(59, 130, 246, 0.05);
+}
+
+.transaction-table .table-cell {
+  padding: 6px 12px;
+  vertical-align: top;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.transaction-table .table-cell-index {
+  text-align: center;
+  width: 50px;
+}
+
+.transaction-table .table-cell-index .text {
+  color: #fbbf24;
+  font-weight: 600;
+}
+
+.transaction-table .table-cell-hash .text {
+  color: #7c2d12;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+}
+
+.transaction-table .table-cell-to {
+  width: 100px;
+}
+
+.transaction-table .table-cell-to .text {
+  color: #fbbf24;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+}
+
+.transaction-table .table-cell-type .text {
+  color: #dc2626;
+  font-weight: 500;
+}
+
+.transaction-table .table-cell-value .text {
+  color: #fbbf24;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+}
+
+.transaction-table .table-cell-date .text {
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Semantic HTML Elements */
+header.section-header {
+  color: #60a5fa; /* Programmer light blue for headers */
+  font-weight: bold;
+  font-size: 15px;
+  margin: 0 0 8px 0;
+}
+
+p.section-subtitle {
+  color: #94a3b8; /* Light gray for subtitles */
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.usage-section {
+  margin-top: 16px;
+}
+
+.usage-section h3.section-subtitle {
+  color: #60a5fa;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+
+.command-list {
+  margin: 8px 0;
+}
+
+.command-item {
+  margin: 4px 0;
+  padding-left: 12px;
+  position: relative;
+}
+
+.command-item::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #60a5fa;
+  font-weight: bold;
+}
+
+code.command-name {
+  color: #2563eb;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  background: rgba(37, 99, 235, 0.1);
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+var.command-example {
+  color: #0891b2;
+  font-family: 'JetBrains Mono', monospace;
+  font-style: normal;
+}
+
+.command-description {
+  color: #6b7280;
+  font-style: italic;
+}
+
+.summary-info {
+  margin: 12px 0 0 0;
+  padding: 8px 12px;
+  background: rgba(59, 130, 246, 0.05);
+  border-radius: 4px;
 }
 
 /* Animations */
