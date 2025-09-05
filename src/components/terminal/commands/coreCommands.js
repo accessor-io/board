@@ -3,97 +3,271 @@ import { endaomentAPI } from '../../../services/endaomentAPI.js';
 
 export const coreCommands = {
   help: () => {
-    let output = '';
-    output += 'ENS DAO TREASURY ANALYSIS TERMINAL\n\n';
-    output += 'CORE ANALYSIS COMMANDS:\n';
-    output += '• overview        Revenue generation & funding mechanisms\n';
-    output += '• assets          Fund distribution & expenditures\n';
-    output += '• analytics       Accounting & transparency analysis\n';
-    output += '• tx              Transaction history from all wallets (short for transactions)\n';
-    output += '• status          Current financial infrastructure\n\n';
-    output += 'WORKING GROUP COMMANDS:\n';
-    output += '• wg meta         Meta-Governance working group\n';
-    output += '• wg eco          Ecosystem working group\n';
-    output += '• wg public       Public Goods working group\n';
-    output += '  └─ info         General information\n';
-    output += '  └─ tx all       Show all transactions\n';
-    output += '  └─ tx <number>  Show specific number of transactions\n';
-    output += '  └─ budget       Budget allocations\n';
-    output += '  └─ funding      Funding details\n\n';
-    output += 'SERVICE PROVIDER COMMANDS:\n';
-    output += '• spp overview        SPP2 program overview and statistics\n';
-    output += '• spp providers       List all active service providers\n';
-    output += '• spp categories      Provider categories and funding breakdown\n';
-    output += '• spp updates         Program updates and progress reports\n';
-    output += '• spp funding         Funding infrastructure and disbursements\n';
-    output += '• spp governance      Governance links and implementation details\n';
-    output += '• spp <provider-id>   Individual provider details (e.g., spp zk-email)\n';
-    output += '• spp infrastructure  Infrastructure category providers\n';
-    output += '• spp development     Development category providers\n';
-    output += '• spp governance      Governance category providers\n';
-    output += '• spp identity        Identity category providers\n';
-    output += '• spp content         Content category providers\n';
-    output += '• spp research        Research category providers\n\n';
-    output += 'WALLET MANAGEMENT:\n';
-    output += '• wallets all              Show all ENS DAO wallets\n';
-    output += '• wallets wg <type>        Show working group wallets (public, eco, meta)\n';
-    output += '• wallets dao              Show main DAO treasury wallets\n';
-    output += '• wallets treasury         Show treasury and endowment wallets\n\n';
-    output += 'ASSET BALANCES:\n';
-    output += '• assets wg wallet <type>  Show WG wallet balances (public, eco, meta)\n';
-    output += '• assets overview          Show all assets summary\n';
-    output += '• assets networks          Show assets across networks\n\n';
-    output += 'DATA EXPORT:\n';
-    output += '• exportData tx all            Export all transactions to CSV\n';
-    output += '• exportData tx wg <type>      Export WG transactions to CSV\n';
-    output += '• exportData wallets all       Export wallet information to CSV\n';
-    output += '• exportData wallets wg <type> Export WG wallets to CSV\n';
-    output += '• exportData assets wg <type>  Export WG assets to CSV\n';
-    output += '• exportData assets overview   Export treasury overview to CSV\n\n';
-    output += 'DATE FILTERING:\n';
-    output += 'Add date filters to any transaction command:\n';
-    output += '• mar0125-apr0125          Date range (March 1 - April 1, 2025)\n';
-    output += '• 2025-03-01-2025-04-01    ISO date range\n';
-    output += '• mar0125                  Single date (March 1, 2025)\n';
-    output += '• 2025-03-01               ISO single date\n';
-    output += '• last30days               Relative dates\n';
-    output += '• thismonth                Other options: today, yesterday,\n';
-    output += '• lastmonth                last7days, last90days, thisweek,\n';
-    output += '• lastweek                 lastyear, thisyear\n\n';
-    output += 'FINANCIAL QUERY COMMANDS:\n';
-    output += '• revenue          Revenue sources & collection\n';
-    output += '• compensation     Steward & officer compensation\n';
-    output += '• governance       ENS token distributions\n';
-    output += '• investments      Treasury investment strategies\n';
-    output += '• challenges       Transparency & reporting issues\n';
-    output += '• summary          Complete treasury overview\n\n';
-    output += 'SYSTEM COMMANDS:\n';
-    output += '• ls              List all sections\n';
-    output += '• clear           Clear terminal screen\n';
-    output += '• history         Show command history\n';
-    output += '• time/date       Current time and date\n';
-    output += '• exit            Exit terminal\n\n';
-    output += '═══════════════════════════════════════════════════════════════════════════════\n';
-    output += '                           📋 ADDITIONAL OPTIONS\n';
-    output += '═══════════════════════════════════════════════════════════════════════════════\n\n';
-    output += '• list                 Show comprehensive command reference with all combinations\n\n';
-    output += 'COMMAND EXAMPLES:\n';
-    output += '• wg public tx all          Show all Public Goods transactions\n';
-    output += '• wg meta budget            Show Meta-Gov budget details\n';
-    output += '• spp overview              Show Service Provider Program overview\n';
-    output += '• spp providers             List all active service providers\n';
-    output += '• spp eth-limo              Show detailed info for eth.limo provider\n';
-    output += '• spp infrastructure        Show all infrastructure providers\n';
-    output += '• wallets wg eco            Show Ecosystem multisigs\n';
-    output += '• assets wg wallet public   Show Public Goods wallet balances\n';
-    output += '• tx                        Show all recent transactions\n';
-    output += '• tx last30days             Show transactions from last 30 days\n';
-    output += '• tx mar0125-apr0125        Show March-April 2025 transactions\n';
-    output += '• wg public tx mar0125      Public Goods March 2025 transactions\n';
-    output += '• wg eco tx export mar0125  Export filtered transactions to CSV\n';
-    output += '• exportData tx wg public mar0125-apr0125  Export date-filtered data\n';
-    output += '• exportData wallets all        Export all wallet info to CSV\n';
-    output += '• exportData assets overview    Export treasury overview to CSV\n';
+    let output = `<div class="output-container">
+  <header class="section-header">ENS DAO Treasury Analysis Terminal</header>
+  <div class="section-border">═══════════════════════════════════════════════════════════════</div>
+
+  <section class="help-section">
+    <h3 class="section-subtitle">Core Analysis Commands:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <code class="command-name">overview</code> <span class="command-description">Revenue generation & funding mechanisms</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">assets</code> <span class="command-description">Fund distribution & expenditures</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">analytics</code> <span class="command-description">Accounting & transparency analysis</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">tx</code> <span class="command-description">Transaction history from all wallets (short for transactions)</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">status</code> <span class="command-description">Current financial infrastructure</span>
+      </div>
+    </div>
+
+    <h3 class="section-subtitle">Working Group Commands:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <code class="command-name">wg meta</code> <span class="command-description">Meta-Governance working group</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">wg eco</code> <span class="command-description">Ecosystem working group</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">wg public</code> <span class="command-description">Public Goods working group</span>
+      </div>
+      <div class="command-subitem">
+        <code class="command-name">info</code> <span class="command-description">General information</span>
+      </div>
+      <div class="command-subitem">
+        <code class="command-name">tx all</code> <span class="command-description">Show all transactions</span>
+      </div>
+      <div class="command-subitem">
+        <code class="command-name">tx &lt;number&gt;</code> <span class="command-description">Show specific number of transactions</span>
+      </div>
+      <div class="command-subitem">
+        <code class="command-name">budget</code> <span class="command-description">Budget allocations</span>
+      </div>
+      <div class="command-subitem">
+        <code class="command-name">funding</code> <span class="command-description">Funding details</span>
+      </div>
+    </div>
+    <h3 class="section-subtitle">Service Provider Commands:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <code class="command-name">spp overview</code> <span class="command-description">SPP2 program overview and statistics</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">spp providers</code> <span class="command-description">List all active service providers</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">spp categories</code> <span class="command-description">Provider categories and funding breakdown</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">spp updates</code> <span class="command-description">Program updates and progress reports</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">spp funding</code> <span class="command-description">Funding infrastructure and disbursements</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">spp governance</code> <span class="command-description">Governance links and implementation details</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">spp &lt;provider-id&gt;</code> <span class="command-description">Individual provider details (e.g., spp zk-email)</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">spp infrastructure</code> <span class="command-description">Infrastructure category providers</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">spp development</code> <span class="command-description">Development category providers</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">spp governance</code> <span class="command-description">Governance category providers</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">spp identity</code> <span class="command-description">Identity category providers</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">spp content</code> <span class="command-description">Content category providers</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">spp research</code> <span class="command-description">Research category providers</span>
+      </div>
+    <h3 class="section-subtitle">Wallet Management:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <code class="command-name">wallets all</code> <span class="command-description">Show all ENS DAO wallets</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">wallets wg &lt;type&gt;</code> <span class="command-description">Show working group wallets (public, eco, meta)</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">wallets dao</code> <span class="command-description">Show main DAO treasury wallets</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">wallets treasury</code> <span class="command-description">Show treasury and endowment wallets</span>
+      </div>
+    <h3 class="section-subtitle">Asset Balances:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <code class="command-name">assets wg wallet &lt;type&gt;</code> <span class="command-description">Show WG wallet balances (public, eco, meta)</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">assets overview</code> <span class="command-description">Show all assets summary</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">assets networks</code> <span class="command-description">Show assets across networks</span>
+      </div>
+    </div>
+
+    <h3 class="section-subtitle">Data Export:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <code class="command-name">exportData tx all</code> <span class="command-description">Export all transactions to CSV</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">exportData tx wg &lt;type&gt;</code> <span class="command-description">Export WG transactions to CSV</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">exportData wallets all</code> <span class="command-description">Export wallet information to CSV</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">exportData wallets wg &lt;type&gt;</code> <span class="command-description">Export WG wallets to CSV</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">exportData assets wg &lt;type&gt;</code> <span class="command-description">Export WG assets to CSV</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">exportData assets overview</code> <span class="command-description">Export treasury overview to CSV</span>
+      </div>
+    <h3 class="section-subtitle">Date Filtering:</h3>
+    <div class="command-description">Add date filters to any transaction command:</div>
+    <div class="command-list">
+      <div class="command-item">
+        <code class="command-name">mar0125-apr0125</code> <span class="command-description">Date range (March 1 - April 1, 2025)</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">2025-03-01-2025-04-01</code> <span class="command-description">ISO date range</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">mar0125</code> <span class="command-description">Single date (March 1, 2025)</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">2025-03-01</code> <span class="command-description">ISO single date</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">last30days</code> <span class="command-description">Relative dates</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">thismonth</code> <span class="command-description">Other options: today, yesterday,</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">lastmonth</code> <span class="command-description">last7days, last90days, thisweek,</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">lastweek</code> <span class="command-description">lastyear, thisyear</span>
+      </div>
+    <h3 class="section-subtitle">Financial Query Commands:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <code class="command-name">revenue</code> <span class="command-description">Revenue sources & collection</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">compensation</code> <span class="command-description">Steward & officer compensation</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">governance</code> <span class="command-description">ENS token distributions</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">investments</code> <span class="command-description">Treasury investment strategies</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">challenges</code> <span class="command-description">Transparency & reporting issues</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">summary</code> <span class="command-description">Complete treasury overview</span>
+      </div>
+    </div>
+
+    <h3 class="section-subtitle">System Commands:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <code class="command-name">ls</code> <span class="command-description">List all sections</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">clear</code> <span class="command-description">Clear terminal screen</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">history</code> <span class="command-description">Show command history</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">time/date</code> <span class="command-description">Current time and date</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">exit</code> <span class="command-description">Exit terminal</span>
+      </div>
+  </section>
+
+  <section class="additional-options">
+    <div class="section-border">═══════════════════════════════════════════════════════════════════════════════</div>
+    <h3 class="section-subtitle">Additional Options</h3>
+    <div class="section-border">═══════════════════════════════════════════════════════════════════════════════</div>
+
+    <div class="command-list">
+      <div class="command-item">
+        <code class="command-name">list</code> <span class="command-description">Show comprehensive command reference with all combinations</span>
+      </div>
+    </div>
+
+    <h3 class="section-subtitle">Command Examples:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <code class="command-name">wg public tx all</code> <span class="command-description">Show all Public Goods transactions</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">wg meta budget</code> <span class="command-description">Show Meta-Gov budget details</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">spp overview</code> <span class="command-description">Show Service Provider Program overview</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">spp providers</code> <span class="command-description">List all active service providers</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">spp eth-limo</code> <span class="command-description">Show detailed info for eth.limo provider</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">spp infrastructure</code> <span class="command-description">Show all infrastructure providers</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">tx</code> <span class="command-description">Show all recent transactions</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">tx last30days</code> <span class="command-description">Show transactions from last 30 days</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">tx mar0125-apr0125</code> <span class="command-description">Show March-April 2025 transactions</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">wg public tx mar0125</code> <span class="command-description">Public Goods March 2025 transactions</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">wg eco tx export mar0125</code> <span class="command-description">Export filtered transactions to CSV</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">exportData tx wg public mar0125-apr0125</code> <span class="command-description">Export date-filtered data</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">exportData wallets all</code> <span class="command-description">Export all wallet info to CSV</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">exportData assets overview</code> <span class="command-description">Export treasury overview to CSV</span>
+      </div>
+    </div>
+  </section>
+</div>`;
     return output;
   },
 
@@ -104,26 +278,100 @@ export const coreCommands = {
 
   clear: () => '',
 
-  ls: () => `Available command categories:
-• Core Analysis: overview, assets, analytics, tx, status
-• Working Groups: wg meta, wg eco, wg public
-• Service Providers: spp overview, spp providers, spp categories, spp updates
-• Wallets: wallets all, wallets wg <type>, wallets dao, wallets treasury
-• Assets: assets wg wallet <type>, assets overview, assets networks
-• Data Export: exportData tx, exportData wallets, exportData assets
-• Financial: revenue, compensation, governance, investments, challenges, summary
-• System: ls, clear, history, time/date, exit
+  ls: () => `<div class="output-container">
+  <header class="section-header">Available Command Categories</header>
+  <div class="section-border">═══════════════════════════════════════════════════════════════</div>
 
-Use 'help' or 'commands' for detailed usage information.`,
+  <section class="help-section">
+    <div class="command-list">
+      <div class="command-item">
+        <span class="command-description">Core Analysis:</span> <code class="command-name">overview, assets, analytics, tx, status</code>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Working Groups:</span> <code class="command-name">wg meta, wg eco, wg public</code>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Service Providers:</span> <code class="command-name">spp overview, spp providers, spp categories, spp updates</code>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Wallets:</span> <code class="command-name">wallets all, wallets wg &lt;type&gt;, wallets dao, wallets treasury</code>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Assets:</span> <code class="command-name">assets wg wallet &lt;type&gt;, assets overview, assets networks</code>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Data Export:</span> <code class="command-name">exportData tx, exportData wallets, exportData assets</code>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Financial:</span> <code class="command-name">revenue, compensation, governance, investments, challenges, summary</code>
+      </div>
+      <div class="command-item">
+        <span class="command-description">System:</span> <code class="command-name">ls, clear, history, time/date, exit</code>
+      </div>
+    </div>
+
+    <div class="section-subtitle">Usage:</div>
+    <div class="command-list">
+      <div class="command-item">
+        <code class="command-name">help</code> <span class="command-description">Show detailed usage information</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">commands</code> <span class="command-description">Alternative to help command</span>
+      </div>
+    </div>
+  </section>
+</div>`,
 
   'time/date': () => {
     const now = new Date();
-    return `Current Time: ${now.toLocaleTimeString()}\nCurrent Date: ${now.toLocaleDateString()}\nTimezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`;
+    return `<div class="output-container">
+  <header class="section-header">Current Time & Date</header>
+  <div class="section-border">═══════════════════════════════════════════════════════════════</div>
+
+  <section class="time-date-section">
+    <div class="command-list">
+      <div class="command-item">
+        <span class="command-description">Current Time:</span> <span class="status-success">${now.toLocaleTimeString()}</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Current Date:</span> <span class="status-success">${now.toLocaleDateString()}</span>
+      </div>
+      <div class="command-item">
+        <span class="command-description">Timezone:</span> <span class="status-success">${Intl.DateTimeFormat().resolvedOptions().timeZone}</span>
+      </div>
+    </div>
+  </section>
+</div>`;
   },
 
-  history: () => 'Command history feature not yet implemented.',
+  history: () => `<div class="output-container">
+  <header class="section-header">Command History</header>
+  <div class="section-border">═══════════════════════════════════════════════════════════════</div>
 
-  exit: () => 'Terminal exit command. Use browser navigation to close.',
+  <section class="status-section">
+    <div class="command-list">
+      <div class="command-item">
+        <span class="status-warning">Command history feature not yet implemented.</span>
+      </div>
+    </div>
+  </section>
+</div>`,
+
+  exit: () => `<div class="output-container">
+  <header class="section-header">Terminal Exit</header>
+  <div class="section-border">═══════════════════════════════════════════════════════════════</div>
+
+  <section class="status-section">
+    <div class="command-list">
+      <div class="command-item">
+        <span class="command-description">Terminal exit command.</span>
+      </div>
+      <div class="command-item">
+        <span class="status-info">Use browser navigation to close the terminal.</span>
+      </div>
+    </div>
+  </section>
+</div>`,
 
   // Missing core analysis commands
   assets: (args) => {
@@ -134,23 +382,54 @@ Use 'help' or 'commands' for detailed usage information.`,
     // Handle asset subcommands
     if (subCommand === 'wg' && subSubCommand === 'wallet') {
       if (!subSubSubCommand || subSubSubCommand === 'help') {
-        return `Working Group Wallet Balances
+        return `<div class="output-container">
+  <header class="section-header">Working Group Wallet Balances</header>
+  <div class="section-border">═══════════════════════════════════════════════════════════════</div>
 
-Available Commands:
-  assets wg wallet meta     Meta-Governance wallet balances
-  assets wg wallet eco      Ecosystem wallet balances
-  assets wg wallet public   Public Goods wallet balances
+  <section class="assets-section">
+    <h3 class="section-subtitle">Available Commands:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <code class="command-name">assets wg wallet meta</code> <span class="command-description">Meta-Governance wallet balances</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">assets wg wallet eco</code> <span class="command-description">Ecosystem wallet balances</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">assets wg wallet public</code> <span class="command-description">Public Goods wallet balances</span>
+      </div>
+    </div>
 
-Features:
-  Real-time asset tracking across all WG wallets
-  Multi-asset support (ETH, USDC, ENS tokens)
-  Cross-chain balance aggregation
-  Historical balance tracking
+    <h3 class="section-subtitle">Features:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <span class="status-success">Real-time asset tracking across all WG wallets</span>
+      </div>
+      <div class="command-item">
+        <span class="status-success">Multi-asset support (ETH, USDC, ENS tokens)</span>
+      </div>
+      <div class="command-item">
+        <span class="status-success">Cross-chain balance aggregation</span>
+      </div>
+      <div class="command-item">
+        <span class="status-success">Historical balance tracking</span>
+      </div>
+    </div>
 
-Examples:
-  assets wg wallet meta     Show Meta-Gov balances
-  assets wg wallet eco      Show Ecosystem balances
-  assets wg wallet public   Show Public Goods balances`;
+    <h3 class="section-subtitle">Examples:</h3>
+    <div class="command-list">
+      <div class="command-item">
+        <code class="command-name">assets wg wallet meta</code> <span class="command-description">Show Meta-Gov balances</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">assets wg wallet eco</code> <span class="command-description">Show Ecosystem balances</span>
+      </div>
+      <div class="command-item">
+        <code class="command-name">assets wg wallet public</code> <span class="command-description">Show Public Goods balances</span>
+      </div>
+    </div>
+  </section>
+</div>`;
       }
 
       const wgMappings = {
